@@ -1,3 +1,69 @@
+:root {
+  --color-warning: #d79650;
+  --color-error: #DD7F7F;
+  --color_success: #97CE5F;
+  --color-light-black: #3F3F3F;
+  --color-white: #FCFCFC;
+  --color-grey: #616161;
+  --color-primary: #DEEFF2;
+  --color-thirty: #379AAB;
+  --color-background: #EEEEEE;
+  --color-light-grey: #E0E0E0;
+  --color-dark-grey: #BBBBBB;
+}
+
+*{
+  font-family: Roboto;
+}
+
+body{
+  background-color: var(--color-background);
+}
+
+h1{
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+  color: var(--color-light-black);
+}
+
+h2{
+  display: flex;
+  width: 11.1875rem;
+  height: 1.25rem;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  color: var(--color-light-black);
+}
+
+[type=button],
+[type=reset],
+[type=submit],
+button {
+  -webkit-appearance:unset;
+  background-color:unset;
+  background-image:unset;
+}
+
+a{
+  text-decoration: none;
+  color: inherit;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
   --vt-c-white: #ffffff;
