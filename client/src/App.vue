@@ -20,11 +20,11 @@ import Header from "@/components/organisms/Header.vue";
         <Button title="dsdsd" icon="Settings"/>
         <Button title="dsdsd" icon="Settings" variant="xl"/>
         <Button title="dsdsd" icon="Settings" variant="bg-unset"/>
-        <Button title="dsdsd" icon="Settings" variant="xl--bg-unset"/>
+        <Button title="dsdsd" icon="Settings" variant="xl-bg-unset"/>
 
         <Button title="dsdsd" icon="Settings" variant="primary"/>
-        <Button title="dsdsd" icon="Settings" variant="xl--primary"/>
-        <Button title="dsdsd" icon="Settings" variant="xl--primary--bg-unset"/>
+        <Button title="dsdsd" icon="Settings" variant="xl-primary"/>
+        <Button title="dsdsd" icon="Settings" variant="xl-primary-bg-unset"/>
 
       </nav>
     </div>
