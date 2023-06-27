@@ -3,6 +3,7 @@ import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 import Button from "@/components/atoms/Button.vue";
 import Header from "@/components/organisms/Header.vue";
+import PinCard from "@/components/molecules/PinCard.vue";
 </script>
 
 <template>
@@ -14,6 +15,7 @@ import Header from "@/components/organisms/Header.vue";
       <HelloWorld msg="You did it!" />
 
       <nav>
+        <PinCard title="Active users" description="10% less from last month" value="32" trend="up"/>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
 

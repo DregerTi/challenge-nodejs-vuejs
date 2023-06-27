@@ -49,7 +49,7 @@
   padding: 1.625rem 1rem;
   flex-direction: column;
   align-items: center;
-  gap: 6.25rem;
+  gap: 4.5rem;
   height: calc(100vh - 3.25rem);
   width: fit-content;
   width: 82px;
@@ -74,7 +74,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: baseline;
-      gap: 3.75rem;
+      gap: 2.5rem;
       width: 100%;
     }
   }

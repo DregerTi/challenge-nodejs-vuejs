@@ -48,16 +48,11 @@
     }
   });
 
-  function handleClick() {
-    alert('You clicked me!');
-  }
-
 </script>
 
 <template>
   <button class="button"
-          :class="[variant ? 'button--' + variant : '']"
-          v-on:click="onClick">
+          :class="[variant ? 'button--' + variant : '']">
 
     <IconArrowLeft v-if="icon == 'ArrowLeft'"/>
     <IconArrowRight v-if="icon == 'ArrowRight'"/>
@@ -93,10 +88,14 @@
   font-size: 1rem;
   transition: all 0.2s ease-in-out;
   border-radius: 10px;
-  font-size: 1rem;
   line-height: 1rem;
   text-transform: capitalize;
   white-space: nowrap;
+
+  & p{
+    margin: 0;
+    font-size: 1rem;
+  }
 
   & svg{
     min-width: 1.1em;
@@ -178,15 +177,19 @@
 
   &--xl-bg-unset{
     gap: 0.62rem;
-    font-size: 1.25rem;
     line-height: 1.25rem;
     border-radius: 14px;
 
     & svg{
-      min-width: 1.25em;
-      min-height: 1.25em;
-      width: 1.25em;
-      height: 1.25em;
+      min-width: 1.5rem;
+      min-height: 1.5rem;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    & p{
+      margin: 0;
+      font-size: 1.25rem;
     }
 
     background-color: unset;
@@ -200,15 +203,19 @@
 
   &--xl-light-grey{
     gap: 0.62rem;
-    font-size: 1.25rem;
     line-height: 1.25rem;
     border-radius: 14px;
 
     & svg{
-      min-width: 1.25em;
-      min-height: 1.25em;
-      width: 1.25em;
-      height: 1.25em;
+      min-width: 1.5rem;
+      min-height: 1.5rem;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    & p{
+      margin: 0;
+      font-size: 1.25rem;
     }
 
     background-color: var(--color-light-grey);
@@ -222,15 +229,19 @@
 
   &--xl-light-grey-bg-unset{
     gap: 0.62rem;
-    font-size: 1.25rem;
     line-height: 1.25rem;
     border-radius: 14px;
 
     & svg{
-      min-width: 1.25em;
-      min-height: 1.25em;
-      width: 1.25em;
-      height: 1.25em;
+      min-width: 1.5rem;
+      min-height: 1.5rem;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    & p{
+      margin: 0;
+      font-size: 1.25rem;
     }
 
     background-color: var(--color-light-grey);
@@ -252,15 +263,19 @@
 
   &--xl-light-grey{
     gap: 0.62rem;
-    font-size: 1.25rem;
     line-height: 1.25rem;
     border-radius: 14px;
 
     & svg{
-      min-width: 1.25em;
-      min-height: 1.25em;
-      width: 1.25em;
-      height: 1.25em;
+      min-width: 1.5rem;
+      min-height: 1.5rem;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    & p{
+      margin: 0;
+      font-size: 1.25rem;
     }
 
     background-color: var(--color-light-grey);
@@ -274,15 +289,19 @@
 
   &--xl-light-grey-bg-unset{
     gap: 0.62rem;
-    font-size: 1.25rem;
     line-height: 1.25rem;
     border-radius: 14px;
 
     & svg{
-      min-width: 1.25em;
-      min-height: 1.25em;
-      width: 1.25em;
-      height: 1.25em;
+      min-width: 1.5rem;
+      min-height: 1.5rem;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    & p{
+      margin: 0;
+      font-size: 1.25rem;
     }
 
     background-color: var(--color-light-grey);
@@ -304,15 +323,19 @@
 
   &--xl-primary{
     gap: 0.62rem;
-    font-size: 1.25rem;
     line-height: 1.25rem;
     border-radius: 14px;
 
     & svg{
-      min-width: 1.25em;
-      min-height: 1.25em;
-      width: 1.25em;
-      height: 1.25em;
+      min-width: 1.5rem;
+      min-height: 1.5rem;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    & p{
+      margin: 0;
+      font-size: 1.25rem;
     }
 
     background-color: var(--color-primary);
@@ -326,15 +349,19 @@
 
   &--xl-primary-bg-unset{
     gap: 0.62rem;
-    font-size: 1.25rem;
     line-height: 1.25rem;
     border-radius: 14px;
 
     & svg{
-      min-width: 1.25em;
-      min-height: 1.25em;
-      width: 1.25em;
-      height: 1.25em;
+      min-width: 1.5rem;
+      min-height: 1.5rem;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    & p{
+      margin: 0;
+      font-size: 1.25rem;
     }
 
     background-color: var(--color-primary);
