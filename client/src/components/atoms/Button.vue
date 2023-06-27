@@ -18,14 +18,7 @@
     },
     variant: {
       type: String,
-      default: 'default',
-      validator: (value) => {
-        return [
-          'default',
-          'round',
-          'square'
-        ].includes(value);
-      }
+      default: null,
     },
     icon: {
       type: String,
@@ -97,12 +90,13 @@
   background-color: var(--color-light-black);
   color: var(--color-white);
   font-weight: 700;
-  font-size: rem(16);
+  font-size: 1rem;
   transition: all 0.2s ease-in-out;
   border-radius: 10px;
   font-size: 1rem;
   line-height: 1rem;
   text-transform: capitalize;
+  white-space: nowrap;
 
   & svg{
     min-width: 1.1em;
@@ -175,6 +169,28 @@
 
     background-color: unset;
     color: var(--color-light-black);
+
+    &:hover {
+      background-color: unset;
+      color: var(--color-primary);
+    }
+  }
+
+  &--xl-bg-unset{
+    gap: 0.62rem;
+    font-size: 1.25rem;
+    line-height: 1.25rem;
+    border-radius: 14px;
+
+    & svg{
+      min-width: 1.25em;
+      min-height: 1.25em;
+      width: 1.25em;
+      height: 1.25em;
+    }
+
+    background-color: unset;
+    color: var(--color-white);
 
     &:hover {
       background-color: unset;
