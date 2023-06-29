@@ -1,0 +1,59 @@
+<script setup>
+import Header from "@/components/organisms/Header.vue";
+import MenuButton from "@/components/molecules/MenuButton.vue";
+</script>
+
+<template>
+  <div class="container container-menu">
+    <header>
+      <h2>Explore</h2>
+      <p>
+        Learn more about the activity of your users
+      </p>
+    </header>
+    <section>
+      <MenuButton icon="CallSplit" title="Conversion tunnel" description="Tracks the conversion journey or funnel" />
+      <MenuButton icon="LocalFire" title="Heatmaps" description="Interaction patterns on your website" />
+      <MenuButton icon="TrackChanges" title="Tag" description="Create events for customized analysis" />
+    </section>
+  </div>
+</template>
+
+<style lang="scss">
+.container-menu{
+  > section{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin: 5rem 0;
+  }
+  > header {
+    display: flex;
+    flex-direction: column;
+    align-items: baseline!important;
+    > h2{
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--color-grey);
+    }
+    > p {
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--color-grey);
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .container-menu{
+      > section{
+        display: grid;
+        margin: 5rem 0;
+        grid-template-columns: repeat(2, 1fr);
+        > .menu-button{
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+</style>

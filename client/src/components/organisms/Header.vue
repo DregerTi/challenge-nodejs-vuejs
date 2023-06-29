@@ -1,16 +1,13 @@
 <script setup>
 
   import Header from "@/App.vue";
+  import { RouterLink } from 'vue-router'
   import Button from "@/components/atoms/Button.vue";
   import {ref} from "vue";
-
 
   const isOpen = ref(false);
   const isOpenBtn = 'xl-primary-bg-unset';
   const isCloseBtn = 'xl-bg-unset';
-  const { variant } = defineProps({
-
-  });
 
   function mouseLeave() {
     isOpen.value = false;
@@ -30,11 +27,21 @@
     <img src="@/assets/logo.svg" alt="logo" class="header-logo"/>
     <div>
       <nav>
-        <Button icon="Dashboard" v-bind:variant="isOpen ? isCloseBtn : isOpenBtn" v-bind:title="isOpen ? 'Dashboard' : ''"/>
-        <Button icon="Timeline" v-bind:variant="isOpen ? isCloseBtn : isOpenBtn" v-bind:title="isOpen ? 'Audience' : ''"/>
-        <Button icon="AccountTree" v-bind:variant="isOpen ? isCloseBtn : isOpenBtn" v-bind:title="isOpen ? 'Exlore' : ''"/>
-        <Button icon="Person" v-bind:variant="isOpen ? isCloseBtn : isOpenBtn" v-bind:title="isOpen ? 'My account' : ''"/>
-        <Button icon="Settings" v-bind:variant="isOpen ? isCloseBtn : isOpenBtn" v-bind:title="isOpen ? 'Site settings' : ''"/>
+        <RouterLink to="/">
+          <Button icon="Dashboard" v-bind:variant="isOpen ? isCloseBtn : isOpenBtn" v-bind:title="isOpen ? 'Dashboard' : ''"/>
+        </RouterLink>
+        <RouterLink to="/audience">
+          <Button icon="Timeline" v-bind:variant="isOpen ? isCloseBtn : isOpenBtn" v-bind:title="isOpen ? 'Audience' : ''"/>
+        </RouterLink>
+        <RouterLink to="/explore">
+          <Button icon="AccountTree" v-bind:variant="isOpen ? isCloseBtn : isOpenBtn" v-bind:title="isOpen ? 'Exlore' : ''"/>
+        </RouterLink>
+        <RouterLink to="">
+          <Button icon="Person" v-bind:variant="isOpen ? isCloseBtn : isOpenBtn" v-bind:title="isOpen ? 'My account' : ''"/>
+        </RouterLink>
+        <RouterLink to="">
+          <Button icon="Settings" v-bind:variant="isOpen ? isCloseBtn : isOpenBtn" v-bind:title="isOpen ? 'Site settings' : ''"/>
+        </RouterLink>
       </nav>
       <button>oui</button>
     </div>
@@ -43,7 +50,8 @@
 
 <style scoped lang="scss">
 .header {
-  position: fixed;
+  position: sticky;
+  top: 1.625rem;
   margin: 1.625rem 0rem 1.625rem 1.625rem;
   display: flex;
   padding: 1.625rem 1rem;
@@ -81,7 +89,44 @@
 
   &.header--open{
     width: 280px;
-    background-color: var(--color-light-black)
+    background-color: var(--color-light-black);
+  }
+}
+
+@media (max-width: 1024px) {
+
+  .header{
+    z-index: 10;
+    margin: 0;
+    height: fit-content;
+    border-radius: 0;
+    position: fixed;
+    padding: 1.4rem 1.4rem;
+    background-color: var(--color-light-grey);
+    top: calc(100vh - 92.5px);
+    width: 100vw;
+    > .header-logo{
+      display: none;
+    }
+
+    > div{
+      > button{
+        display: none;
+      }
+
+      > nav{
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0;
+        width: 100%;
+      }
+    }
+
+    &.header--open{
+      width: 100vw;
+      max-width: 100vw;
+    }
   }
 }
 </style>

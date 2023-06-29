@@ -1,38 +1,75 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { RouterView } from 'vue-router'
 import Button from "@/components/atoms/Button.vue";
 import Header from "@/components/organisms/Header.vue";
-import PinCard from "@/components/molecules/PinCard.vue";
+import {ref} from "vue";
+
+const setDateButton = ref(true);
+const dashboardEditButton = ref(true);
+
 </script>
 
 <template>
-  <Header/>
-  <div class="container">
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <PinCard title="Active users" description="10% less from last month" value="32" trend="up"/>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-
-        <Button title="dsdsd" icon="Settings"/>
-        <Button title="dsdsd" icon="Settings" variant="xl"/>
-        <Button title="dsdsd" icon="Settings" variant="bg-unset"/>
-        <Button title="dsdsd" icon="Settings" variant="xl-bg-unset"/>
-
-        <Button title="dsdsd" icon="Settings" variant="primary"/>
-        <Button title="dsdsd" icon="Settings" variant="xl-primary"/>
-        <Button title="dsdsd" icon="Settings" variant="xl-primary-bg-unset"/>
-
-      </nav>
+  <section class="body">
+    <Header/>
+    <div>
+      <div class="container">
+        <header>
+          <h1>La route du trone</h1>
+          <div class="actions">
+            <Button v-if="setDateButton" title="This month"/>
+            <Button v-if="dashboardEditButton" icon="Edit"/>
+          </div>
+        </header>
+        <RouterView />
+      </div>
     </div>
-  </div>
-
+  </section>
 </template>
 
 <style lang="scss">
+  .body{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transition: all .3s;
+
+    > div{
+      display: flex;
+      justify-content: center;
+      width: 100%;
+
+      .container{
+        width: 100%;
+        max-width: 1280px;
+        display: flex;
+        flex-direction: column;
+        gap: 2.625rem;
+        margin: 5rem 0;
+
+        > header{
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .actions{
+            display: flex;
+            gap: 1rem;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .body{
+      > div{
+        .container{
+          padding: 0 1rem;
+          margin: 1.4rem 0;
+          margin-bottom: 4rem;
+        }
+      }
+    }
+  }
 </style>

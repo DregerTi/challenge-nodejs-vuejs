@@ -39,8 +39,8 @@
 </script>
 
 <template>
-  <section class="pinCard"
-          :class="[variant ? 'pinCard--' + variant : '']">
+  <section class="pin-card"
+          :class="[variant ? 'pin-card--' + variant : '']">
     <h5>{{ value }}</h5>
     <label>{{ title }}</label>
     <p>{{ description }}</p>
@@ -50,7 +50,7 @@
 </template>
 
 <style scoped lang="scss">
-.pinCard {
+.pin-card {
   display: flex;
   width: 14.4rem;
   height: 11.875rem;
@@ -70,14 +70,14 @@
     line-height: 1.25rem;
   }
 
-  > p{
+  > label{
     color: var(--color-white);
     font-size: 1rem;
     font-weight: 600;
     line-height: 1rem;
   }
 
-  > label{
+  > p{
     color: var(--color-grey);
     font-size: 0.875rem;
     font-weight: 600;
@@ -95,6 +95,22 @@
 
     &.trend-icon-up{
       fill: var(--color-success);
+    }
+  }
+
+  &--primary{
+    background-color: var(--color-primary);
+
+    > h5{
+      color: var(--color-light-black, #FCFCFC);
+    }
+
+    > p{
+      color: var(--color-grey);
+    }
+
+    > label{
+      color: var(--color-light-black);
     }
   }
 }

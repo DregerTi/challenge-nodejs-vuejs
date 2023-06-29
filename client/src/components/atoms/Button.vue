@@ -22,7 +22,6 @@
     },
     icon: {
       type: String,
-      default: 'ArrowLeft',
       validator: (value) => {
         return [
           'ArrowLeft',
@@ -92,7 +91,7 @@
   text-transform: capitalize;
   white-space: nowrap;
 
-  & p{
+  & p {
     margin: 0;
     font-size: 1rem;
   }
