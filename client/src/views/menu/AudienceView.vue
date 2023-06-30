@@ -4,7 +4,7 @@ import MenuButton from "@/components/molecules/MenuButton.vue";
 </script>
 
 <template>
-  <div class="container container-menu">
+  <div class="container-menu">
     <header>
       <h2>Audience</h2>
       <p>
@@ -27,6 +27,7 @@ import MenuButton from "@/components/molecules/MenuButton.vue";
 
 <style lang="scss">
   .container-menu{
+    margin-top: 5rem;
     > section{
       display: flex;
       flex-wrap: wrap;
@@ -52,12 +53,23 @@ import MenuButton from "@/components/molecules/MenuButton.vue";
 
   @media (max-width: 1024px) {
     .container-menu{
+      margin-top: 0rem;
       > section{
         display: grid;
         margin: 2rem 0;
-        grid-template-columns: repeat(2, 1fr);
+        gap: 1.4rem;
+        width: calc(100% - 1.4rem);
+        grid-template-columns: 50% 50%;
         > .menu-button{
           width: 100%;
+        }
+      }
+      > header {
+        > h2{
+          font-size: 1.2rem;
+        }
+        > p {
+          font-size: 1rem;
         }
       }
     }

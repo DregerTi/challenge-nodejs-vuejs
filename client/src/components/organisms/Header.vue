@@ -4,6 +4,7 @@
   import { RouterLink } from 'vue-router'
   import Button from "@/components/atoms/Button.vue";
   import {ref} from "vue";
+  import Switch from "@/components/atoms/Switch.vue";
 
   const isOpen = ref(false);
   const isOpenBtn = 'xl-primary-bg-unset';
@@ -43,7 +44,7 @@
           <Button icon="Settings" v-bind:variant="isOpen ? isCloseBtn : isOpenBtn" v-bind:title="isOpen ? 'Site settings' : ''"/>
         </RouterLink>
       </nav>
-      <button>oui</button>
+      <Switch />
     </div>
   </header>
 </template>

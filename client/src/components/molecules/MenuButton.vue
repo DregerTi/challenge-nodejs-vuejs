@@ -115,7 +115,13 @@
   .menu-button{
     flex-direction: column;
     height: 12rem;
+    padding: 0 1.6rem;
     justify-content: center;
+    > div {
+      > p{
+        font-size: 0.75rem;
+      }
+    }
   }
 }
 </style>

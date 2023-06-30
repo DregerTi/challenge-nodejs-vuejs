@@ -1,16 +1,6 @@
 <script setup>
-  import IconAccountTree from "@/components/icons/IconAccountTree.vue";
-  import IconArrowDropDown from "@/components/icons/IconArrowDropDown.vue";
-  import IconArrowLeft from "@/components/icons/IconArrowLeft.vue";
-  import IconDashboard from "@/components/icons/IconDashboard.vue";
-  import IconArrowRight from "@/components/icons/IconArrowRight.vue";
-  import IconPerson from "@/components/icons/IconPerson.vue";
-  import IconSettings from "@/components/icons/IconSettings.vue";
-  import IconTimeline from "@/components/icons/IconTimeline.vue";
-  import IconTrackChanges from "@/components/icons/IconTrackChanges.vue";
   import IconTrendingDown from "@/components/icons/IconTrendingDown.vue";
   import IconTrendingUp from "@/components/icons/IconTrendingUp.vue";
-  import IconEdit from "@/components/icons/IconEdit.vue";
 
   const { title, description, value, trend, variant } = defineProps({
     title: {
@@ -111,6 +101,43 @@
 
     > label{
       color: var(--color-light-black);
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .pin-card {
+    padding: 1rem;
+    gap: 0.3rem;
+    display: grid;
+    height: unset;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "trend value"
+      "trend title"
+      "trend description";
+    grid-column-gap: 1rem;
+    border-radius: 1.25rem;
+
+    > h5{
+      grid-area: value;
+      font-size: 1.3rem;
+    }
+
+    > label{
+      grid-area: title;
+      font-size: 0.8rem;
+    }
+
+    > p{
+      grid-area: description;
+      font-size: 0.7rem;
+      display: none;
+    }
+
+    > svg{
+      grid-area: trend;
     }
   }
 }

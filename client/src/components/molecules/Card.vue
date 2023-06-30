@@ -74,4 +74,17 @@
     }
   }
 }
+
+@media (max-width: 1024px) {
+  .card {
+    border-radius: 1rem;
+
+    > header {
+      > h5 {
+        font-size: 1rem;
+        line-height: 1rem;
+      }
+    }
+  }
+}
 </style>

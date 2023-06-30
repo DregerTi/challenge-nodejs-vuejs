@@ -54,7 +54,7 @@ import Card from "@/components/molecules/Card.vue";
     .pin-container {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 2rem;
+      gap: 1rem;
       .pin-card {
         width: 100% !important;
       }
@@ -63,6 +63,7 @@ import Card from "@/components/molecules/Card.vue";
     .dashboard-grid{
       grid-template-columns: repeat(1, 1fr);
       grid-template-rows: repeat(6, 1fr);
+      grid-row-gap: 1.5rem;
     }
   }
 
