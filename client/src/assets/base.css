@@ -1,3 +1,7 @@
+:root{
+  --prefers-color-scheme: dark;
+}
+
 :root {
   --color-warning: #d79650;
   --color-error: #DD7F7F;
@@ -12,22 +16,37 @@
   --color-dark-grey: #BBBBBB;
 }
 
+.dark-theme{
+  --color-warning: #d79650;
+  --color-error:#DD7F7F;
+  --color-success: #97CE5F;
+  --color-light-black: #616161;
+  --color-white: #EEEEEE;
+  --color-grey: #757575;
+  --color-primary: #a8dae3;
+  --color-secondary: #379AAB;
+  --color-background: #3F3F3F;
+  --color-light-grey: #E0E0E0;
+  --color-dark-grey: #BBBBBB;
+}
+
+
 body{
   background-color: var(--color-background);
 }
 
 h1{
-  font-size: 2rem;
-  font-weight: 600;
-  line-height: 1.25rem;
+  font-size: 2rem!important;
+  font-weight: 600!important;
+  line-height: 1.25rem!important;
   color: var(--color-light-black);
 }
 
 h2{
-  font-size: 1.25rem;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 1.25rem;
+  font-size: 1.25rem!important;
+  font-style: normal!important;
+  font-weight: 600!important;
+  line-height: 1.25rem!important;
   color: var(--color-light-black);
 }
 

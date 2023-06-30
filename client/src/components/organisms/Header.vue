@@ -44,7 +44,7 @@
           <Button icon="Settings" v-bind:variant="isOpen ? isCloseBtn : isOpenBtn" v-bind:title="isOpen ? 'Site settings' : ''"/>
         </RouterLink>
       </nav>
-      <Switch />
+      <Switch class="switch" />
     </div>
   </header>
 </template>
@@ -110,11 +110,11 @@
       display: none;
     }
 
-    > div{
-      > button{
-        display: none;
-      }
+    .switch {
+      display: none;
+    }
 
+    > div{
       > nav{
         flex-direction: row;
         justify-content: space-between;
