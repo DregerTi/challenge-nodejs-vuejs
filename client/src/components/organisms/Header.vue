@@ -6,7 +6,7 @@
   import {ref} from "vue";
   import Switch from "@/components/atoms/Switch.vue";
 
-  const isOpen = ref(false);
+  const isOpen = ref(true);
   const isOpenBtn = 'xl-primary-bg-unset';
   const isCloseBtn = 'xl-bg-unset';
 
@@ -49,7 +49,7 @@
   </header>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .header {
   position: sticky;
   top: 1.625rem;
@@ -95,7 +95,6 @@
 }
 
 @media (max-width: 1024px) {
-
   .header{
     z-index: 10;
     margin: 0;
@@ -103,8 +102,9 @@
     border-radius: 0;
     position: fixed;
     padding: 1.4rem 1.4rem;
-    background-color: var(--color-light-grey);
+    background-color: var(--color-background);
     top: calc(100vh - 92.5px);
+    transition: top 0s!important;
     width: 100vw;
     > .header-logo{
       display: none;
@@ -127,6 +127,21 @@
     &.header--open{
       width: 100vw;
       max-width: 100vw;
+      background-color: var(--color-background);
+
+      .button--xl-bg-unset{
+
+        > p{
+          display: none;
+        }
+
+        color: var(--color-light-black);
+
+        &:hover {
+          background-color: unset!important;
+          color: var(--color-secondary)!important;
+        }
+      }
     }
   }
 }
