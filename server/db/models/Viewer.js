@@ -23,7 +23,6 @@ module.exports = (connection) => {
     { sequelize: connection, tableName: "viewer" }
   );
 
-  Viewer.belongsTo(Site, { foreignKey: 'idSite' });
 
   return Viewer;
 };

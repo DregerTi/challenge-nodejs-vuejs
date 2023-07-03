@@ -1,3 +1,5 @@
+const User = require("./User");
+const Site = require("./Site");
 module.exports = (connection) => {
   const { DataTypes, Model } = require("sequelize");
   const User = require("./User");
@@ -30,9 +32,6 @@ module.exports = (connection) => {
     },
     { sequelize: connection, tableName: "tag" }
   );
-
-  Tag.belongsTo(User, { foreignKey: 'createdBy' })
-  Tag.belongsTo(Site, { foreignKey: 'idSite' });
 
   return Tag;
 };
