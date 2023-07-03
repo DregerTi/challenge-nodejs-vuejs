@@ -1,9 +1,8 @@
 <script setup>
-  import IconTrendingDown from "@/components/icons/IconTrendingDown.vue";
-  import IconTrendingUp from "@/components/icons/IconTrendingUp.vue";
   import RoundedButton from "@/components/atoms/RoundedButton.vue";
+  import Listbox from "@/components/atoms/Listbox.vue";
 
-  const { title, path } = defineProps({
+  const { title, path, buttonType, editMode } = defineProps({
     title: {
       required: true,
       type: String,
@@ -20,6 +19,10 @@
     },
     path: {
       type: String,
+    },
+    editMode: {
+      type: Boolean,
+      default: false,
     }
   });
 
@@ -28,11 +31,13 @@
 <template>
   <section class="card">
     <header>
-      <h5>{{ title }}</h5>
+      <h5 v-if="!editMode">{{ title }}</h5>
+      <Listbox v-if="editMode" :selected="title" variant="md"/>
       <RouterLink v-if="buttonType != null" to="{{ path }}">
-        <RoundedButton v-if="buttonType == 'rounded'" />
-        <span v-if="buttonType == 'text'">See more</span>
+        <RoundedButton v-if="buttonType == 'rounded' && !editMode" icon="ArrowUpward"/>
+        <span v-if="buttonType == 'text' && !editMode">See more</span>
       </RouterLink>
+      <RoundedButton v-if="editMode" icon="Add"/>
     </header>
     <slot></slot>
   </section>
@@ -48,7 +53,7 @@
   flex: 1 0 0;
   align-self: stretch;
   border-radius: 1.125rem;
-  background-color: var(--color-white);
+  background-color: var(--color-background-item);
 
   > header {
     display: flex;
@@ -59,17 +64,17 @@
       font-size: 1.25rem;
       font-weight: 600;
       line-height: 1.25rem;
-      color: var(--color-light-black);
+      color: var(--color-text);
     }
 
     span{
-      color: var(--color-grey);
+      color: var(--color-text-secondary);
       font-size: 1rem;
       font-style: normal;
       line-height: 1rem;
 
       &:hover{
-        color: var(--color-light-black);
+        color: var(--color-text);
       }
     }
   }

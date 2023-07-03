@@ -40,7 +40,6 @@
 
 <style scoped lang="scss">
 .switch{
-  //select first child
   & :first-child{
     border-radius: 14px;
     background-color: var(--color-primary);

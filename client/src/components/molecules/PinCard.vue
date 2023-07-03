@@ -1,8 +1,10 @@
 <script setup>
   import IconTrendingDown from "@/components/icons/IconTrendingDown.vue";
   import IconTrendingUp from "@/components/icons/IconTrendingUp.vue";
+  import Listbox from "@/components/atoms/Listbox.vue";
+  import RoundedButton from "@/components/atoms/RoundedButton.vue";
 
-  const { title, description, value, trend, variant } = defineProps({
+  const { title, description, value, trend, variant, editMode } = defineProps({
     title: {
       type: String,
     },
@@ -20,22 +22,23 @@
       type: String,
       default: null,
     },
+    editMode: {
+      type: Boolean,
+      default: false,
+    },
   });
-
-  function handleClick() {
-    alert('You clicked me!');
-  }
 
 </script>
 
 <template>
   <section class="pin-card"
           :class="[variant ? 'pin-card--' + variant : '']">
-    <h5>{{ value }}</h5>
-    <label>{{ title }}</label>
-    <p>{{ description }}</p>
-    <IconTrendingDown class="trend-icon-down" v-if="trend == 'down'"/>
-    <IconTrendingUp class="trend-icon-up" v-if="trend == 'up'"/>
+    <Listbox v-if="editMode" :selected="title" variant="sm"/>
+    <h5 v-if="!editMode">{{ value }}</h5>
+    <label v-if="!editMode">{{ title }}</label>
+    <p v-if="!editMode">{{ description }}</p>
+    <IconTrendingDown v-if="!editMode && trend == 'down'" class="trend-icon-down"/>
+    <IconTrendingUp v-if="!editMode && trend == 'up'" class="trend-icon-up"/>
   </section>
 </template>
 
@@ -52,6 +55,8 @@
   flex-grow: 1;
   border-radius: 32px;
   background-color: var(--color-light-black);
+  color: var(--color-white) !important;
+  position: relative;
 
   > h5{
     color: var(--color-white, #FCFCFC);

@@ -1,10 +1,25 @@
 <script setup>
 import IconArrowUpward from "@/components/icons/IconArrowUpward.vue";
+import IconAdd from "@/components/icons/IconAdd.vue";
+import IconClose from "@/components/icons/IconClose.vue";
+
+const { icon } = defineProps({
+  icon: {
+    type: String,
+    validator: (value) => {
+      return [
+        'ArrowUpward',
+      ].includes(value);
+    }
+  },
+});
 </script>
 
 <template>
   <button class="rounded-button">
-    <IconArrowUpward />
+    <IconAdd v-if="icon == 'Add'"/>
+    <IconArrowUpward v-if="icon == 'ArrowUpward'"/>
+    <IconClose v-if="icon == 'Close'"/>
   </button>
 </template>
 
@@ -16,7 +31,7 @@ import IconArrowUpward from "@/components/icons/IconArrowUpward.vue";
   padding: 0.375rem;
   justify-content: center;
   align-items: center;
-  background-color: var(--color-light-black);
+  background-color: var(--color-light-black-item);
   color: var(--color-white);
   border-radius: 3.125rem;
   border: none;

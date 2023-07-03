@@ -1,31 +1,47 @@
 <script setup>
 import PinCard from "@/components/molecules/PinCard.vue";
-import MenuButton from "@/components/molecules/MenuButton.vue";
 import Card from "@/components/molecules/Card.vue";
+import { defineProps, defineEmits } from "vue";
+import RoundedButton from "@/components/atoms/RoundedButton.vue";
+
+const { dashboardEditMode } = defineProps({
+  dashboardEditMode: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const emit = defineEmits(["update:setDateButton", "update:dashboardEditButton"]);
+emit("update:setDateButton", true);
+emit("update:dashboardEditButton", true);
+
 
 </script>
 
 <template>
     <section class="pin-container">
-      <PinCard title="Active users" description="10% less from last month" value="32" trend="up"/>
-      <PinCard title="Active users" description="10% less from last month" value="33" trend="down" variant="primary"/>
-      <PinCard title="Active users" description="10% less from last month" value="33" trend="down" variant="primary"/>
-      <PinCard title="Active users" description="10% less from last month" value="33" trend="down" variant="primary"/>
+      <PinCard title="Active users" description="10% less from last month" value="32" trend="up" :editMode="dashboardEditMode"/>
+      <PinCard title="Active users" description="10% less from last month" value="33" trend="down" variant="primary" :editMode="dashboardEditMode"/>
+      <PinCard title="Active users" description="10% less from last month" value="33" trend="down" variant="primary" :editMode="dashboardEditMode"/>
+      <PinCard title="Active users" description="10% less from last month" value="33" trend="down" variant="primary" :editMode="dashboardEditMode"/>
     </section>
     <div class="dashboard-grid">
-      <Card title="Bounce trade" buttonType="text" path="/"/>
-      <Card title="Bounce trade" buttonType="rounded" path="/"/>
-      <Card title="Bounce trade" buttonType="rounded" path="/"/>
-      <Card title="Bounce trade" buttonType="rounded" path="/"/>
-      <Card title="Bounce trade" buttonType="rounded" path="/"/>
-      <Card title="Bounce trade" buttonType="rounded" path="/"/>
-      <Card title="Bounce trade" buttonType="rounded" path="/"/>
-      <Card title="Bounce trade" buttonType="rounded" path="/"/>
-      <Card title="Bounce trade" buttonType="rounded" path="/"/>
-      <Card title="Bounce trade" buttonType="rounded" path="/"/>
-      <Card title="Bounce trade" buttonType="rounded" path="/"/>
-      <Card title="Bounce trade" buttonType="rounded" path="/"/>
-      <Card title="Bounce trade" buttonType="rounded" path="/"/>
+      <Card title="Bounce trade" buttonType="text" :editMode="dashboardEditMode" path="/"/>
+      <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/"/>
+      <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/"/>
+      <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/"/>
+      <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/"/>
+      <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/"/>
+      <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/"/>
+      <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/"/>
+      <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/"/>
+      <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/"/>
+      <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/"/>
+      <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/"/>
+      <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/"/>
+      <Card class="cta-add-card" v-if="dashboardEditMode">
+        <RoundedButton icon="Close" variant="primary" size="md" :editMode="dashboardEditMode"/>
+      </Card>
     </div>
 </template>
 
@@ -44,6 +60,17 @@ import Card from "@/components/molecules/Card.vue";
     grid-template-rows: repeat(2, 1fr);
     grid-column-gap: 2rem;
     grid-row-gap: 2.62rem;
+
+    > .cta-add-card{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+      &:hover{
+        background-color: #E0E0E0;
+      }
+    }
 
     > div{
       background-color: red;

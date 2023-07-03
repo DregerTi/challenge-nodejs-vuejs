@@ -11,10 +11,13 @@
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.14",
+    "@heroicons/vue": "^2.0.18",
     "autoprefixer": "^10",
+    "chart.js": "^4.3.0",
     "postcss": "^8",
     "tailwindcss": "^3",
     "vue": "^3.3.4",
+    "vue-chartjs": "^5.2.0",
     "vue-router": "^4.2.2"
   },
   "devDependencies": {

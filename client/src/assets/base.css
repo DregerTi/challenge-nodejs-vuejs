@@ -8,10 +8,14 @@
   --color-success: #97CE5F;
   --color-light-black: #3F3F3F;
   --color-white: #FCFCFC;
+  --color-text: #3F3F3F;
+  --color-text-secondary: #616161;
   --color-grey: #616161;
   --color-primary: #DEEFF2;
   --color-secondary: #379AAB;
   --color-background: #EEEEEE;
+  --color-background-item: #e3e3e3;
+  --color-light-black-item: #3F3F3F;
   --color-light-grey: #E0E0E0;
   --color-dark-grey: #BBBBBB;
 }
@@ -22,10 +26,14 @@
   --color-success: #97CE5F;
   --color-light-black: #616161;
   --color-white: #EEEEEE;
+  --color-text: #EEEEEE;
+  --color-text-secondary: #BBBBBB;
   --color-grey: #757575;
   --color-primary: #a8dae3;
   --color-secondary: #379AAB;
   --color-background: #3F3F3F;
+  --color-background-item: #616161;
+  --color-light-black-item: #3F3F3F;
   --color-light-grey: #E0E0E0;
   --color-dark-grey: #BBBBBB;
 }
@@ -39,7 +47,7 @@ h1{
   font-size: 2rem!important;
   font-weight: 600!important;
   line-height: 1.25rem!important;
-  color: var(--color-light-black);
+  color: var(--color-text);
 }
 
 h2{
@@ -47,7 +55,7 @@ h2{
   font-style: normal!important;
   font-weight: 600!important;
   line-height: 1.25rem!important;
-  color: var(--color-light-black);
+  color: var(--color-text);
 }
 
 [type=button],

@@ -3,9 +3,18 @@ import { RouterView } from 'vue-router'
 import Button from "@/components/atoms/Button.vue";
 import Header from "@/components/organisms/Header.vue";
 import {ref} from "vue";
+import Listbox from "@/components/atoms/Listbox.vue";
 
-const setDateButton = ref(true);
-const dashboardEditButton = ref(true);
+
+
+const setDateButton = ref(false);
+const dashboardEditButton = ref(false);
+const dashboardEditMode = ref(false);
+
+function toogleDashboardEditMode() {
+  dashboardEditMode.value = !dashboardEditMode.value;
+}
+
 
 </script>
 
@@ -15,13 +24,18 @@ const dashboardEditButton = ref(true);
     <div>
       <div class="container">
         <header>
-          <h1>La route du trone</h1>
+          <Listbox variant="lg" selected="La route du trône" />
           <div class="actions">
             <Button v-if="setDateButton" title="This month"/>
-            <Button v-if="dashboardEditButton" icon="Edit"/>
+            <Button v-if="dashboardEditButton && !dashboardEditMode" v-bind:onClick="toogleDashboardEditMode" icon="Edit"/>
+            <Button v-if="dashboardEditButton && dashboardEditMode" v-bind:onClick="toogleDashboardEditMode" icon="Check"/>
           </div>
         </header>
-        <RouterView />
+        <RouterView
+            :dashboardEditMode="dashboardEditMode"
+            v-model:setDateButton="setDateButton"
+            v-model:dashboardEditButton="dashboardEditButton"
+        />
       </div>
     </div>
   </section>

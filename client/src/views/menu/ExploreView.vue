@@ -1,6 +1,11 @@
 <script setup>
 import Header from "@/components/organisms/Header.vue";
 import MenuButton from "@/components/molecules/MenuButton.vue";
+import {defineEmits} from "vue";
+
+const emit = defineEmits(["update:setDateButton", "update:dashboardEditButton"]);
+emit("update:setDateButton", false);
+emit("update:dashboardEditButton", false);
 </script>
 
 <template>

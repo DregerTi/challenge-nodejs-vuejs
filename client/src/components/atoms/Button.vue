@@ -11,6 +11,7 @@
   import IconTrendingDown from "@/components/icons/IconTrendingDown.vue";
   import IconTrendingUp from "@/components/icons/IconTrendingUp.vue";
   import IconEdit from "@/components/icons/IconEdit.vue";
+  import IconCheck from "@/components/icons/IconCheck.vue";
 
   const { title, variant, icon } = defineProps({
     title: {
@@ -37,7 +38,8 @@
           'TrackChanges',
           'TrendingDown',
           'TrendingUp',
-          'Edit'
+          'Edit',
+          'Check'
         ].includes(value);
       }
     },
@@ -51,8 +53,8 @@
 
 <template>
   <button class="button"
-          :class="[variant ? 'button--' + variant : '']">
-
+          :class="[variant ? 'button--' + variant : '']"
+          v-on:click="onClick">
     <IconArrowLeft v-if="icon == 'ArrowLeft'"/>
     <IconArrowRight v-if="icon == 'ArrowRight'"/>
     <IconAccountTree v-if="icon == 'AccountTree'"/>
@@ -67,7 +69,7 @@
     <IconTrendingDown v-if="icon == 'TrendingDown'"/>
     <IconTrendingUp v-if="icon == 'TrendingUp'"/>
     <IconEdit v-if="icon == 'Edit'"/>
-
+    <IconCheck v-if="icon == 'Check'"/>
     <p v-if="title">{{ title }}</p>
   </button>
 </template>
