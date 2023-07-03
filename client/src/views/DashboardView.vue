@@ -26,7 +26,7 @@ emit("update:dashboardEditButton", true);
       <PinCard title="Active users" description="10% less from last month" value="33" trend="down" variant="primary" :editMode="dashboardEditMode"/>
     </section>
     <div class="dashboard-grid">
-      <Card title="Bounce trade" buttonType="text" :editMode="dashboardEditMode" path="/"/>
+      <Card title="Bounce trade" buttonType="text" :editMode="dashboardEditMode" path="/total-users"/>
       <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/"/>
       <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/"/>
       <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/"/>

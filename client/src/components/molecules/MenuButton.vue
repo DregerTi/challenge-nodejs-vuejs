@@ -13,7 +13,7 @@
   import IconTrackChanges from "@/components/icons/IconTrackChanges.vue";
   import IconLocalFire from "@/components/icons/IconLocalFire.vue";
 
-  const { title, description, icon } = defineProps({
+  const { title, description, icon, path } = defineProps({
     title: {
       type: String,
       required: true,
@@ -30,29 +30,35 @@
         ].includes(value);
       }
     },
+    path: {
+      type: String,
+      default: null,
+    },
   });
 
 </script>
 
 <template>
-  <section class="menu-button">
-    <IconCallSplit v-if="icon == 'CallSplit'"/>
-    <IconLocalFire v-if="icon == 'LocalFire'"/>
-    <IconTrackChanges v-if="icon == 'TrackChanges'"/>
-    <IconTrendingUp v-if="icon == 'TrendingUp'"/>
-    <IconDevices v-if="icon == 'Devices'"/>
-    <IconGroup v-if="icon == 'Group'"/>
-    <IconPersonAdd v-if="icon == 'PersonAdd'"/>
-    <IconPerson v-if="icon == 'Person'"/>
-    <IconBadge v-if="icon == 'Badge'"/>
-    <IconAutoTimer v-if="icon == 'AutoTimer'"/>
-    <IconExplore v-if="icon == 'Explore'"/>
-    <IconRoundaboutRight v-if="icon == 'RoundaboutRight'"/>
-    <div>
-      <h5>{{ title }}</h5>
-      <p>{{ description }}</p>
-    </div>
-  </section>
+  <RouterLink :to="path" :title="title">
+    <section class="menu-button">
+      <IconCallSplit v-if="icon == 'CallSplit'"/>
+      <IconLocalFire v-if="icon == 'LocalFire'"/>
+      <IconTrackChanges v-if="icon == 'TrackChanges'"/>
+      <IconTrendingUp v-if="icon == 'TrendingUp'"/>
+      <IconDevices v-if="icon == 'Devices'"/>
+      <IconGroup v-if="icon == 'Group'"/>
+      <IconPersonAdd v-if="icon == 'PersonAdd'"/>
+      <IconPerson v-if="icon == 'Person'"/>
+      <IconBadge v-if="icon == 'Badge'"/>
+      <IconAutoTimer v-if="icon == 'AutoTimer'"/>
+      <IconExplore v-if="icon == 'Explore'"/>
+      <IconRoundaboutRight v-if="icon == 'RoundaboutRight'"/>
+      <div>
+        <h5>{{ title }}</h5>
+        <p>{{ description }}</p>
+      </div>
+    </section>
+  </RouterLink>
 </template>
 
 <style scoped lang="scss">

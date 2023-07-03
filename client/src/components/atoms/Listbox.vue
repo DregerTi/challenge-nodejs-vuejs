@@ -95,8 +95,6 @@ const selectedValue = ref(selected)
 </template>
 
 <style scoped lang="scss">
-// .listbox with properties like in the snippet above
-
 .listbox{
   &--sm{
     .listbox-label{

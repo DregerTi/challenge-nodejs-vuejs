@@ -17,9 +17,9 @@ emit("update:dashboardEditButton", false);
       </p>
     </header>
     <section>
-      <MenuButton icon="CallSplit" title="Conversion tunnel" description="Tracks the conversion journey or funnel" />
-      <MenuButton icon="LocalFire" title="Heatmaps" description="Interaction patterns on your website" />
-      <MenuButton icon="TrackChanges" title="Tag" description="Create events for customized analysis" />
+      <MenuButton icon="CallSplit" title="Conversion tunnel" description="Tracks the conversion journey or funnel" path="/"/>
+      <MenuButton icon="LocalFire" title="Heatmaps" description="Interaction patterns on your website" path="/"/>
+      <MenuButton icon="TrackChanges" title="Tag" description="Create events for customized analysis" path="/"/>
     </section>
   </div>
 </template>

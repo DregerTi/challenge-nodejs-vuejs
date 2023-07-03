@@ -33,7 +33,7 @@
     <header>
       <h5 v-if="!editMode">{{ title }}</h5>
       <Listbox v-if="editMode" :selected="title" variant="md"/>
-      <RouterLink v-if="buttonType != null" to="{{ path }}">
+      <RouterLink v-if="buttonType != null && path" :to="path">
         <RoundedButton v-if="buttonType == 'rounded' && !editMode" icon="ArrowUpward"/>
         <span v-if="buttonType == 'text' && !editMode">See more</span>
       </RouterLink>
