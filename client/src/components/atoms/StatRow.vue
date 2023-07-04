@@ -1,7 +1,4 @@
 <script setup>
-import IconArrowUpward from "@/components/icons/IconArrowUpward.vue";
-import IconAdd from "@/components/icons/IconAdd.vue";
-import IconClose from "@/components/icons/IconClose.vue";
 import StatRowData from "@/components/atoms/StatRowData.vue";
 
 const { title, trend, value, ratio } = defineProps({
