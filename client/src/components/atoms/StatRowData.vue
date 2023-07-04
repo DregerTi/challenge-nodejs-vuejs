@@ -26,13 +26,13 @@ const { trend, value, ratio } = defineProps({
 </script>
 
 <template>
-  <div class="statRowData">
+  <td class="statRowData">
     <span class="value">{{ value }}</span>
     <IconArrowUpward class="trend trend--up" v-if="trend == 'up'"/>
     <IconArrowUpward class="trend trend--down" v-if="trend == 'down'"/>
     <IconClose class="trend trend--same" v-if="trend == 'same'"/>
     <span class="ratio">{{ ratio }}%</span>
-  </div>
+  </td>
 </template>
 
 <style scoped lang="scss">

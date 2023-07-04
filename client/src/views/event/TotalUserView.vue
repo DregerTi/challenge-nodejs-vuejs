@@ -1,14 +1,67 @@
-
 <script setup>
 import Header from "@/components/organisms/Header.vue";
 import MenuButton from "@/components/molecules/MenuButton.vue";
 import {defineEmits} from "vue";
 import Card from "@/components/molecules/Card.vue";
 import StatRow from "@/components/atoms/StatRow.vue";
+import StatRowXl from "@/components/atoms/StatRowXl.vue";
+import StatList from "@/components/organisms/statList.vue";
 
 const emit = defineEmits(["update:setDateButton", "update:dashboardEditButton"]);
 emit("update:setDateButton", true);
 emit("update:dashboardEditButton", false);
+
+let labels = ['page', 'views'];
+let rows = [
+      {
+        'title': 'Home',
+        'value': '3255',
+        'trend': 'up',
+        'ratio': '23'
+      },
+      {
+        'title': 'dsk 1',
+        'value': '32898',
+        'trend': 'down',
+        'ratio': '23'
+      },
+      {
+        'title': 'df dffdf d',
+        'value': '322',
+        'trend': 'down',
+        'ratio': '23'
+      },
+      {
+        'title': 'df dfdfdgh d',
+        'value': '32',
+        'trend': 'up',
+        'ratio': '2'
+      },
+      {
+        'title': 'sdf fddf dffd',
+        'value': '32',
+        'trend': 'up',
+        'ratio': '33'
+      },
+      {
+        'title': 'fsd',
+        'value': '3',
+        'trend': 'down',
+        'ratio': '23'
+      },
+      {
+        'title': 'sdfdsf',
+        'value': '2',
+        'trend': 'same',
+        'ratio': '21'
+      },
+      {
+        'title': 'sd ges d',
+        'value': '1',
+        'trend': 'up',
+        'ratio': '3'
+      },
+];
 
 </script>
 
@@ -18,6 +71,8 @@ emit("update:dashboardEditButton", false);
   </Card>
   <section>
     <StatRow title="oui" ratio="32" value="345" trend="up"/>
+    <StatRowXl title="oui" ratio="32" value="345" trend="up" index="1"/>
+    <StatList :labels="labels" :rows="rows"/>
   </section>
 </template>
 
