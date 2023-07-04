@@ -55,13 +55,13 @@ const { title, trend, value, ratio, index } = defineProps({
     align-items: center;
     gap: 1.25rem;
     > h5 {
-      color: var(--color-light-black);
+      color: var(--color-text);
       font-size: 1.2rem;
       font-weight: 500;
       line-height: 1.2rem;
     }
     > span {
-      color: var(--color_grey);
+      color: var(--color-text-secondary);
       font-size: 1.2rem;
       font-weight: 400;
       line-height: 1.2rem;

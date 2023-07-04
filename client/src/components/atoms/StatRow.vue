@@ -48,7 +48,8 @@ const { title, trend, value, ratio } = defineProps({
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0rem;
+  margin-bottom: 1rem;
 
   > header {
     display: flex;
@@ -57,7 +58,7 @@ const { title, trend, value, ratio } = defineProps({
     width: 100%;
     gap: 1.25rem;
     > h5 {
-      color: var(--color-light-black);
+      color: var(--color-text);
       font-size: 1.2rem;
       font-weight: 500;
       line-height: 1.2rem;
@@ -68,7 +69,7 @@ const { title, trend, value, ratio } = defineProps({
     width: 100%;
     height: 0.4rem;
     border-radius: 0.25rem;
-    background-color: var(--color-dark-grey);
+    background-color: var(--color-text-third);
     overflow: hidden;
     > div{
       height: 100%;

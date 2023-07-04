@@ -73,6 +73,7 @@ let rows = [
     <StatRow title="oui" ratio="32" value="345" trend="up"/>
     <StatRowXl title="oui" ratio="32" value="345" trend="up" index="1"/>
     <StatList :labels="labels" :rows="rows"/>
+    <StatList :rows="rows" variant="sm"/>
   </section>
 </template>
 

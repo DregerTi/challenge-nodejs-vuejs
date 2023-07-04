@@ -1,7 +1,7 @@
 <script setup>
-import IconArrowUpward from "@/components/icons/IconArrowUpward.vue";
-import IconAdd from "@/components/icons/IconAdd.vue";
-import IconClose from "@/components/icons/IconClose.vue";
+import IconArrowDropDown from "@/components/icons/IconArrowDropDown.vue";
+import IconArrowDropUp from "@/components/icons/IconArrowDropUp.vue";
+import IconCheckIndeterminate from "@/components/icons/IconCheckIndeterminate.vue";
 
 const { trend, value, ratio } = defineProps({
   trend: {
@@ -28,15 +28,16 @@ const { trend, value, ratio } = defineProps({
 <template>
   <td class="statRowData">
     <span class="value">{{ value }}</span>
-    <IconArrowUpward class="trend trend--up" v-if="trend == 'up'"/>
-    <IconArrowUpward class="trend trend--down" v-if="trend == 'down'"/>
-    <IconClose class="trend trend--same" v-if="trend == 'same'"/>
+    <IconArrowDropUp class="trend trend--up" v-if="trend == 'up'"/>
+    <IconArrowDropDown class="trend trend--down" v-if="trend == 'down'"/>
+    <IconCheckIndeterminate class="trend trend--same" v-if="trend == 'same'"/>
     <span class="ratio">{{ ratio }}%</span>
   </td>
 </template>
 
 <style scoped lang="scss">
 .statRowData{
+  margin: 0.25rem 0;
   display: flex;
   gap: 0.5rem;
   flex-wrap: nowrap;
@@ -59,7 +60,9 @@ const { trend, value, ratio } = defineProps({
   }
 
   .trend{
-    width: 1rem;
+    height: fit-content;
+    width: 1.8rem;
+
     &--up{
       fill: var(--color-success);
     }
@@ -67,7 +70,7 @@ const { trend, value, ratio } = defineProps({
       fill: var(--color-error);
     }
     &--same{
-      fill: var(--color-text);
+      fill: var(--color-warning);
     }
   }
 }
