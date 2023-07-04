@@ -61,7 +61,7 @@ let rows = [
 </script>
 
 <template>
- <EventStat title="Total users" :rows="rows" :labels="labels" />
+ <EventStat title="New users" :rows="rows" :labels="labels" />
 </template>
 
 <style lang="scss">
