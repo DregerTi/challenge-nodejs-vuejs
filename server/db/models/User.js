@@ -30,6 +30,7 @@ module.exports = (connection) => {
       { sequelize: connection, tableName: "users" }
   );
 
+
   function updatePassword(user) {
     return bcrypt.genSalt(10).then((salt) =>
         bcrypt.hash(user.password, salt).then((hash) => {

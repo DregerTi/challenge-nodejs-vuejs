@@ -30,7 +30,7 @@ module.exports = (connection) => {
     { sequelize: connection, tableName: "session" }
   );
 
-  Session.belongsTo(Viewer, { foreignKey: 'idViewer' });
+  Session.belongsTo(Viewer, { foreignKey: 'viewerId' });
 
   return Session;
 };

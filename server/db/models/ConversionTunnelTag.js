@@ -23,8 +23,8 @@ module.exports = (connection) => {
     { sequelize: connection, tableName: "conversionTunnelTag" }
   );
 
-  ConversionTunnelTag.belongsTo(ConversionTunnel, { foreignKey: 'idConversionTunnel' })
-  ConversionTunnelTag.belongsTo(Tag, { foreignKey: 'idTag' });
+  ConversionTunnelTag.belongsTo(ConversionTunnel, { foreignKey: 'conversionTunnelId' })
+  ConversionTunnelTag.belongsTo(Tag, { foreignKey: 'tagId' });
 
   return ConversionTunnelTag;
 };

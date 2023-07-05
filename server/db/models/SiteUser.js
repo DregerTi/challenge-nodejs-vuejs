@@ -1,32 +1,29 @@
 module.exports = (connection) => {
-  const { DataTypes, Model } = require("sequelize");
-  const Site = require("./Site")(connection);
-  const User = require("./User")(connection);
-  class SiteUser extends Model {}
+    const {DataTypes, Model} = require("sequelize");
+    const Site = require("./Site")(connection);
+    const User = require("./User")(connection);
 
-  SiteUser.init(
-    {
-      id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-      },
-      reader: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-      },
-      writer: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-      }
-    },
-    { sequelize: connection, tableName: "siteUser" }
-  );
+    class SiteUser extends Model {
+    }
 
-  SiteUser.belongsTo(Site, { foreignKey: 'idSite' })
-  SiteUser.belongsTo(User, { foreignKey: 'idUser' });
+    SiteUser.init(
+        {
+            id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                autoIncrement: true,
+            },
+            role: {
+                type: DataTypes.STRING(32),
+                allowNull: false,
+                defaultValue: 'USER',
+            },
+        },
+        {sequelize: connection, tableName: "siteUser", indexes: [{unique: true, fields: ['userId', 'siteId']}]}
+    );
 
-  return SiteUser;
+    SiteUser.belongsTo(Site, {foreignKey: 'siteId'})
+    SiteUser.belongsTo(User, {foreignKey: 'userId'});
+
+    return SiteUser;
 };
