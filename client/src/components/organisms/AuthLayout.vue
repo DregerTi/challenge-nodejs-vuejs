@@ -41,7 +41,7 @@ import Switch from "@/components/atoms/Switch.vue";
   width: 100%;
   max-width: 1530px;
   flex-direction: column;
-  margin: 2rem 0;
+  margin: 2rem 1rem;
 }
 
 .auth-header{
@@ -131,6 +131,12 @@ import Switch from "@/components/atoms/Switch.vue";
 }
 
 @media (max-width: 1024px) {
+  .auth-header{
+    > .header-logo{
+      width: 48px;
+    }
+  }
+
   .auth-container {
     display: flex;
     justify-content: space-between;
@@ -145,7 +151,7 @@ import Switch from "@/components/atoms/Switch.vue";
     > :last-child {
       width: 100%;
       color: var(--color-text-secondary);
-      gap: 7rem;
+      gap: 4rem;
       height: 100%;
       display: flex;
       flex-direction: column;

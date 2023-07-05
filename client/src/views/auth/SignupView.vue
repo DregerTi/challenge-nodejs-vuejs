@@ -11,7 +11,7 @@ import AuthLayout from "@/components/organisms/AuthLayout.vue";
       <p>Welcome! Are you ready to digitanalyze your website?</p>
     </div>
     <form>
-      <div class="flex gap-8 w-full">
+      <div class="flex flex-col gap-8 w-full md:flex-row">
         <Input class="w-full" type="text" placeholder="Firstname" name="fistname" label="fistname" />
         <Input class="w-full" type="text" placeholder="Lastname" name="lastname" label="lastname" />
       </div>
