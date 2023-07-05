@@ -1,0 +1,38 @@
+<script setup>
+import Button from "@/components/atoms/Button.vue";
+import Input from "@/components/atoms/Input.vue";
+import AuthLayout from "@/components/organisms/AuthLayout.vue";
+</script>
+
+<template>
+  <section>
+    <div>
+      <h2>Signup</h2>
+      <p>Welcome! Are you ready to digitanalyze your website?</p>
+    </div>
+    <form>
+      <div class="flex gap-8 w-full">
+        <Input class="w-full" type="text" placeholder="Firstname" name="fistname" label="fistname" />
+        <Input class="w-full" type="text" placeholder="Lastname" name="lastname" label="lastname" />
+      </div>
+
+      <Input type="text" placeholder="Email" name="email" label="Email" />
+
+      <Input type="pasword" placeholder="Password" name="password" label="Password" />
+
+      <Input type="password" placeholder="password" name="confirm-password" label="Confirm Password" />
+      <div>
+        <p>
+          Already have an account?
+          <span class="a-href">
+            <RouterLink to="login">Login</RouterLink>
+          </span>
+        </p>
+      </div>
+      <Button title="Sign up" />
+    </form>
+  </section>
+</template>
+
+<style lang="scss">
+</style>

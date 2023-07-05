@@ -150,5 +150,32 @@ const selectedValue = ref(selected)
 
 }
 
+@media (max-width: 1024px) {
+  .listbox {
+    &--sm {
+      .listbox-label {
+        font-size: 0.6rem;
+        font-weight: 600;
+      }
+    }
+
+    &--md {
+      .listbox-label {
+        font-size: 1rem;
+        line-height: 1rem;
+        height: 1rem !important;
+      }
+    }
+
+    &--lg {
+      .listbox-label {
+        font-size: 1.5rem !important;
+        line-height: 1.5rem !important;
+        height: 1.5rem !important;
+      }
+    }
+  }
+}
+
 
 </style>

@@ -119,6 +119,7 @@
 
 @media (max-width: 1024px) {
   .menu-button{
+    width: unset;
     flex-direction: column;
     height: 12rem;
     padding: 0 1.6rem;

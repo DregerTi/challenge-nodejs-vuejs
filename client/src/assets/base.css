@@ -19,6 +19,7 @@
   --color-light-black-item: #3F3F3F;
   --color-light-grey: #E0E0E0;
   --color-dark-grey: #BBBBBB;
+  --animate-duration: 0.5s!important;
 }
 
 .dark-theme{

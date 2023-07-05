@@ -19,6 +19,7 @@ emit("update:dashboardEditButton", true);
 </script>
 
 <template>
+  <div>
     <section class="pin-container">
       <PinCard title="Active users" description="10% less from last month" value="32" trend="up" :editMode="dashboardEditMode"/>
       <PinCard title="Active users" description="10% less from last month" value="33" trend="down" variant="primary" :editMode="dashboardEditMode"/>
@@ -26,7 +27,7 @@ emit("update:dashboardEditButton", true);
       <PinCard title="Active users" description="10% less from last month" value="33" trend="down" variant="primary" :editMode="dashboardEditMode"/>
     </section>
     <div class="dashboard-grid">
-      <Card title="Bounce trade" buttonType="text" :editMode="dashboardEditMode" path="/total-users"/>
+      <Card title="Bounce trade" buttonType="text" :editMode="dashboardEditMode" :path="'/analytics/'+ $route.params.site +'/audience/total-users'"/>
       <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/"/>
       <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/"/>
       <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/"/>
@@ -43,6 +44,7 @@ emit("update:dashboardEditButton", true);
         <RoundedButton icon="Close" variant="primary" size="md" :editMode="dashboardEditMode"/>
       </Card>
     </div>
+  </div>
 </template>
 
 <style scoped lang="scss">
@@ -58,6 +60,7 @@ emit("update:dashboardEditButton", true);
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
+    margin-top: 3rem;
     grid-column-gap: 2rem;
     grid-row-gap: 2.62rem;
 

@@ -30,12 +30,14 @@ const { title, labels, rows } = defineProps({
 </script>
 
 <template>
-  <Card :title="title">
-    <slot></slot>
-  </Card>
-  <section>
-    <StatList :labels="labels" :rows="rows"/>
-  </section>
+  <div>
+    <Card :title="title">
+      <slot></slot>
+    </Card>
+    <section>
+      <StatList :labels="labels" :rows="rows"/>
+    </section>
+  </div>
 </template>
 
 <style lang="scss">

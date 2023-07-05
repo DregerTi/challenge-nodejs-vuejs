@@ -18,15 +18,15 @@ emit("update:dashboardEditButton", false);
       </p>
     </header>
     <section>
-      <MenuButton icon="Group" title="Total users" description="Displays the total number of users on your website" path="total-users"/>
-      <MenuButton icon="PersonAdd" title="New users" description="Tracks the number of new users visiting your website" path="/new-users"/>
-      <MenuButton icon="Person" title="Active users" description="Number of currently active users on your website" path="/active-users"/>
-      <MenuButton icon="Badge" title="Sessions" description="Analyzes the total number of sessions" path="/sessions"/>
-      <MenuButton icon="AutoTimer" title="Session duration" description="Measures the average duration of sessions" path="/avg-sessions"/>
-      <MenuButton icon="RoundaboutRight" title="Bounce rate" description="Percentage of users who leave without interaction" path="/bounce-rate"/>
-      <MenuButton icon="TrendingUp" title="Page views" description="Ranking and performance of your individual pages" path="/page-views"/>
-      <MenuButton icon="Devices" title="Devices" description="User devices accessing your website" path="/devices"/>
-      <MenuButton icon="Explore" title="Localisation" description="Identifies the geographic location of visitors" path="/localisation"/>
+      <MenuButton icon="Group" title="Total users" description="Displays the total number of users on your website" :path="'/analytics/'+ $route.params.site +'/audience/total-users'"/>
+      <MenuButton icon="PersonAdd" title="New users" description="Tracks the number of new users visiting your website" :path="'/analytics/'+ $route.params.site +'/audience/new-users'"/>
+      <MenuButton icon="Person" title="Active users" description="Number of currently active users on your website" :path="'/analytics/'+ $route.params.site +'/audience/active-users'"/>
+      <MenuButton icon="Badge" title="Sessions" description="Analyzes the total number of sessions" :path="'/analytics/'+ $route.params.site +'/audience/sessions'"/>
+      <MenuButton icon="AutoTimer" title="Session duration" description="Measures the average duration of sessions" :path="'/analytics/'+ $route.params.site +'/audience/avg-sessions'"/>
+      <MenuButton icon="RoundaboutRight" title="Bounce rate" description="Percentage of users who leave without interaction" :path="'/analytics/'+ $route.params.site +'/audience/bounce-rate'"/>
+      <MenuButton icon="TrendingUp" title="Page views" description="Ranking and performance of your individual pages" :path="'/analytics/'+ $route.params.site +'/audience/page-views'"/>
+      <MenuButton icon="Devices" title="Devices" description="User devices accessing your website" :path="'/analytics/'+ $route.params.site +'/audience/devices'"/>
+      <MenuButton icon="Explore" title="Localisation" description="Identifies the geographic location of visitors" :path="'/analytics/'+ $route.params.site +'/audience/localisation'"/>
     </section>
   </div>
 </template>

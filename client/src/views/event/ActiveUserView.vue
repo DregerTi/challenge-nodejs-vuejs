@@ -1,6 +1,6 @@
 <script setup>
 import {defineEmits} from "vue";
-import EventStat from "@/components/organisms/EventStat.vue";
+import EventStat from "@/components/templates/EventStat.vue";
 
 const emit = defineEmits(["update:setDateButton", "update:dashboardEditButton"]);
 emit("update:setDateButton", true);

@@ -28,13 +28,13 @@
     <img src="@/assets/logo.svg" alt="logo" class="header-logo"/>
     <div>
       <nav>
-        <RouterLink to="/">
+        <RouterLink :to="'/analytics/'+ $route.params.site +'/'">
           <Button icon="Dashboard" v-bind:variant="isOpen ? isCloseBtn : isOpenBtn" v-bind:title="isOpen ? 'Dashboard' : ''"/>
         </RouterLink>
-        <RouterLink to="/audience">
+        <RouterLink :to="'/analytics/'+ $route.params.site +'/audience'">
           <Button icon="Timeline" v-bind:variant="isOpen ? isCloseBtn : isOpenBtn" v-bind:title="isOpen ? 'Audience' : ''"/>
         </RouterLink>
-        <RouterLink to="/explore">
+        <RouterLink :to="'/analytics/'+ $route.params.site +'/explore'">
           <Button icon="AccountTree" v-bind:variant="isOpen ? isCloseBtn : isOpenBtn" v-bind:title="isOpen ? 'Exlore' : ''"/>
         </RouterLink>
         <RouterLink to="">
@@ -65,6 +65,7 @@
   border-radius: 24px;
   background-color: unset;
   transition: all 0.3s ease-in-out;
+  z-index: 30;
 
   > .header-logo{
     width: 50px;
