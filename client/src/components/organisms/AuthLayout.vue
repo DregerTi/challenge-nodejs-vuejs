@@ -19,8 +19,8 @@ import Switch from "@/components/atoms/Switch.vue";
           <RouterView v-slot="{ Component }">
             <transition
                 v-if="Component"
-                enter-active-class="animate__animated animate__fadeInLeft"
-                leave-active-class="animate__animated animate__fadeOutRight"
+                enter-active-class="animate__animated animate__fadeInRight"
+                leave-active-class="animate__animated animate__fadeOutLeft"
                 mode="out-in">
               <component :is="Component" />
             </transition>
