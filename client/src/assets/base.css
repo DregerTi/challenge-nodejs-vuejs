@@ -1,116 +1,104 @@
-:root{
-  --prefers-color-scheme: dark;
+:root {
+    --prefers-color-scheme: dark;
 }
 
 :root {
-  --color-warning: #d79650;
-  --color-error: #DD7F7F;
-  --color-success: #97CE5F;
-  --color-light-black: #3F3F3F;
-  --color-white: #FCFCFC;
-  --color-text: #3F3F3F;
-  --color-text-secondary: #616161;
-  --color-text-third: #E0E0E0;
-  --color-grey: #616161;
-  --color-primary: #DEEFF2;
-  --color-secondary: #379AAB;
-  --color-background: #EEEEEE;
-  --color-background-item: #e3e3e3;
-  --color-light-black-item: #3F3F3F;
-  --color-light-grey: #E0E0E0;
-  --color-dark-grey: #BBBBBB;
-  --animate-duration: 0.5s!important;
+    --color-warning: #d79650;
+    --color-error: #dd7f7f;
+    --color-success: #97ce5f;
+    --color-light-black: #3f3f3f;
+    --color-white: #fcfcfc;
+    --color-text: #3f3f3f;
+    --color-text-secondary: #616161;
+    --color-text-third: #e0e0e0;
+    --color-grey: #616161;
+    --color-primary: #deeff2;
+    --color-secondary: #379aab;
+    --color-background: #eeeeee;
+    --color-background-item: #e3e3e3;
+    --color-light-black-item: #3f3f3f;
+    --color-light-grey: #e0e0e0;
+    --color-dark-grey: #bbbbbb;
+    --animate-duration: 0.5s !important;
 }
 
-.dark-theme{
-  --color-warning: #d79650;
-  --color-error:#DD7F7F;
-  --color-success: #97CE5F;
-  --color-light-black: #616161;
-  --color-white: #EEEEEE;
-  --color-text: #EEEEEE;
-  --color-text-secondary: #BBBBBB;
-  --color-text-third: #545454;
-  --color-grey: #757575;
-  --color-primary: #a8dae3;
-  --color-secondary: #379AAB;
-  --color-background: #3F3F3F;
-  --color-background-item: #616161;
-  --color-light-black-item: #3F3F3F;
-  --color-light-grey: #E0E0E0;
-  --color-dark-grey: #BBBBBB;
+.dark-theme {
+    --color-warning: #d79650;
+    --color-error: #dd7f7f;
+    --color-success: #97ce5f;
+    --color-light-black: #616161;
+    --color-white: #eeeeee;
+    --color-text: #eeeeee;
+    --color-text-secondary: #bbbbbb;
+    --color-text-third: #545454;
+    --color-grey: #757575;
+    --color-primary: #a8dae3;
+    --color-secondary: #379aab;
+    --color-background: #3f3f3f;
+    --color-background-item: #616161;
+    --color-light-black-item: #3f3f3f;
+    --color-light-grey: #e0e0e0;
+    --color-dark-grey: #bbbbbb;
 }
 
-
-body{
-  background-color: var(--color-background);
+body {
+    background-color: var(--color-background);
 }
 
-h1{
-  font-size: 2rem!important;
-  font-weight: 600!important;
-  line-height: 1.25rem!important;
-  color: var(--color-text);
+h1 {
+    font-size: 2rem !important;
+    font-weight: 600 !important;
+    line-height: 1.25rem !important;
+    color: var(--color-text);
 }
 
-h2{
-  font-size: 1.25rem!important;
-  font-style: normal!important;
-  font-weight: 600!important;
-  line-height: 1.25rem!important;
-  color: var(--color-text);
+h2 {
+    font-size: 1.25rem !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
+    line-height: 1.25rem !important;
+    color: var(--color-text);
 }
 
-[type=button],
-[type=reset],
-[type=submit],
+[type='button'],
+[type='reset'],
+[type='submit'],
 button {
-  -webkit-appearance:unset;
-  background-color:unset;
-  background-image:unset;
+    -webkit-appearance: unset;
+    background-color: unset;
+    background-image: unset;
 }
 
-a{
-  text-decoration: none;
-  color: inherit;
+a {
+    text-decoration: none;
+    color: inherit;
 }
-
-
-
-
-
-
-
-
-
-
 
 @media (prefers-color-scheme: dark) {
-  :root {
-
-  }
+    :root {
+    }
 }
 
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
-  margin: 0;
-  font-weight: normal;
+    box-sizing: border-box;
+    margin: 0;
+    font-weight: normal;
 }
 
 body {
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
-  color: var(--color-light-black);
-  background: var(--color-background);
-  transition: color 0.5s, background-color 0.5s;
-  line-height: 1.6;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
-    Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  font-size: 15px;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    color: var(--color-light-black);
+    background: var(--color-background);
+    transition: color 0.5s, background-color 0.5s;
+    line-height: 1.6;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+        Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-size: 15px;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }

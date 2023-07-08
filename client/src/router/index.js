@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+    history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
             path: '/auth/',
@@ -23,7 +23,7 @@ const router = createRouter({
                     path: 'signup',
                     name: 'signup',
                     component: () => import('../views/auth/SignupView.vue')
-                },
+                }
             ]
         },
         {
@@ -35,7 +35,7 @@ const router = createRouter({
                 {
                     path: 'dashboard',
                     name: 'dashboard',
-                    component: () => import('../views/DashboardView.vue'),
+                    component: () => import('../views/DashboardView.vue')
                 },
                 {
                     path: 'audience/',
@@ -96,10 +96,10 @@ const router = createRouter({
                 {
                     path: 'explore',
                     name: 'explore',
-                    component: () => import('../views/menu/ExploreView.vue'),
+                    component: () => import('../views/menu/ExploreView.vue')
                 }
             ]
-        },
+        }
     ]
 })
 

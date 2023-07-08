@@ -1,44 +1,40 @@
 <script setup>
-import Header from "@/components/organisms/Header.vue";
-import Card from "@/components/molecules/Card.vue";
-import StatList from "@/components/organisms/StatList.vue";
+import Header from '@/components/organisms/Header.vue'
+import Card from '@/components/molecules/Card.vue'
+import StatList from '@/components/organisms/StatList.vue'
 
 const { title, labels, rows } = defineProps({
-  title: {
-    type: String,
-    required: true,
-  },
-  rows: {
-    type: Array,
-    required: true,
-  },
-  labels: {
-    type: Array,
-    required: false,
-  },
-  variant: {
-    type: String,
-    validator: (value) => {
-      return [
-        'default',
-        'sm',
-      ].includes(value);
+    title: {
+        type: String,
+        required: true
     },
-    default: 'default',
-  },
-});
+    rows: {
+        type: Array,
+        required: true
+    },
+    labels: {
+        type: Array,
+        required: false
+    },
+    variant: {
+        type: String,
+        validator: (value) => {
+            return ['default', 'sm'].includes(value)
+        },
+        default: 'default'
+    }
+})
 </script>
 
 <template>
-  <div>
-    <Card :title="title">
-      <slot></slot>
-    </Card>
-    <section>
-      <StatList :labels="labels" :rows="rows"/>
-    </section>
-  </div>
+    <div>
+        <Card :title="title">
+            <slot></slot>
+        </Card>
+        <section>
+            <StatList :labels="labels" :rows="rows" />
+        </section>
+    </div>
 </template>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>
