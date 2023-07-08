@@ -1,8 +1,10 @@
 const jwt = require("jsonwebtoken");
 const UnauthorizedError = require("../errors/UnauthorizedError");
+const SiteUserService = require("../services/siteUser");
+const UserService = require("../services/user");
 
 module.exports = {
-    requireAuthentication: function (req, res, next) {
+    requireAuthentication: async function (req, res, next) {
         if (!req.headers.authorization) {
             return next(new UnauthorizedError());
         }
@@ -11,7 +13,23 @@ module.exports = {
             return next(new UnauthorizedError());
         }
         try {
-            req.user = jwt.verify(token, process.env.JWT_SECRET);
+            const userToken = jwt.verify(token, process.env.JWT_SECRET);
+
+            const serviceSiteUser = new SiteUserService();
+            const serviceUser = new UserService();
+            let user = await serviceUser.findOne({id: parseInt(userToken.id, 10)});
+
+            const userRoles = await serviceSiteUser.findAll({userId: parseInt(userToken.id, 10)});
+
+            user.roles = userRoles.map((role) => {
+                return {
+                    siteId: role.siteId,
+                    role: role.role,
+                };
+            });
+
+            req.user = user;
+
         } catch (err) {
             return next(new UnauthorizedError());
         }

@@ -83,6 +83,9 @@ module.exports = function SiteService() {
         },
         delete: async (filters) => {
             return Site.destroy({ where: filters });
+        },
+        addUser: async (data) => {
+            return SiteUser.create(data);
         }
     };
 };

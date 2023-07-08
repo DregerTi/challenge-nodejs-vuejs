@@ -13,11 +13,6 @@ module.exports = (connection) => {
                 primaryKey: true,
                 autoIncrement: true,
             },
-            proposalLink: {
-                type: DataTypes.STRING,
-                allowNull: false,
-                unique: true,
-            },
             accepted: {
                 type: DataTypes.BOOLEAN,
                 allowNull: true,

@@ -8,7 +8,7 @@ const checkFormat = require("./middlewares/check-format");
 const errorHandler = require("./middlewares/error-handler");
 const checkAuth = require("./middlewares/check-auth");
 const SiteRouter = require("./routes/site");
-const SiteInvitationRouter = require("./routes/siteInvitationRouter");
+const SiteInvitationRouter = require("./routes/siteInvitation");
 
 app.use(cors());
 
