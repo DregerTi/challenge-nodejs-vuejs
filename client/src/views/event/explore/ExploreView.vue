@@ -19,7 +19,7 @@ emit('update:dashboardEditButton', false)
                 icon="CallSplit"
                 title="Conversion tunnel"
                 description="Tracks the conversion journey or funnel"
-                path="/"
+                :path="'/analytics/' + $route.params.site + '/explore/conversion-tunnel'"
             />
             <MenuButton
                 icon="LocalFire"

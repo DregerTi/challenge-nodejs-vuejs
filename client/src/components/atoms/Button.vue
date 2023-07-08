@@ -12,6 +12,7 @@ import IconTrendingDown from '@/components/icons/IconTrendingDown.vue'
 import IconTrendingUp from '@/components/icons/IconTrendingUp.vue'
 import IconEdit from '@/components/icons/IconEdit.vue'
 import IconCheck from '@/components/icons/IconCheck.vue'
+import IconDelete from "@/components/icons/IconDelete.vue";
 
 const { title, variant, icon } = defineProps({
     title: {
@@ -39,7 +40,8 @@ const { title, variant, icon } = defineProps({
                 'TrendingDown',
                 'TrendingUp',
                 'Edit',
-                'Check'
+                'Check',
+                'Delete'
             ].includes(value)
         }
     },
@@ -67,6 +69,7 @@ const { title, variant, icon } = defineProps({
         <IconTrendingUp v-if="icon == 'TrendingUp'" />
         <IconEdit v-if="icon == 'Edit'" />
         <IconCheck v-if="icon == 'Check'" />
+        <IconDelete v-if="icon == 'Delete'" />
         <p v-if="title">{{ title }}</p>
     </button>
 </template>
@@ -125,6 +128,27 @@ const { title, variant, icon } = defineProps({
             background-color: var(--color-light-black);
             color: var(--color-light-grey);
         }
+    }
+
+    &--error {
+        background-color: var(--color-error);
+        color: var(--color-white);
+
+        &:hover {
+            background-color: var(--color-light-grey);
+            color: var(--color-error);
+        }
+
+    }
+
+    &--dark-grey {
+      background-color: var(--color-dark-grey);
+      color: var(--color-light-black);
+
+      &:hover {
+        background-color: var(--color-light-grey);
+        color: var(--color-light-black);
+      }
     }
 
     &--light-grey-bg-unset {
