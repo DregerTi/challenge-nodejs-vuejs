@@ -12,16 +12,11 @@ import Switch from '@/components/atoms/Switch.vue'
             </header>
             <section class="auth-container">
                 <section>
-                    <h1>Use the Google analytics killer for your website, use Digitalanalytics</h1>
-                    <p>oui</p>
+                    <h1>Use the Google Analytics killer for your website, use DigitalAnalytics</h1>
                 </section>
                 <RouterView v-slot="{ Component }">
-                    <transition
-                        v-if="Component"
-                        enter-active-class="animate__animated animate__fadeInRight"
-                        leave-active-class="animate__animated animate__fadeOutLeft"
-                        mode="out-in"
-                    >
+                    <transition v-if="Component" enter-active-class="animate__animated animate__fadeInRight"
+                        leave-active-class="animate__animated animate__fadeOutLeft" mode="out-in">
                         <component :is="Component" />
                     </transition>
                 </RouterView>
@@ -35,6 +30,7 @@ import Switch from '@/components/atoms/Switch.vue'
     width: 100%;
     display: flex;
     justify-content: center;
+    position: initial;
 }
 
 .container-xl {
@@ -50,7 +46,7 @@ import Switch from '@/components/atoms/Switch.vue'
     align-items: center;
     gap: 2.625rem;
 
-    > .header-logo {
+    >.header-logo {
         width: 60px;
     }
 }
@@ -73,6 +69,7 @@ import Switch from '@/components/atoms/Switch.vue'
         flex-direction: column;
         justify-content: space-between;
         z-index: 12;
+
         h1 {
             font-size: 3rem !important;
             line-height: 1.2 !important;
@@ -90,18 +87,19 @@ import Switch from '@/components/atoms/Switch.vue'
         display: flex;
         flex-direction: column;
 
-        > div {
+        >div {
             display: flex;
             flex-direction: column;
             gap: 0.8rem;
-            > h2 {
+
+            >h2 {
                 font-size: 1.875rem !important;
                 line-height: 2.25rem !important;
                 font-weight: 500 !important;
                 color: var(--color-text);
             }
 
-            > p {
+            >p {
                 font-size: 1.125rem;
                 line-height: 1.75rem;
                 font-weight: 500;
@@ -112,7 +110,7 @@ import Switch from '@/components/atoms/Switch.vue'
             margin-top: 2rem;
         }
 
-        > form {
+        >form {
             display: flex;
             flex-direction: column;
             gap: 1rem;
@@ -132,7 +130,7 @@ import Switch from '@/components/atoms/Switch.vue'
 
 @media (max-width: 1024px) {
     .auth-header {
-        > .header-logo {
+        >.header-logo {
             width: 48px;
         }
     }
@@ -156,25 +154,26 @@ import Switch from '@/components/atoms/Switch.vue'
             display: flex;
             flex-direction: column;
 
-            > div {
+            >div {
                 display: flex;
                 flex-direction: column;
                 gap: 0.8rem;
-                > h2 {
+
+                >h2 {
                     font-size: 1.875rem !important;
                     line-height: 2.25rem !important;
                     font-weight: 500 !important;
                     color: var(--color-text);
                 }
 
-                > p {
+                >p {
                     font-size: 1.125rem;
                     line-height: 1.75rem;
                     font-weight: 500;
                 }
             }
 
-            > form {
+            >form {
                 display: flex;
                 flex-direction: column;
                 gap: 1rem;

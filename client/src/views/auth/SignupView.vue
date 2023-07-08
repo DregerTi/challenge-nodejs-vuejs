@@ -12,32 +12,15 @@ import AuthLayout from '@/components/organisms/AuthLayout.vue'
         </div>
         <form>
             <div class="flex flex-col gap-8 w-full md:flex-row">
-                <Input
-                    class="w-full"
-                    type="text"
-                    placeholder="Firstname"
-                    name="fistname"
-                    label="fistname"
-                />
-                <Input
-                    class="w-full"
-                    type="text"
-                    placeholder="Lastname"
-                    name="lastname"
-                    label="lastname"
-                />
+                <Input class="w-full" type="text" placeholder="Firstname" name="Fistname" label="Fistname" />
+                <Input class="w-full" type="text" placeholder="Lastname" name="Lastname" label="Lastname" />
             </div>
 
             <Input type="text" placeholder="Email" name="email" label="Email" />
 
             <Input type="pasword" placeholder="Password" name="password" label="Password" />
 
-            <Input
-                type="password"
-                placeholder="password"
-                name="confirm-password"
-                label="Confirm Password"
-            />
+            <Input type="password" placeholder="Confirm password" name="confirm-password" label="Confirm Password" />
             <div>
                 <p>
                     Already have an account?
@@ -51,4 +34,12 @@ import AuthLayout from '@/components/organisms/AuthLayout.vue'
     </section>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.body {
+    position: initial;
+}
+
+.auth-container> :last-child {
+    gap: 2rem;
+}
+</style>
