@@ -12,7 +12,7 @@ import Input from '@/components/atoms/Input.vue'
         <form>
             <Input type="text" placeholder="example@email.com" name="email" label="Email" />
 
-            <Input type="password" placeholder="password" name="password" label="Password" />
+            <Input type="password" placeholder="Must have 6 characters minimum" name="password" label="Password" />
             <div>
                 <span class="a-href">
                     <RouterLink to="forgot-password">Forgot password?</RouterLink>
@@ -29,4 +29,13 @@ import Input from '@/components/atoms/Input.vue'
     </section>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.body {
+    position: fixed;
+    overflow: hidden;
+}
+
+.auth-container> :last-child {
+    gap: 7rem;
+}
+</style>
