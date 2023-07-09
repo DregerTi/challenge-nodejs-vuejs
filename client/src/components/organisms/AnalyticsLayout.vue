@@ -72,7 +72,7 @@ function toogleDashboardEditMode() {
             display: flex;
             flex-direction: column;
             gap: 2.625rem;
-            margin: 3.5rem 0;
+            margin: 3.5rem 2rem;
 
             > header {
                 display: flex;
