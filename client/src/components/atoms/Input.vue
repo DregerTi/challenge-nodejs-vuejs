@@ -1,5 +1,5 @@
 <script setup>
-const { type, placeholder, value, label, name } = defineProps({
+const { type, placeholder, value, label, name, variant } = defineProps({
     type: {
         type: String,
         default: 'text',
@@ -30,17 +30,22 @@ const { type, placeholder, value, label, name } = defineProps({
         default: ''
     },
     label: {
-        type: String
+        type: String,
+        required: false
     },
     name: {
         type: String,
         required: true
+    },
+    variant: {
+        type: String,
+        required: false
     }
 })
 </script>
 
 <template>
-    <div class="input">
+    <div class="input" :class="[variant ? 'input--' + variant : '']">
         <label v-if="label">{{ label }}</label>
         <input :type="type" :placeholder="placeholder" :value="value" :name="name" />
     </div>
@@ -67,6 +72,13 @@ const { type, placeholder, value, label, name } = defineProps({
         color: var(--color-text);
         border-radius: 0.375rem;
         background-color: var(--color-background-item);
+    }
+
+    &--search {
+        > input {
+            background: url(@/assets/search.svg) no-repeat scroll calc(100% - 10px) 10px;
+            padding-right: 40px;
+        }
     }
 }
 </style>

@@ -129,6 +129,45 @@ const router = createRouter({
                                 }
                             ]
                         },
+                        {
+                            path: 'heatmap/',
+                            name: 'heatmap',
+                            component: () => import('../views/event/explore/heatmap/HeatmapView.vue'),
+                            children: [
+                                {
+                                    path: ':id',
+                                    name: 'heatmap-show',
+                                    component: () => import('../views/event/explore/heatmap/HeatmapShowView.vue')
+                                }
+                            ]
+                        },
+                        {
+                            path: 'tag/',
+                            name: 'tag',
+                            component: () => import('../views/event/explore/tag/TagView.vue'),
+                            children: [
+                                {
+                                    path: ':id',
+                                    name: 'tag-show',
+                                    component: () => import('../views/event/explore/tag/TagShowView.vue')
+                                },
+                                {
+                                    path: ':id/edit',
+                                    name: 'tag-edit',
+                                    component: () => import('../views/event/explore/tag/TagEditView.vue')
+                                },
+                                {
+                                    path: ':id/delete',
+                                    name: 'tag-delete',
+                                    component: () => import('../views/event/explore/tag/TagDeleteView.vue')
+                                },
+                                {
+                                    path: 'create',
+                                    name: 'tag-create',
+                                    component: () => import('../views/event/explore/tag/TagCreateView.vue')
+                                }
+                            ]
+                        }
                     ]
                 }
             ]

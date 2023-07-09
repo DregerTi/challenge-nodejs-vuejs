@@ -93,7 +93,7 @@ function toogleDashboardEditMode() {
             .container {
                 padding: 0 1rem;
                 margin: 1.4rem 0;
-                margin-bottom: 4rem;
+                margin-bottom: 8rem;
 
                 > header {
                     flex-direction: column;

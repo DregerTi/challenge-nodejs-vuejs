@@ -25,13 +25,13 @@ emit('update:dashboardEditButton', false)
                 icon="LocalFire"
                 title="Heatmaps"
                 description="Interaction patterns on your website"
-                path="/"
+                :path="'/analytics/' + $route.params.site + '/explore/heatmap'"
             />
             <MenuButton
                 icon="TrackChanges"
                 title="Tag"
                 description="Create events for customized analysis"
-                path="/"
+                :path="'/analytics/' + $route.params.site + '/explore/tag'"
             />
         </section>
     </div>

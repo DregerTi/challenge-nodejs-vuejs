@@ -46,7 +46,7 @@ function mouseOver() {
                     <Button
                         icon="AccountTree"
                         v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
-                        v-bind:title="isOpen ? 'Exlore' : ''"
+                        v-bind:title="isOpen ? 'Explore' : ''"
                     />
                 </RouterLink>
                 <RouterLink to="">

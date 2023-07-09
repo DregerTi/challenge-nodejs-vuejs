@@ -13,6 +13,7 @@ import IconTrendingUp from '@/components/icons/IconTrendingUp.vue'
 import IconEdit from '@/components/icons/IconEdit.vue'
 import IconCheck from '@/components/icons/IconCheck.vue'
 import IconDelete from "@/components/icons/IconDelete.vue";
+import IconScreenshotMonitor from "@/components/icons/IconScreenshotMonitor.vue";
 
 const { title, variant, icon } = defineProps({
     title: {
@@ -70,6 +71,7 @@ const { title, variant, icon } = defineProps({
         <IconEdit v-if="icon == 'Edit'" />
         <IconCheck v-if="icon == 'Check'" />
         <IconDelete v-if="icon == 'Delete'" />
+        <IconScreenshotMonitor v-if="icon == 'ScreenshotMonitor'" />
         <p v-if="title">{{ title }}</p>
     </button>
 </template>

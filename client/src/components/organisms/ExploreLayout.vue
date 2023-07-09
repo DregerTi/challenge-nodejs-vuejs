@@ -4,18 +4,20 @@ import Button from '@/components/atoms/Button.vue'
 import Header from '@/components/organisms/Header.vue'
 import {defineEmits, ref} from 'vue'
 import Listbox from '@/components/atoms/Listbox.vue'
+import Input from "@/components/atoms/Input.vue";
 
 const deleteBtn = ref(false)
 const updateBtn = ref(false)
 const calendarBtn = ref(false)
 const mdMenuExplore = ref(false)
 const descriptionHidden = ref(true)
+const screenShotBtn = ref(false)
 
 const emit = defineEmits(['update:setDateButton', 'update:dashboardEditButton'])
 emit('update:setDateButton', false)
 emit('update:dashboardEditButton', false)
 
-const { title, items, description, createNewPath } = defineProps({
+const { title, items, description, createNewPath, path } = defineProps({
   title: {
     type: String,
     required: true
@@ -30,15 +32,21 @@ const { title, items, description, createNewPath } = defineProps({
   },
   createNewPath: {
     type: String,
-    required: true
+    required: false
   },
+  path: {
+    type: String,
+    required: true
+  }
 })
 </script>
 
 <template>
   <div class="container-explore">
     <header :class="[mdMenuExplore ? 'md-menu-explore' : '']">
+      <Input type="text" placeholder="Search" name="search" variant="search" />
       <RouterLink
+          v-if="createNewPath"
           :to="createNewPath"
       >
         <Button title="Create new"/>
@@ -46,7 +54,7 @@ const { title, items, description, createNewPath } = defineProps({
       <nav>
         <RouterLink
             v-for="item in items"
-            :to="'/analytics/' + $route.params.site + '/explore/conversion-tunnel/' + item.id"
+            :to="path + '/' + item.id"
         >
           <Button
               :title="item.title"
@@ -63,6 +71,7 @@ const { title, items, description, createNewPath } = defineProps({
           </h2>
           <div v-if="$route.params.id">
             <Button v-if="calendarBtn" class="calendar-button" title="This month" />
+            <Button v-if="screenShotBtn" icon="ScreenshotMonitor" />
             <RouterLink  v-if="updateBtn" :to="$route.params.id+'/edit'">
               <Button icon="Edit"/>
             </RouterLink>
@@ -83,6 +92,7 @@ const { title, items, description, createNewPath } = defineProps({
             v-model:calendarBtn="calendarBtn"
             v-model:descriptionHidden="descriptionHidden"
             v-model:mdMenuExplore="mdMenuExplore"
+            v-model:screenShotBtn="screenShotBtn"
         >
           <transition
               v-if="Component"
@@ -98,7 +108,7 @@ const { title, items, description, createNewPath } = defineProps({
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .container-explore{
   display: flex;
   gap: 3rem;
@@ -107,7 +117,7 @@ const { title, items, description, createNewPath } = defineProps({
   > header{
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.4rem;
     z-index: 1;
     width: 250px;
     padding: 1.2rem;
@@ -120,12 +130,36 @@ const { title, items, description, createNewPath } = defineProps({
       }
     }
 
+    > .input{
+      width: 100%;
+      padding: 0;
+      > input{
+        width: 100%;
+        border-radius: 10px!important;
+        background-color: var(--color-dark-grey);
+
+        &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+          color: var(--color-grey);
+          opacity: 1; /* Firefox */
+        }
+
+        &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+          color: var(--color-grey);
+        }
+
+        &::-ms-input-placeholder { /* Microsoft Edge */
+          color: var(--color-grey);
+        }
+      }
+    }
+
     > nav{
       display: flex;
       flex-direction: column;
       gap: 1rem;
       max-height: 100%;
       overflow-y: scroll;
+      padding-top: 1rem;
       width: 100%;
       > a {
         width: 100%;
@@ -144,12 +178,6 @@ const { title, items, description, createNewPath } = defineProps({
       width: 100%;
     }
     margin: 4rem 0;
-
-    p{
-      font-size: 1.2rem;
-      font-weight: 400;
-      color: var(--color-grey)!important;
-    }
   }
 
   > section{

@@ -12,35 +12,35 @@ emit('update:screenShotBtn', false)
 
 let items = [
     {
-        title: 'Conversion Tunnel 1',
+        title: 'Heatmap 1',
         id: '3255'
     },
     {
-        title: 'Conversion Tunnel 2',
+        title: 'Heatmap 2',
         id: '32898'
     },
     {
-        title: 'Conversion Tunnel 3',
+        title: 'Heatmap 3',
         id: '322'
     },
     {
-        title: 'Conversion Tunnel 4',
+        title: 'Heatmap 4',
         id: '32'
     },
     {
-        title: 'Conversion Tunnel 5',
+        title: 'Heatmap 5',
         id: '3002'
     },
     {
-        title: 'Conversion Tunnel 6',
+        title: 'Heatmap 6',
         id: '3'
     },
     {
-        title: 'Conversion Tunnel 7',
+        title: 'Heatmap 7',
         id: '2'
     },
     {
-        title: 'Conversion Tunnel 8',
+        title: 'Heatmap 8',
         value: '1'
     }
 ]
@@ -48,11 +48,10 @@ let items = [
 
 <template>
   <ExploreLayout
-      title="Conversion Tunnels"
+      title="Heatmaps"
       :items="items"
-      description="Create and edit conversion tunnels to track the conversion journey or funnel"
-      :createNewPath="'/analytics/' + $route.params.site + '/explore/conversion-tunnel/create'"
-      :path="'/analytics/' + $route.params.site + '/explore/conversion-tunnel'"
+      description="See where your users click and scroll on your website"
+      :path="'/analytics/' + $route.params.site + '/explore/heatmap'"
   >
   </ExploreLayout>
 </template>
