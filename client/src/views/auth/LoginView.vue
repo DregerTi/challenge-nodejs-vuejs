@@ -30,10 +30,6 @@ import Input from '@/components/atoms/Input.vue'
 </template>
 
 <style lang="scss">
-.body {
-    position: fixed;
-    overflow: hidden;
-}
 
 .auth-container> :last-child {
     gap: 7rem;
