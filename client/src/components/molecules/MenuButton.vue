@@ -12,6 +12,8 @@ import IconDevices from '@/components/icons/IconDevices.vue'
 import IconTrendingUp from '@/components/icons/IconTrendingUp.vue'
 import IconTrackChanges from '@/components/icons/IconTrackChanges.vue'
 import IconLocalFire from '@/components/icons/IconLocalFire.vue'
+import IconVpnKey from "@/components/icons/IconVpnKey.vue";
+import IconLinkOff from "@/components/icons/IconLinkOff.vue";
 
 const { title, description, icon, path } = defineProps({
     title: {
@@ -50,6 +52,8 @@ const { title, description, icon, path } = defineProps({
             <IconAutoTimer v-if="icon == 'AutoTimer'" />
             <IconExplore v-if="icon == 'Explore'" />
             <IconRoundaboutRight v-if="icon == 'RoundaboutRight'" />
+            <IconVpnKey v-if="icon == 'VpnKey'" />
+            <IconLinkOff v-if="icon == 'LinkOff'" />
             <div>
                 <h5>{{ title }}</h5>
                 <p>{{ description }}</p>

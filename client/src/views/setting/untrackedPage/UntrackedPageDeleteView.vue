@@ -15,10 +15,10 @@ emit('update:descriptionHidden', false)
 <template>
   <div class="event-form">
     <p>
-      Are you sure you want to delete this tag?
+      Are you sure you want to delete this untracked page?
     </p>
     <div class="flex gap-4">
-      <RouterLink class="w-full" :to="'/analytics/' + $route.params.site + '/explore/tag/' + $route.params.id">
+      <RouterLink class="w-full" :to="'/analytics/' + $route.params.site + '/setting/untracked-page/' + $route.params.id">
         <Button title="Cancel" class="w-full" variant="light-grey"/>
       </RouterLink>
       <Button title="Delete" class="w-full" variant="error"/>

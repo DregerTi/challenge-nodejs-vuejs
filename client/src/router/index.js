@@ -169,7 +169,92 @@ const router = createRouter({
                             ]
                         }
                     ]
-                }
+                },
+                {
+                    path: 'me/',
+                    name: 'me',
+                    children: [
+                        {
+                            path: '',
+                            name: 'me',
+                            component: () => import('../views/auth/MeView.vue')
+                        },
+                        {
+                            path: 'edit',
+                            name: 'me-update',
+                            component: () => import('../views/auth/MeUpdateView.vue')
+                        }
+                    ]
+                },
+                {
+                    path: 'setting/',
+                    name: 'setting',
+                    children: [
+                        {
+                            path: '',
+                            name: 'setting',
+                            component: () => import('../views/setting/SettingView.vue')
+                        },
+                        {
+                            path: 'website-info/',
+                            name: 'website-info',
+                            children: [
+                                {
+                                    path: '',
+                                    name: 'website-info',
+                                    component: () => import('../views/setting/websiteInfo/WebsiteInfoView.vue'),
+                                },
+                                {
+                                    path: 'edit',
+                                    name: 'website-info-edit',
+                                    component: () => import('../views/setting/websiteInfo/WebsiteInfoUpdateView.vue')
+                                },
+                            ]
+                        },
+                        {
+                            path: 'api-key',
+                            name: 'api-key',
+                            component: () => import('../views/setting/ApiKeyView.vue')
+                        },
+                        {
+                            path: 'users',
+                            name: 'users',
+                            component: () => import('../views/setting/SettingView.vue')
+                        },
+                        {
+                            path: 'website-users',
+                            name: 'website-users',
+                            component: () => import('../views/setting/SettingView.vue')
+                        },
+                        {
+                            path: 'untracked-page/',
+                            name: 'untracked-page',
+                            component: () => import('../views/setting/untrackedPage/UntrackedPageView.vue'),
+                            children: [
+                                {
+                                    path: ':id',
+                                    name: 'untracked-page-show',
+                                    component: () => import('../views/setting/untrackedPage/UntrackedPageShowView.vue')
+                                },
+                                {
+                                    path: ':id/edit',
+                                    name: 'untracked-page-edit',
+                                    component: () => import('../views/setting/untrackedPage/UntrackedPageEditView.vue')
+                                },
+                                {
+                                    path: ':id/delete',
+                                    name: 'untracked-page-delete',
+                                    component: () => import('../views/setting/untrackedPage/UntrackedPageDeleteView.vue')
+                                },
+                                {
+                                    path: 'add',
+                                    name: 'untracked-page-add',
+                                    component: () => import('../views/setting/untrackedPage/UntrackedPageCreateView.vue')
+                                }
+                            ]
+                        },
+                    ]
+                },
             ]
         }
     ]

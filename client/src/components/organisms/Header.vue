@@ -49,14 +49,14 @@ function mouseOver() {
                         v-bind:title="isOpen ? 'Explore' : ''"
                     />
                 </RouterLink>
-                <RouterLink to="">
+                <RouterLink :to="'/analytics/' + $route.params.site + '/me'">
                     <Button
                         icon="Person"
                         v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
                         v-bind:title="isOpen ? 'My account' : ''"
                     />
                 </RouterLink>
-                <RouterLink to="">
+                <RouterLink :to="'/analytics/' + $route.params.site + '/setting'">
                     <Button
                         icon="Settings"
                         v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"

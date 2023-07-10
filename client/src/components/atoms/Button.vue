@@ -14,6 +14,7 @@ import IconEdit from '@/components/icons/IconEdit.vue'
 import IconCheck from '@/components/icons/IconCheck.vue'
 import IconDelete from "@/components/icons/IconDelete.vue";
 import IconScreenshotMonitor from "@/components/icons/IconScreenshotMonitor.vue";
+import IconAutorenew from "@/components/icons/IconAutorenew.vue";
 
 const { title, variant, icon } = defineProps({
     title: {
@@ -72,6 +73,7 @@ const { title, variant, icon } = defineProps({
         <IconCheck v-if="icon == 'Check'" />
         <IconDelete v-if="icon == 'Delete'" />
         <IconScreenshotMonitor v-if="icon == 'ScreenshotMonitor'" />
+        <IconAutorenew v-if="icon == 'Autorenew'" />
         <p v-if="title">{{ title }}</p>
     </button>
 </template>
