@@ -1,6 +1,6 @@
 const specificRouter = require("./specificRouter");
 const SiteInvitationService = require("../services/siteInvitation");
-const SiteUserService = require("../services/SiteUser");
+const SiteUserService = require("../services/siteUser");
 const genericController = require("../controllers/generic");
 const checkAuth = require("../middlewares/check-auth");
 const invitationPermissions = require("../middlewares/invitations-permissions");
