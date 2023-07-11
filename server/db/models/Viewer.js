@@ -23,6 +23,10 @@ module.exports = (connection) => {
     { sequelize: connection, tableName: "viewer" }
   );
 
+  Viewer.associate = (models) => {
+    Viewer.belongsTo(models.Site, {foreignKey: 'siteId'});
+  }
+
 
   return Viewer;
 };

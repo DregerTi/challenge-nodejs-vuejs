@@ -1,4 +1,4 @@
-const {User} = require("../db");
+const {User, SiteUser} = require("../db");
 const Sequelize = require("sequelize");
 const ValidationError = require("../errors/ValidationError");
 
@@ -7,20 +7,28 @@ module.exports = function UserService() {
         findAll: async function (filters, options) {
             let dbOptions = {
                 where: filters,
+                include: [{
+                    model: SiteUser,
+                }] ,
             };
             // options.order = {name: "ASC", dob: "DESC"}
-            if (options.order) {
+            if (options?.order) {
                 // => [["name", "ASC"], ["dob", "DESC"]]
                 dbOptions.order = Object.entries(options.order);
             }
-            if (options.limit) {
+            if (options?.limit) {
                 dbOptions.limit = options.limit;
                 dbOptions.offset = options.offset;
             }
             return User.findAll(dbOptions);
         },
         findOne: async function (filters) {
-            return User.findOne({where: filters});
+            return User.findOne(
+                {
+                    where: filters,
+                    include: SiteUser
+                }
+            );
         },
         create: async function (data) {
             try {

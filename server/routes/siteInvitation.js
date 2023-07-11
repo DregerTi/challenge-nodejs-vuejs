@@ -4,7 +4,7 @@ const SiteUserService = require("../services/siteUser");
 const genericController = require("../controllers/generic");
 const checkAuth = require("../middlewares/check-auth");
 const invitationPermissions = require("../middlewares/invitations-permissions");
-const tokenGenerator = require("../utils/token-generator");
+const UserService = require("../services/user");
 
 const routesList = [
     {
@@ -33,7 +33,20 @@ const routesList = [
 const service = new SiteInvitationService();
 const controller = new genericController(service);
 const siteUserService = new SiteUserService();
+const userService = new UserService();
 
+controller.create = async (req, res, next) => {
+    const {siteId, email, role} = req.body;
+    try {
+        const user = await userService.findOne({email});
+        if (!user) return res.status(404).json({error: 'User not found'});
+        if (user.id === req.user.id) return res.status(409).json({error: 'You cannot invite yourself'});
+        const invitation = await service.create({siteId, userId, role});
+        res.status(201).json(invitation);
+    } catch (err) {
+        next(err);
+    }
+}
 controller.accept = async (req, res, next) => {
     const {id} = req.params;
     try {

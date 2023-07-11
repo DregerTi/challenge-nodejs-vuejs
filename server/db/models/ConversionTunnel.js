@@ -26,5 +26,10 @@ module.exports = (connection) => {
         { sequelize: connection, tableName: "conversionTunnel" }
     );
 
+    ConversionTunnel.associate = (models) => {
+        ConversionTunnel.belongsTo(models.Site, { foreignKey: "siteId" });
+        ConversionTunnel.belongsTo(models.User, { foreignKey: "createdBy" });
+    }
+
     return ConversionTunnel;
 };

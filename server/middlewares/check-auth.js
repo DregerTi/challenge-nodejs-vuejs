@@ -10,6 +10,7 @@ module.exports = {
         }
         const [type, token] = req.headers.authorization.split(" ");
         if (type !== "Bearer") {
+            console.log("Bearer")
             return next(new UnauthorizedError());
         }
         try {
@@ -19,18 +20,18 @@ module.exports = {
             const serviceUser = new UserService();
             let user = await serviceUser.findOne({id: parseInt(userToken.id, 10)});
 
-            const userRoles = await serviceSiteUser.findAll({userId: parseInt(userToken.id, 10)});
-
-            user.roles = userRoles.map((role) => {
+            user.roles = user.SiteUsers.map((role) => {
                 return {
                     siteId: role.siteId,
                     role: role.role,
                 };
             });
+            delete user.SiteUsers;
 
             req.user = user;
 
         } catch (err) {
+            console.log(err);
             return next(new UnauthorizedError());
         }
         next();

@@ -27,6 +27,11 @@ module.exports = (connection) => {
     { sequelize: connection, tableName: "untrackPath" }
   );
 
+  UntrackPath.associate = (models) => {
+    UntrackPath.belongsTo(models.Site, {foreignKey: 'siteId'});
+    UntrackPath.belongsTo(models.User, {foreignKey: 'createdBy'});
+  }
+
 
   return UntrackPath;
 };

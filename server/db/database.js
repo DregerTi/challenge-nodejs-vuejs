@@ -4,6 +4,7 @@ NODE_ENV = process.env.NODE_ENV || "development";
 
 const config = {
   development: {
+      databaseUrl: 'postgres://root:password@127.0.0.1:5432/app',
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: 'app',
@@ -11,6 +12,7 @@ const config = {
       dialect: 'postgres',
   },
   test: {
+      databaseUrl: 'postgres://root:password@127.0.0.1:5432/test',
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: 'app',
@@ -18,6 +20,7 @@ const config = {
       dialect: 'postgres',
   },
   production: {
+      databaseUrl: 'postgres://root:password@127.0.0.1:5432/prod',
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: 'app_production',
