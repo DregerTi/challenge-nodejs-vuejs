@@ -12,41 +12,39 @@ emit('update:dashboardEditButton', false)
     <div class="container-menu">
         <header>
             <h2>Settings</h2>
-            <p>
-                Manage settings
-            </p>
+            <p>Manage settings</p>
         </header>
         <section>
-          <MenuButton
-              icon="Badge"
-              title="Web site"
-              description="Manage your website informations"
-              :path="'/analytics/' + $route.params.site + '/setting/website-info'"
-          />
-          <MenuButton
-              icon="VpnKey"
-              title="API key"
-              description="Manage website API key"
-              :path="'/analytics/' + $route.params.site + '/setting/api-key'"
-          />
-          <MenuButton
-              icon="LinkOff"
-              title="Untracked pages"
-              description="Manage your untracked pages"
-              :path="'/analytics/' + $route.params.site + '/setting/untracked-page'"
-          />
-          <MenuButton
-              icon="Group"
-              title="Website users"
-              description="Manage website users & permissions"
-              :path="'/analytics/' + $route.params.site + '/setting/website-users'"
-          />
-          <MenuButton
-              icon="Group"
-              title="Users"
-              description="As digitanalytics admin manage all users"
-              :path="'/analytics/' + $route.params.site + '/setting/users'"
-          />
+            <MenuButton
+                icon="Badge"
+                title="Web site"
+                description="Manage your website informations"
+                :path="'/analytics/' + $route.params.site + '/setting/website-info'"
+            />
+            <MenuButton
+                icon="VpnKey"
+                title="API key"
+                description="Manage website API key"
+                :path="'/analytics/' + $route.params.site + '/setting/api-key'"
+            />
+            <MenuButton
+                icon="LinkOff"
+                title="Untracked pages"
+                description="Manage your untracked pages"
+                :path="'/analytics/' + $route.params.site + '/setting/untracked-page'"
+            />
+            <MenuButton
+                icon="Group"
+                title="Website users"
+                description="Manage website users & permissions"
+                :path="'/analytics/' + $route.params.site + '/setting/website-users'"
+            />
+            <MenuButton
+                icon="Group"
+                title="Users"
+                description="As digitanalytics admin manage all users"
+                :path="'/analytics/' + $route.params.site + '/setting/users'"
+            />
         </section>
     </div>
 </template>

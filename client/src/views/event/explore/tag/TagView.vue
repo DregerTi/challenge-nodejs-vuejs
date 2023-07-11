@@ -1,8 +1,16 @@
 <script setup>
-import ExploreLayout from "@/components/organisms/ExploreLayout.vue";
-import {defineEmits} from "vue";
+import ExploreLayout from '@/components/organisms/ExploreLayout.vue'
+import { defineEmits } from 'vue'
 
-const emit = defineEmits(['update:descriptionHidden', "update:deleteBtn", "update:calendarBtn", "update:updateBtn", "update:setDateButton", "update:mdMenuExplore", "update:screenShotBtn"])
+const emit = defineEmits([
+    'update:descriptionHidden',
+    'update:deleteBtn',
+    'update:calendarBtn',
+    'update:updateBtn',
+    'update:setDateButton',
+    'update:mdMenuExplore',
+    'update:screenShotBtn'
+])
 emit('update:deleteBtn', false)
 emit('update:updateBtn', false)
 emit('update:calendarBtn', false)
@@ -47,15 +55,14 @@ let items = [
 </script>
 
 <template>
-  <ExploreLayout
-      title="Tags"
-      :items="items"
-      description="Create and edit tags to track your users' actions on your website"
-      :createNewPath="'/analytics/' + $route.params.site + '/explore/tag/create'"
-      :path="'/analytics/' + $route.params.site + '/explore/tag'"
-  >
-  </ExploreLayout>
+    <ExploreLayout
+        title="Tags"
+        :items="items"
+        description="Create and edit tags to track your users' actions on your website"
+        :createNewPath="'/analytics/' + $route.params.site + '/explore/tag/create'"
+        :path="'/analytics/' + $route.params.site + '/explore/tag'"
+    >
+    </ExploreLayout>
 </template>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

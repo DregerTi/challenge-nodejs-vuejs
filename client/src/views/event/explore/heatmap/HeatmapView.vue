@@ -1,8 +1,16 @@
 <script setup>
-import ExploreLayout from "@/components/organisms/ExploreLayout.vue";
-import {defineEmits} from "vue";
+import ExploreLayout from '@/components/organisms/ExploreLayout.vue'
+import { defineEmits } from 'vue'
 
-const emit = defineEmits(['update:descriptionHidden', "update:deleteBtn", "update:calendarBtn", "update:updateBtn", "update:setDateButton", "update:mdMenuExplore", "update:screenShotBtn"])
+const emit = defineEmits([
+    'update:descriptionHidden',
+    'update:deleteBtn',
+    'update:calendarBtn',
+    'update:updateBtn',
+    'update:setDateButton',
+    'update:mdMenuExplore',
+    'update:screenShotBtn'
+])
 emit('update:deleteBtn', false)
 emit('update:updateBtn', false)
 emit('update:calendarBtn', false)
@@ -47,14 +55,13 @@ let items = [
 </script>
 
 <template>
-  <ExploreLayout
-      title="Heatmaps"
-      :items="items"
-      description="See where your users click and scroll on your website"
-      :path="'/analytics/' + $route.params.site + '/explore/heatmap'"
-  >
-  </ExploreLayout>
+    <ExploreLayout
+        title="Heatmaps"
+        :items="items"
+        description="See where your users click and scroll on your website"
+        :path="'/analytics/' + $route.params.site + '/explore/heatmap'"
+    >
+    </ExploreLayout>
 </template>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

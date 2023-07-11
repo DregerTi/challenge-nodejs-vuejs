@@ -12,8 +12,8 @@ import IconDevices from '@/components/icons/IconDevices.vue'
 import IconTrendingUp from '@/components/icons/IconTrendingUp.vue'
 import IconTrackChanges from '@/components/icons/IconTrackChanges.vue'
 import IconLocalFire from '@/components/icons/IconLocalFire.vue'
-import IconVpnKey from "@/components/icons/IconVpnKey.vue";
-import IconLinkOff from "@/components/icons/IconLinkOff.vue";
+import IconVpnKey from '@/components/icons/IconVpnKey.vue'
+import IconLinkOff from '@/components/icons/IconLinkOff.vue'
 
 const { title, description, icon, path } = defineProps({
     title: {

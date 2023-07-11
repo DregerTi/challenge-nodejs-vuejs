@@ -27,8 +27,6 @@ services:
     ports:
       - 3000:3000
     environment:
-      NODE_ENV: development
-      DATABASE_URL: postgres://root:password@db:5432/app
       JWT_SECRET: ImAstrongSecret
     working_dir: /usr/src/app
     volumes:

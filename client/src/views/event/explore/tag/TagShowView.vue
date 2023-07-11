@@ -1,8 +1,13 @@
 <script setup>
+import { defineEmits } from 'vue'
 
-import {defineEmits} from "vue";
-
-const emit = defineEmits(['update:descriptionHidden', "update:deleteBtn", "update:calendarBtn", "update:updateBtn", "update:mdMenuExplore"])
+const emit = defineEmits([
+    'update:descriptionHidden',
+    'update:deleteBtn',
+    'update:calendarBtn',
+    'update:updateBtn',
+    'update:mdMenuExplore'
+])
 emit('update:deleteBtn', true)
 emit('update:updateBtn', true)
 emit('update:mdMenuExplore', true)
@@ -11,13 +16,7 @@ emit('update:descriptionHidden', false)
 </script>
 
 <template>
-
-  <div>
-    oe
-  </div>
-
+    <div>oe</div>
 </template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

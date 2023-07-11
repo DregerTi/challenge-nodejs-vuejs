@@ -1,8 +1,16 @@
 <script setup>
-import ExploreLayout from "@/components/organisms/ExploreLayout.vue";
-import {defineEmits} from "vue";
+import ExploreLayout from '@/components/organisms/ExploreLayout.vue'
+import { defineEmits } from 'vue'
 
-const emit = defineEmits(['update:descriptionHidden', "update:deleteBtn", "update:calendarBtn", "update:updateBtn", "update:setDateButton", "update:mdMenuExplore", "update:screenShotBtn"])
+const emit = defineEmits([
+    'update:descriptionHidden',
+    'update:deleteBtn',
+    'update:calendarBtn',
+    'update:updateBtn',
+    'update:setDateButton',
+    'update:mdMenuExplore',
+    'update:screenShotBtn'
+])
 emit('update:deleteBtn', false)
 emit('update:updateBtn', false)
 emit('update:calendarBtn', false)
@@ -47,15 +55,14 @@ let items = [
 </script>
 
 <template>
-  <ExploreLayout
-      title="Conversion Tunnels"
-      :items="items"
-      description="Create and edit conversion tunnels to track the conversion journey or funnel"
-      :createNewPath="'/analytics/' + $route.params.site + '/explore/conversion-tunnel/create'"
-      :path="'/analytics/' + $route.params.site + '/explore/conversion-tunnel'"
-  >
-  </ExploreLayout>
+    <ExploreLayout
+        title="Conversion Tunnels"
+        :items="items"
+        description="Create and edit conversion tunnels to track the conversion journey or funnel"
+        :createNewPath="'/analytics/' + $route.params.site + '/explore/conversion-tunnel/create'"
+        :path="'/analytics/' + $route.params.site + '/explore/conversion-tunnel'"
+    >
+    </ExploreLayout>
 </template>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

@@ -1,6 +1,12 @@
 const Sequelize = require("sequelize");
+const databaseConfig = require("./database");
 
-const connection = new Sequelize(process.env.DATABASE_URL);
+NODE_ENV = process.env.NODE_ENV || "development";
+
+const connection = new Sequelize(databaseConfig.database, databaseConfig.username, databaseConfig.password, {
+  dialect: "postgres",
+  port: databaseConfig.port,
+});
 
 connection
   .authenticate()

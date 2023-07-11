@@ -69,7 +69,8 @@ const router = createRouter({
                         {
                             path: 'avg-sessions',
                             name: 'avg-sessions',
-                            component: () => import('../views/event/audience/SessionDurationView.vue')
+                            component: () =>
+                                import('../views/event/audience/SessionDurationView.vue')
                         },
                         {
                             path: 'bounce-rate',
@@ -105,39 +106,56 @@ const router = createRouter({
                         {
                             path: 'conversion-tunnel/',
                             name: 'conversion-tunnel',
-                            component: () => import('../views/event/explore/conversionTunnel/ConversionTunnelView.vue'),
+                            component: () =>
+                                import(
+                                    '../views/event/explore/conversionTunnel/ConversionTunnelView.vue'
+                                ),
                             children: [
                                 {
                                     path: ':id',
                                     name: 'conversion-tunnel-show',
-                                    component: () => import('../views/event/explore/conversionTunnel/ConversionTunnelShowView.vue')
+                                    component: () =>
+                                        import(
+                                            '../views/event/explore/conversionTunnel/ConversionTunnelShowView.vue'
+                                        )
                                 },
                                 {
                                     path: ':id/edit',
                                     name: 'conversion-tunnel-edit',
-                                    component: () => import('../views/event/explore/conversionTunnel/ConversionTunnelEditView.vue')
+                                    component: () =>
+                                        import(
+                                            '../views/event/explore/conversionTunnel/ConversionTunnelEditView.vue'
+                                        )
                                 },
                                 {
                                     path: ':id/delete',
                                     name: 'conversion-tunnel-delete',
-                                    component: () => import('../views/event/explore/conversionTunnel/ConversionTunnelDeleteView.vue')
+                                    component: () =>
+                                        import(
+                                            '../views/event/explore/conversionTunnel/ConversionTunnelDeleteView.vue'
+                                        )
                                 },
                                 {
                                     path: 'create',
                                     name: 'conversion-tunnel-create',
-                                    component: () => import('../views/event/explore/conversionTunnel/ConversionTunnelCreateView.vue')
+                                    component: () =>
+                                        import(
+                                            '../views/event/explore/conversionTunnel/ConversionTunnelCreateView.vue'
+                                        )
                                 }
                             ]
                         },
                         {
                             path: 'heatmap/',
                             name: 'heatmap',
-                            component: () => import('../views/event/explore/heatmap/HeatmapView.vue'),
+                            component: () =>
+                                import('../views/event/explore/heatmap/HeatmapView.vue'),
                             children: [
                                 {
                                     path: ':id',
                                     name: 'heatmap-show',
-                                    component: () => import('../views/event/explore/heatmap/HeatmapShowView.vue')
+                                    component: () =>
+                                        import('../views/event/explore/heatmap/HeatmapShowView.vue')
                                 }
                             ]
                         },
@@ -149,22 +167,26 @@ const router = createRouter({
                                 {
                                     path: ':id',
                                     name: 'tag-show',
-                                    component: () => import('../views/event/explore/tag/TagShowView.vue')
+                                    component: () =>
+                                        import('../views/event/explore/tag/TagShowView.vue')
                                 },
                                 {
                                     path: ':id/edit',
                                     name: 'tag-edit',
-                                    component: () => import('../views/event/explore/tag/TagEditView.vue')
+                                    component: () =>
+                                        import('../views/event/explore/tag/TagEditView.vue')
                                 },
                                 {
                                     path: ':id/delete',
                                     name: 'tag-delete',
-                                    component: () => import('../views/event/explore/tag/TagDeleteView.vue')
+                                    component: () =>
+                                        import('../views/event/explore/tag/TagDeleteView.vue')
                                 },
                                 {
                                     path: 'create',
                                     name: 'tag-create',
-                                    component: () => import('../views/event/explore/tag/TagCreateView.vue')
+                                    component: () =>
+                                        import('../views/event/explore/tag/TagCreateView.vue')
                                 }
                             ]
                         }
@@ -202,13 +224,17 @@ const router = createRouter({
                                 {
                                     path: '',
                                     name: 'website-info',
-                                    component: () => import('../views/setting/websiteInfo/WebsiteInfoView.vue'),
+                                    component: () =>
+                                        import('../views/setting/websiteInfo/WebsiteInfoView.vue')
                                 },
                                 {
                                     path: 'edit',
                                     name: 'website-info-edit',
-                                    component: () => import('../views/setting/websiteInfo/WebsiteInfoUpdateView.vue')
-                                },
+                                    component: () =>
+                                        import(
+                                            '../views/setting/websiteInfo/WebsiteInfoUpdateView.vue'
+                                        )
+                                }
                             ]
                         },
                         {
@@ -229,32 +255,45 @@ const router = createRouter({
                         {
                             path: 'untracked-page/',
                             name: 'untracked-page',
-                            component: () => import('../views/setting/untrackedPage/UntrackedPageView.vue'),
+                            component: () =>
+                                import('../views/setting/untrackedPage/UntrackedPageView.vue'),
                             children: [
                                 {
                                     path: ':id',
                                     name: 'untracked-page-show',
-                                    component: () => import('../views/setting/untrackedPage/UntrackedPageShowView.vue')
+                                    component: () =>
+                                        import(
+                                            '../views/setting/untrackedPage/UntrackedPageShowView.vue'
+                                        )
                                 },
                                 {
                                     path: ':id/edit',
                                     name: 'untracked-page-edit',
-                                    component: () => import('../views/setting/untrackedPage/UntrackedPageEditView.vue')
+                                    component: () =>
+                                        import(
+                                            '../views/setting/untrackedPage/UntrackedPageEditView.vue'
+                                        )
                                 },
                                 {
                                     path: ':id/delete',
                                     name: 'untracked-page-delete',
-                                    component: () => import('../views/setting/untrackedPage/UntrackedPageDeleteView.vue')
+                                    component: () =>
+                                        import(
+                                            '../views/setting/untrackedPage/UntrackedPageDeleteView.vue'
+                                        )
                                 },
                                 {
                                     path: 'add',
                                     name: 'untracked-page-add',
-                                    component: () => import('../views/setting/untrackedPage/UntrackedPageCreateView.vue')
+                                    component: () =>
+                                        import(
+                                            '../views/setting/untrackedPage/UntrackedPageCreateView.vue'
+                                        )
                                 }
                             ]
-                        },
+                        }
                     ]
-                },
+                }
             ]
         }
     ]
