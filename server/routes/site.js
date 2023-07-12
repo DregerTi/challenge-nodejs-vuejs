@@ -6,7 +6,7 @@ const sitePermissions = require("../middlewares/site-permissions");
 const SiteUserService = require("../services/siteUser");
 const tokenGenerator = require("../utils/token-generator");
 const UserService = require("../services/user");
-const Site = require("../db/models/site");
+const Site = require("../db/models/Site");
 
 //module.exports = new genericRouter(new genericController(new SiteService()));
 const routesList = [
