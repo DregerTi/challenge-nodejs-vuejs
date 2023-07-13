@@ -12,7 +12,7 @@ const config = {
       dialect: 'postgres',
   },
   test: {
-      databaseUrl: 'postgres://root:password@db:5432/app',
+      databaseUrl: 'postgres://root:password@127.0.0.1:5432/app',
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: 'app_test',
