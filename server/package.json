@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test mocha ./tests/*.spec.js",
+    "test-local": "NODE_ENV=testLocal mocha ./tests/*.spec.js",
+    "test": "NODE_ENV=test node migration mocha ./tests/*.spec.js",
     "watch": "node --watch server.js",
     "dev": "node --watch server.js",
     "d:s:u": "node migration.js"
