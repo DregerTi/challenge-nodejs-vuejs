@@ -13,3 +13,6 @@ describe('Health', () => {
       });
   });
 });
+
+require("./user")
+require("./site")

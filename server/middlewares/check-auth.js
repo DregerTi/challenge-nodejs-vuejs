@@ -10,7 +10,6 @@ module.exports = {
         }
         const [type, token] = req.headers.authorization.split(" ");
         if (type !== "Bearer") {
-            console.log("Bearer")
             return next(new UnauthorizedError());
         }
         try {
@@ -31,7 +30,6 @@ module.exports = {
             req.user = user;
 
         } catch (err) {
-            console.log(err);
             return next(new UnauthorizedError());
         }
         next();

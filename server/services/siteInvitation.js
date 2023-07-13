@@ -9,11 +9,11 @@ module.exports = function SiteInvitationService() {
                 where: filters,
             };
             // options.order = {name: "ASC", dob: "DESC"}
-            if (options.order) {
+            if (options?.order) {
                 // => [["name", "ASC"], ["dob", "DESC"]]
                 dbOptions.order = Object.entries(options.order);
             }
-            if (options.limit) {
+            if (options?.limit) {
                 dbOptions.limit = options.limit;
                 dbOptions.offset = options.offset;
             }
