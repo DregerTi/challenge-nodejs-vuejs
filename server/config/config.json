@@ -1,5 +1,5 @@
 {
-  "test": {
+  "development": {
     "username": "root",
     "password": "password",
     "database": "database_test",
