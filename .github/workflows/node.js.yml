@@ -21,7 +21,8 @@ jobs:
         image: postgres:latest
         # `POSTGRES_HOST` is `postgres`
         env:
-          POSTGRES_DB: db
+          POSTGRES_DB: test
+          POSTGRES_HOST: postgres
           POSTGRES_PASSWORD: password
           # optional (defaults to `5432`)
           POSTGRES_PORT: 5432
