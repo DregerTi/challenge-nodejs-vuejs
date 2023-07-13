@@ -29,7 +29,13 @@ const { title, labels, rows } = defineProps({
 <template>
     <div>
         <Card :title="title">
-            <slot></slot>
+            <slot>
+              <h1>Event Stats</h1>
+              <p>
+                fssd
+              </p>
+
+            </slot>
         </Card>
         <section>
             <StatList :labels="labels" :rows="rows" />

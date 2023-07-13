@@ -7,7 +7,7 @@ const router = createRouter({
             path: '/auth/',
             redirect: '/auth/login',
             name: 'auth',
-            component: () => import('../components/organisms/AuthLayout.vue'),
+            component: () => import('../components/templates/AuthLayout.vue'),
             children: [
                 {
                     path: 'forgot-password',
@@ -30,7 +30,7 @@ const router = createRouter({
             path: '/analytics/:site/',
             redirect: '/analytics/:site/dashboard',
             name: 'analytics',
-            component: () => import('../components/organisms/AnalyticsLayout.vue'),
+            component: () => import('../components/templates/AnalyticsLayout.vue'),
             children: [
                 {
                     path: 'dashboard',
@@ -243,9 +243,27 @@ const router = createRouter({
                             component: () => import('../views/setting/ApiKeyView.vue')
                         },
                         {
-                            path: 'users',
+                            path: 'users/',
                             name: 'users',
-                            component: () => import('../views/setting/SettingView.vue')
+                            children: [
+                                {
+                                    path: '',
+                                    name: 'users',
+                                    component: () => import('../views/setting/user/UserView.vue')
+                                },
+                                {
+                                    path: ':id/edit',
+                                    name: 'users-edit',
+                                    component: () =>
+                                        import('../views/setting/user/UserEditView.vue')
+                                },
+                                {
+                                    path: ':id/delete',
+                                    name: 'users-delete',
+                                    component: () =>
+                                        import('../views/setting/user/UserDeleteView.vue')
+                                }
+                            ]
                         },
                         {
                             path: 'website-users',

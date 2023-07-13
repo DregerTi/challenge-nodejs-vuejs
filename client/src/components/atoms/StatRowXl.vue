@@ -21,10 +21,11 @@ const { title, trend, value, ratio, index } = defineProps({
     },
     ratio: {
         type: String,
-        required: true
+        required: false
     },
     index: {
-        type: Number
+        type: Number,
+        required: false
     }
 })
 </script>
@@ -32,10 +33,11 @@ const { title, trend, value, ratio, index } = defineProps({
 <template>
     <tr class="stat-row-xl">
         <td class="stat-row-xl-head">
-            <span>{{ index }}</span>
+            <span v-if="index">{{ index }}</span>
             <h5>{{ title }}</h5>
         </td>
-        <StatRowData :trend="trend" :value="value" :ratio="ratio" />
+        <slot></slot>
+        <StatRowData v-if="ratio || trend || value" :trend="trend" :value="value" :ratio="ratio" />
     </tr>
 </template>
 

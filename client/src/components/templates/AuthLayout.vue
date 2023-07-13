@@ -7,7 +7,7 @@ import Switch from '@/components/atoms/Switch.vue'
     <div class="body">
         <div class="flex flex-column gap-2 container-xl">
             <header class="auth-header">
-                <img src="@/assets/logo.svg" alt="logo" class="header-logo" />
+                <img src="../../assets/logo.svg" alt="logo" class="header-logo" />
                 <Switch class="switch" />
             </header>
             <section class="auth-container">

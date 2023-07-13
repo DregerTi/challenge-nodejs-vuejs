@@ -36,6 +36,7 @@ const { title, path, buttonType, editMode } = defineProps({
             <RoundedButton v-if="editMode" icon="Add" />
         </header>
         <slot></slot>
+        <slot name="chart"></slot>
     </section>
 </template>
 

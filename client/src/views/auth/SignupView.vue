@@ -1,7 +1,7 @@
 <script setup>
 import Button from '@/components/atoms/Button.vue'
 import Input from '@/components/atoms/Input.vue'
-import AuthLayout from '@/components/organisms/AuthLayout.vue'
+import AuthLayout from '@/components/templates/AuthLayout.vue'
 </script>
 
 <template>

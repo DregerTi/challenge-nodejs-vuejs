@@ -116,7 +116,7 @@ const { title, variant, icon } = defineProps({
 
     &--bg-unset {
         background-color: unset;
-        color: var(--color-white);
+        color: var(--color-text);
 
         &:hover {
             background-color: unset;
@@ -140,6 +140,21 @@ const { title, variant, icon } = defineProps({
 
         &:hover {
             background-color: var(--color-light-grey);
+            color: var(--color-error);
+        }
+    }
+
+    &--error-bg-unset {
+        &:hover {
+            background-color: var(--color-light-black);
+            color: var(--color-light-grey);
+        }
+
+        background-color: unset;
+        color: var(--color-error);
+
+        &:hover {
+            background-color: unset;
             color: var(--color-error);
         }
     }

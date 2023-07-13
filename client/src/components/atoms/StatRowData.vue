@@ -16,7 +16,7 @@ const { trend, value, ratio } = defineProps({
     },
     ratio: {
         type: String,
-        required: true
+        required: false
     }
 })
 </script>
@@ -27,7 +27,7 @@ const { trend, value, ratio } = defineProps({
         <IconArrowDropUp class="trend trend--up" v-if="trend == 'up'" />
         <IconArrowDropDown class="trend trend--down" v-if="trend == 'down'" />
         <IconCheckIndeterminate class="trend trend--same" v-if="trend == 'same'" />
-        <span class="ratio">{{ ratio }}%</span>
+        <span v-if="ratio" class="ratio">{{ ratio }}%</span>
     </td>
 </template>
 

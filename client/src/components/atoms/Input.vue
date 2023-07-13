@@ -1,4 +1,6 @@
 <script setup>
+import Listbox from '@/components/atoms/Listbox.vue'
+
 const { type, placeholder, value, label, name, variant } = defineProps({
     type: {
         type: String,
@@ -13,6 +15,7 @@ const { type, placeholder, value, label, name, variant } = defineProps({
                 'time',
                 'datetime-local',
                 'search',
+                'select',
                 'tel',
                 'url',
                 'month',
@@ -28,6 +31,10 @@ const { type, placeholder, value, label, name, variant } = defineProps({
     value: {
         type: String,
         default: ''
+    },
+    values: {
+        type: Array,
+        required: false
     },
     label: {
         type: String,
@@ -47,7 +54,14 @@ const { type, placeholder, value, label, name, variant } = defineProps({
 <template>
     <div class="input" :class="[variant ? 'input--' + variant : '']">
         <label v-if="label">{{ label }}</label>
-        <input :type="type" :placeholder="placeholder" :value="value" :name="name" />
+        <input
+            v-if="type != 'select'"
+            :type="type"
+            :placeholder="placeholder"
+            :value="value"
+            :name="name"
+        />
+        <Listbox v-else :selected="placeholder" :values="values" :name="name" variant="lite" />
     </div>
 </template>
 

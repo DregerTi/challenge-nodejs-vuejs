@@ -9,22 +9,13 @@ const { title, variant, selected } = defineProps({
     },
     selected: {
         type: String,
-        default: 'Wade Cooper'
+        required: false
     },
     variant: {
         type: String,
         default: 'lg'
     }
 })
-
-const values = [
-    'Wade Cooper',
-    'Arlene Mccoy',
-    'Devon Webb',
-    'Tom Cook',
-    'Tanya Fox',
-    'Hellen Schmidt'
-]
 
 const selectedValue = ref(selected)
 </script>

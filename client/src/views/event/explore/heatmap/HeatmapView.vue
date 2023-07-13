@@ -1,5 +1,5 @@
 <script setup>
-import ExploreLayout from '@/components/organisms/ExploreLayout.vue'
+import ExploreLayout from '@/components/templates/ExploreLayout.vue'
 import { defineEmits } from 'vue'
 
 const emit = defineEmits([
