@@ -1,7 +1,6 @@
 require('dotenv').config();
 
 NODE_ENV = process.env.NODE_ENV || "development";
-console.log("NODE_ENV: " + NODE_ENV, 'process node env: ' + process.env.NODE_ENV);
 
 const config = {
     development: {

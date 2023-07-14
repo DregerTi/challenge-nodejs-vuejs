@@ -1,7 +1,5 @@
 module.exports = (connection) => {
   const { DataTypes, Model } = require("sequelize");
-  const Site = require('./Site');
-  const User = require('./User');
   class UntrackPath extends Model {}
 
   UntrackPath.init(

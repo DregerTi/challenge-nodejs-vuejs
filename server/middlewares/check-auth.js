@@ -12,10 +12,10 @@ module.exports = {
         if (type !== "Bearer") {
             return next(new UnauthorizedError());
         }
+
         try {
             const userToken = jwt.verify(token, process.env.JWT_SECRET);
 
-            const serviceSiteUser = new SiteUserService();
             const serviceUser = new UserService();
             let user = await serviceUser.findOne({id: parseInt(userToken.id, 10)});
 
@@ -30,6 +30,7 @@ module.exports = {
             req.user = user;
 
         } catch (err) {
+            console.log(err);
             return next(new UnauthorizedError());
         }
         next();

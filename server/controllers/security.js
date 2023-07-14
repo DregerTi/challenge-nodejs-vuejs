@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-module.exports = function SecurityController(UserService, SiteUserService) {
+module.exports = function SecurityController(UserService) {
     return {
         login: async (req, res, next) => {
             try {

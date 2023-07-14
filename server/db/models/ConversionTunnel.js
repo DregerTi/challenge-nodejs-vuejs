@@ -1,6 +1,5 @@
 module.exports = (connection) => {
     const { DataTypes, Model } = require("sequelize");
-    const db = require("../db");
 
     class ConversionTunnel extends Model {}
 

@@ -28,6 +28,7 @@ module.exports = {
     },
     isUserSiteAdmin: function (roles) {
         return function (req, res, next) {
+
             if (!req.user.roles.find((role) => role.siteId === parseInt(req.body.siteId, 10) && roles.includes(role.role))) {
                 return next(new ForbiddenError());
             }

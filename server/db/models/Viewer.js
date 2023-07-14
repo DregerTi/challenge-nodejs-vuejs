@@ -1,6 +1,5 @@
 module.exports = (connection) => {
   const { DataTypes, Model } = require("sequelize");
-  const Site = require('./Site');
   class Viewer extends Model {}
 
   Viewer.init(

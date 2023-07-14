@@ -1,9 +1,5 @@
-const User = require("./User");
-const Site = require("./Site");
 module.exports = (connection) => {
     const {DataTypes, Model} = require("sequelize");
-    const User = require("./User");
-    const Site = require("./Site");
 
     class Tag extends Model {
     }

@@ -3,6 +3,10 @@ const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 const index = require('../index');
 
+after(function (done) {
+    require('./dropDb');
+    done();
+});
 describe('Health', () => {
   it('should return 200', (done) => {
     chai.request(index)
@@ -16,3 +20,4 @@ describe('Health', () => {
 
 require("./user")
 require("./site")
+require("./tag");

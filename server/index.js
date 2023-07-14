@@ -9,6 +9,7 @@ const errorHandler = require("./middlewares/error-handler");
 const checkAuth = require("./middlewares/check-auth");
 const SiteRouter = require("./routes/site");
 const SiteInvitationRouter = require("./routes/siteInvitation");
+const TagRouter = require("./routes/tag");
 
 app.use(cors());
 
@@ -19,6 +20,7 @@ app.use("/", SecurityRouter);
 app.use("/users", checkAuth.requireAuthentication, UserRouter); // protect only this route
 app.use("/sites", SiteRouter);
 app.use("/invitations", SiteInvitationRouter);
+app.use("/tags", TagRouter);
 //app.use("/sites", [checkAuth.requireAuthentication,checkAuth.isGrantedForSite(['ADMIN', 'USER'])], SiteRouter); // protect only this route
 
 app.get("/", (req, res) => {
