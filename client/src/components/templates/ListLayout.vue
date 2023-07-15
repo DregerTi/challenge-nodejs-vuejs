@@ -12,10 +12,14 @@ const emit = defineEmits(['update:setDateButton', 'update:dashboardEditButton'])
 emit('update:setDateButton', false)
 emit('update:dashboardEditButton', false)
 
-const { title, items, path, labels, description } = defineProps({
+const { title, items, path, labels, description, createPath } = defineProps({
     title: {
         type: String,
         required: true
+    },
+    createPath: {
+        type: String,
+        required: false
     },
     items: {
         type: Array,
@@ -62,6 +66,9 @@ const { title, items, path, labels, description } = defineProps({
             </header>
         </section>
         <header>
+            <RouterLink v-if="createPath" :to="createPath">
+                <Button title="Add user" />
+            </RouterLink>
             <Input type="text" placeholder="Search" name="search" variant="search" />
             <table>
                 <thead v-if="labels">

@@ -23,7 +23,7 @@ import Button from '@/components/atoms/Button.vue'
     </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .info {
     display: flex;
     flex-direction: column;

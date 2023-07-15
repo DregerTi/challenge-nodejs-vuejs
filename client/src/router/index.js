@@ -266,9 +266,32 @@ const router = createRouter({
                             ]
                         },
                         {
-                            path: 'website-users',
+                            path: 'website-users/',
                             name: 'website-users',
-                            component: () => import('../views/setting/SettingView.vue')
+                            children: [
+                                {
+                                    path: '',
+                                    name: 'Website-users',
+                                    component: () =>
+                                        import('../views/setting/websiteUser/WebsiteUserView.vue')
+                                },
+                                {
+                                    path: ':id/edit',
+                                    name: 'Website-users-edit',
+                                    component: () =>
+                                        import(
+                                            '../views/setting/websiteUser/WebsiteUserEditView.vue'
+                                        )
+                                },
+                                {
+                                    path: ':id/delete',
+                                    name: 'Website-users-delete',
+                                    component: () =>
+                                        import(
+                                            '../views/setting/websiteUser/WebsiteUserDeleteView.vue'
+                                        )
+                                }
+                            ]
                         },
                         {
                             path: 'untracked-page/',
