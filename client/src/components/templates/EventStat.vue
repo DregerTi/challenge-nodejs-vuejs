@@ -30,11 +30,8 @@ const { title, labels, rows } = defineProps({
     <div>
         <Card :title="title">
             <slot>
-              <h1>Event Stats</h1>
-              <p>
-                fssd
-              </p>
-
+                <h1>Event Stats</h1>
+                <p>fssd</p>
             </slot>
         </Card>
         <section>

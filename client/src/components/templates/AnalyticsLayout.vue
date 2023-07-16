@@ -4,6 +4,7 @@ import Button from '@/components/atoms/Button.vue'
 import Header from '@/components/organisms/Header.vue'
 import { ref } from 'vue'
 import Listbox from '@/components/atoms/Listbox.vue'
+import Calendar from '../molecules/Calendar.vue'
 
 const setDateButton = ref(false)
 const dashboardEditButton = ref(false)
@@ -22,7 +23,7 @@ function toogleDashboardEditMode() {
                 <header>
                     <Listbox variant="lg" selected="La route du trône" />
                     <div class="actions">
-                        <Button class="dateButton" v-if="setDateButton" title="This month" />
+                        <Calendar class="dateButton" v-if="setDateButton" />
                         <Button
                             v-if="dashboardEditButton && !dashboardEditMode"
                             v-bind:onClick="toogleDashboardEditMode"
@@ -61,6 +62,7 @@ function toogleDashboardEditMode() {
     display: flex;
     justify-content: space-between;
     transition: all 0.3s;
+
     > div {
         display: flex;
         justify-content: center;
@@ -87,6 +89,7 @@ function toogleDashboardEditMode() {
         }
     }
 }
+
 @media (max-width: 1024px) {
     .body {
         > div {
@@ -99,8 +102,10 @@ function toogleDashboardEditMode() {
                     flex-direction: column;
                     align-items: baseline;
                     gap: 1.6rem;
+
                     .actions {
                         width: 100%;
+
                         > .dateButton {
                             flex-grow: 1;
                         }

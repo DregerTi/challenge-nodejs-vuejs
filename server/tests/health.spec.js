@@ -4,7 +4,7 @@ chai.use(chaiHttp);
 const index = require('../index');
 
 after(function (done) {
-    require('./dropDb');
+    require('./dropDatabase');
     done();
 });
 describe('Health', () => {
@@ -17,7 +17,3 @@ describe('Health', () => {
       });
   });
 });
-
-require("./user")
-require("./site")
-require("./tag");

@@ -5,6 +5,7 @@ import Header from '@/components/organisms/Header.vue'
 import { defineEmits, ref } from 'vue'
 import Listbox from '@/components/atoms/Listbox.vue'
 import Input from '@/components/atoms/Input.vue'
+import Calendar from '../molecules/Calendar.vue'
 
 const deleteBtn = ref(false)
 const updateBtn = ref(false)
@@ -68,7 +69,7 @@ const { title, items, description, createNewPath, path } = defineProps({
                         {{ title }}
                     </h2>
                     <div v-if="$route.params.id">
-                        <Button v-if="calendarBtn" class="calendar-button" title="This month" />
+                        <Calendar v-if="calendarBtn" class="calendar-button" />
                         <Button v-if="screenShotBtn" icon="ScreenshotMonitor" />
                         <RouterLink v-if="updateBtn" :to="$route.params.id + '/edit'">
                             <Button icon="Edit" />
@@ -121,8 +122,10 @@ const { title, items, description, createNewPath, path } = defineProps({
         padding: 1.2rem;
         background-color: var(--color-light-grey);
         border-radius: 1rem;
+
         > a {
             width: 100%;
+
             > * {
                 width: 100%;
             }
@@ -131,6 +134,7 @@ const { title, items, description, createNewPath, path } = defineProps({
         > .input {
             width: 100%;
             padding: 0;
+
             > input {
                 width: 100%;
                 border-radius: 10px !important;
@@ -139,7 +143,8 @@ const { title, items, description, createNewPath, path } = defineProps({
                 &::placeholder {
                     /* Chrome, Firefox, Opera, Safari 10.1+ */
                     color: var(--color-grey);
-                    opacity: 1; /* Firefox */
+                    opacity: 1;
+                    /* Firefox */
                 }
 
                 &:-ms-input-placeholder {
@@ -162,8 +167,10 @@ const { title, items, description, createNewPath, path } = defineProps({
             overflow-y: scroll;
             padding-top: 1rem;
             width: 100%;
+
             > a {
                 width: 100%;
+
                 > * {
                     width: 100%;
                 }
@@ -175,14 +182,17 @@ const { title, items, description, createNewPath, path } = defineProps({
         display: flex;
         flex-direction: column;
         gap: 1rem;
+
         > * {
             width: 100%;
         }
+
         margin: 4rem 0;
     }
 
     > section {
         flex-grow: 1;
+
         > header {
             display: flex;
             flex-direction: column;
@@ -210,6 +220,7 @@ const { title, items, description, createNewPath, path } = defineProps({
         }
     }
 }
+
 @media (max-width: 1024px) {
     .container-explore {
         flex-direction: column;

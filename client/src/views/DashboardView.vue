@@ -146,6 +146,7 @@ emit('update:dashboardEditButton', true)
 .pin-container {
     display: flex;
     gap: 2rem;
+
     .pin-card {
         flex-grow: 1;
     }
@@ -165,6 +166,7 @@ emit('update:dashboardEditButton', true)
         align-items: center;
         cursor: pointer;
         transition: all 0.3s ease-in-out;
+
         &:hover {
             background-color: #e0e0e0;
         }
@@ -180,6 +182,7 @@ emit('update:dashboardEditButton', true)
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
+
         .pin-card {
             width: 100% !important;
         }
