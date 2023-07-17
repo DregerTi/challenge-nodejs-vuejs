@@ -63,9 +63,6 @@ module.exports = function TagService() {
         },
         delete: async (filters) => {
             return Tag.destroy({ where: filters });
-        },
-        addUser: async (data) => {
-            return SiteUser.create(data);
         }
     };
 };

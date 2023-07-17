@@ -20,11 +20,11 @@ const routesList = [
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN', 'USER'])]
     },
     {
-        path: "/:id", method: "update", action: "patch",
+        path: "/:id", method: "patch", action: "update",
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
     },
     {
-        path: "/:id", method: "replace", action: "put",
+        path: "/:id", method: "put", action: "replace",
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
     },
     {
@@ -52,15 +52,39 @@ const routesList = [
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
     },
     {
-        path: "/:id/tags/:tagId", method: "update", action: "patchTag",
+        path: "/:id/tags/:tagId", method: "patch", action: "updateTag",
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
     },
     {
-        path: "/:id/tags/:tagId", method: "replace", action: "putTag",
+        path: "/:id/tags/:tagId", method: "put", action: "replaceTag",
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
     },
     {
         path: "/:id/tags/:tagId", method: "delete", action: "deleteTag",
+        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
+    },
+    {
+        path: "/:id/conversion-tunnels", method: "get", action: "getConversionTunnels",
+        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['USER', 'ADMIN'])]
+    },
+    {
+        path: "/:id/conversion-tunnels/:conversionTunnelId", method: "get", action: "getOneConversionTunnel",
+        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
+    },
+    {
+        path: "/:id/conversion-tunnels", method: "post", action: "createConversionTunnel",
+        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
+    },
+    {
+        path: "/:id/conversion-tunnels/:conversionTunnelId", method: "patch", action: "updateConversionTunnel",
+        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
+    },
+    {
+        path: "/:id/conversion-tunnels/:conversionTunnelId", method: "put", action: "replaceConversionTunnel",
+        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
+    },
+    {
+        path: "/:id/conversion-tunnels/:conversionTunnelId", method: "delete", action: "deleteConversionTunnel",
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
     },
 ]

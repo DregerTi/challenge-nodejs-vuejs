@@ -17,14 +17,20 @@ module.exports = (connection) => {
                 allowNull: false,
                 unique: true,
                 validate: {
-                    isEmail: true,
+                    isEmail: {
+                        msg: "Email must be a valid email address",
+                    }
                 },
             },
             password: {
                 type: DataTypes.STRING,
                 allowNull: false,
-                len: [1, 32],
-                //is: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/,
+                validate: {
+                    len: {
+                        args: [6, 32],
+                        msg: "Password must be between 6 and 32 characters long",
+                    },
+                }
             },
         },
         {sequelize: connection, tableName: "users"}

@@ -3,6 +3,7 @@ const SiteUserService = require("../services/siteUser");
 const UserService = require("../services/user");
 const genericController = require("./generic");
 const TagService = require("../services/tag");
+const ConversionTunnelService = require("../services/conversionTunnel");
 const tokenGenerator = require("../utils/token-generator");
 
 const service = new SiteService();
@@ -10,6 +11,7 @@ const userSiteService = new SiteUserService();
 const userService = new UserService();
 const controller = new genericController(service);
 const tagService = new TagService();
+const conversionTunnelService = new ConversionTunnelService();
 
 controller.create = async function create(req, res, next) {
     const {body} = req;
@@ -124,11 +126,83 @@ controller.deleteTag = async function (req, res, next) {
     const { tagId } = req.params;
     try {
         const result = await tagService.delete({ id: parseInt(tagId, 10) });
+        if (result) res.sendStatus(204);
+        else res.sendStatus(404);
+    } catch (err) {
+        next(err);
+    }
+}
+
+controller.getConversionTunnels = async function getConversionTunnels(req, res, next) {
+    try {
+        const conversionTunnels = await conversionTunnelService.findAll({siteId: parseInt(req.params.id, 10)});
+        if (conversionTunnels) res.status(200).json(conversionTunnels);
+        else res.sendStatus(404);
+    } catch (error) {
+        next(error);
+    }
+}
+
+controller.getOneConversionTunnel = async function getOneConversionTunnel(req, res, next) {
+    const { conversionTunnelId } = req.params;
+    try {
+        const conversionTunnel = await conversionTunnelService.findOne({id: parseInt(conversionTunnelId, 10)});
+        if (conversionTunnel) res.status(200).json(conversionTunnel);
+        else res.sendStatus(404);
+    } catch (err) {
+        next(err);
+    }
+}
+
+controller.createConversionTunnel = async function (req, res, next) {
+    const body = req.body;
+    try {
+        body.createdBy = req.user.id;
+        const conversionTunnel = await conversionTunnelService.create(req.body);
+        res.status(201).json(conversionTunnel);
+    } catch (err) {
+        next(err);
+    }
+}
+
+controller.updateConversionTunnel = async function (req, res, next) {
+    const { conversionTunnelId } = req.params;
+    const body = req.body;
+    try {
+        const [result] = await conversionTunnelService.update({ id: parseInt(conversionTunnelId, 10) }, body);
         if (result) res.json(result);
         else res.sendStatus(404);
     } catch (err) {
         next(err);
     }
 }
+
+controller.replaceConversionTunnel = async function (req, res, next) {
+    const { conversionTunnelId } = req.params;
+    const { body } = req;
+    try {
+        const [[result, created]] = await conversionTunnelService.replace(
+            { id: parseInt(conversionTunnelId, 10) },
+            { id: parseInt(conversionTunnelId, 10), ...body }
+        );
+        if (created) res.status(201).json(result);
+        else res.json(result);
+    } catch (err) {
+        next(err);
+    }
+}
+
+controller.deleteConversionTunnel = async function (req, res, next) {
+    const { conversionTunnelId } = req.params;
+    try {
+        const result = await conversionTunnelService.delete({ id: parseInt(conversionTunnelId, 10) });
+        if (result) res.sendStatus(204);
+        else res.sendStatus(404);
+    } catch (err) {
+        next(err);
+    }
+}
+
+
 
 module.exports = controller;

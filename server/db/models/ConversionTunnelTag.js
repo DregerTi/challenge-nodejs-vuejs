@@ -1,7 +1,5 @@
 module.exports = (connection) => {
   const { DataTypes, Model } = require("sequelize");
-  const ConversionTunnel = require("./ConversionTunnel")(connection);
-  const Tag = require("./Tag")(connection);
   class ConversionTunnelTag extends Model {}
 
   ConversionTunnelTag.init(
@@ -23,8 +21,11 @@ module.exports = (connection) => {
     { sequelize: connection, tableName: "conversionTunnelTag" }
   );
 
-  ConversionTunnelTag.belongsTo(ConversionTunnel, { foreignKey: 'conversionTunnelId' })
-  ConversionTunnelTag.belongsTo(Tag, { foreignKey: 'tagId' });
+  ConversionTunnelTag.associate = (models) => {
+    ConversionTunnelTag.belongsTo(models.ConversionTunnel, { foreignKey: 'conversionTunnelId' })
+    ConversionTunnelTag.belongsTo(models.Tag, { foreignKey: 'tagId' });
+    ConversionTunnelTag.belongsTo(models.User, { foreignKey: 'createdBy' });
+  }
 
   return ConversionTunnelTag;
 };

@@ -1,40 +1,43 @@
 module.exports = (connection) => {
-    const {DataTypes, Model} = require("sequelize");
+  const { DataTypes, Model } = require("sequelize");
 
-    class Tag extends Model {
-    }
+  class Tag extends Model {
+  }
 
-    Tag.init(
-        {
-            id: {
-                type: DataTypes.INTEGER,
-                primaryKey: true,
-                autoIncrement: true,
-            },
-            name: {
-                type: DataTypes.STRING(32),
-                allowNull: false,
-                validate: {
-                    len: [1, 32],
-                }
-            },
-            tagKey: {
-                type: DataTypes.STRING,
-                allowNull: false,
-                unique: true,
-            },
-            createdAt: {
-                type: DataTypes.DATE,
-                defaultValue: DataTypes.NOW
-            },
-        },
-        {sequelize: connection, tableName: "tag"}
-    );
+  Tag.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+      },
+      name: {
+        type: DataTypes.STRING(32),
+        allowNull: false,
+        validate: {
+          len: {
+            args: [1, 32],
+            msg: "Name must be between 1 and 32 characters long"
+          }
+        }
+      },
+      tagKey: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW
+      }
+    },
+    { sequelize: connection, tableName: "tag" }
+  );
 
-    Tag.associate = (models) => {
-        Tag.belongsTo(models.User, {foreignKey: 'createdBy'});
-        Tag.belongsTo(models.Site, {foreignKey: 'siteId'});
-    }
+  Tag.associate = (models) => {
+    Tag.belongsTo(models.User, { foreignKey: "createdBy" });
+    Tag.belongsTo(models.Site, { foreignKey: "siteId" });
+  };
 
-    return Tag;
+  return Tag;
 };

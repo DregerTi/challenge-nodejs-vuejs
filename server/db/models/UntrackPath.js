@@ -14,7 +14,9 @@ module.exports = (connection) => {
         allowNull: false,
         unique: true,
         validate: {
-          is: /^(http|https):\/\/[^ "]+$/,
+          isUrl: {
+            msg: 'URL must be a valid URL'
+          }
         }
       },
       createdAt: {
