@@ -178,3 +178,6 @@ describe("Site and SiteInvitation API", function() {
       });
   });
 });
+
+require('./tag');
+require('./conversionTunnel.Js');

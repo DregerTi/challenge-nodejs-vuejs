@@ -2,15 +2,9 @@ const chai = require("chai");
 const chaiHttp = require("chai-http");
 chai.use(chaiHttp);
 const index = require("../index");
-const clearDatabase = require("./dropDatabase");
 
 
 describe("Tag API", function() {
-  after(async () => {
-    await clearDatabase();
-  });
-
-
   it("should return 200", (done) => {
     chai.request(index)
       .post("/login")

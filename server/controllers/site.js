@@ -159,6 +159,7 @@ controller.createConversionTunnel = async function (req, res, next) {
     const body = req.body;
     try {
         body.createdBy = req.user.id;
+        body.siteId = parseInt(req.params.id, 10);
         const conversionTunnel = await conversionTunnelService.create(req.body);
         res.status(201).json(conversionTunnel);
     } catch (err) {
