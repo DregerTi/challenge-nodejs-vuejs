@@ -51,7 +51,6 @@ describe("Site and SiteInvitation API", function() {
                   .post("/login")
                   .send({ email: "t@toto.com", password: "123456" })
                   .end((err, res) => {
-                    onsole.log("422 de merde", res.body, err);
                     chai.expect(res).to.have.status(200);
                     chai.expect(res.body).to.have.property("token");
                     let adminToken = res.body.token;
