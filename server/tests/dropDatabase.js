@@ -1,6 +1,7 @@
 const db = require("../db");
 
-Object.keys(db.connection.models).forEach((modelName) => {
-    db[modelName].destroy({where: {}});
-
-});
+module.exports = async function clearDatabase() {
+    for (const modelName in db.connection.models) {
+        await db[modelName].destroy({where: {}});
+    }
+}

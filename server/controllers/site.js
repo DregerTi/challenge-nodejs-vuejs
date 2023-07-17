@@ -91,6 +91,7 @@ controller.createTag = async function (req, res, next) {
     const body = req.body;
     try {
         body.createdBy = req.user.id;
+        body.siteId = parseInt(req.params.id, 10);
         const tag = await tagService.create(req.body);
         res.status(201).json(tag);
     } catch (err) {

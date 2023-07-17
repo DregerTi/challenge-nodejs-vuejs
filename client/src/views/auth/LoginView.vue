@@ -1,14 +1,7 @@
 <script setup>
 import Button from '@/components/atoms/Button.vue'
 import Input from '@/components/atoms/Input.vue'
-import {reactive} from "vue";
 
-const initialValues = {
-    email: 'test',
-    password: ''
-}
-
-const formData = reactive({ ...initialValues })
 </script>
 
 <template>
@@ -18,7 +11,7 @@ const formData = reactive({ ...initialValues })
             <p>Welcome back!</p>
         </div>
         <form>
-            <Input type="text" placeholder="example@email.com" name="email" label="Email" v-model:value="formData.email"/>
+            <Input type="text" placeholder="example@email.com" name="email" label="Email" />
 
             <Input
                 type="password"

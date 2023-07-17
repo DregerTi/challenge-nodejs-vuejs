@@ -17,7 +17,7 @@ app.use(checkFormat);
 
 app.use(express.json());
 app.use("/", SecurityRouter);
-app.use("/users", checkAuth.requireAuthentication, UserRouter); // protect only this route
+app.use("/users", UserRouter); // protect only this route
 app.use("/sites", SiteRouter);
 app.use("/invitations", SiteInvitationRouter);
 app.use("/tags", TagRouter);
