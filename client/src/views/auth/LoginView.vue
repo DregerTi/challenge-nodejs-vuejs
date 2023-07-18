@@ -1,7 +1,6 @@
 <script setup>
 import Button from '@/components/atoms/Button.vue'
 import Input from '@/components/atoms/Input.vue'
-
 </script>
 
 <template>
