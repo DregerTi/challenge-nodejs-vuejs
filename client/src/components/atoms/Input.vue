@@ -1,7 +1,7 @@
 <script setup>
 import Listbox from '@/components/atoms/Listbox.vue'
 
-const { type, placeholder, value, label, name, variant } = defineProps({
+const { type, placeholder, value, label, name, variant, error } = defineProps({
     type: {
         type: String,
         default: 'text',
@@ -47,8 +47,14 @@ const { type, placeholder, value, label, name, variant } = defineProps({
     variant: {
         type: String,
         required: false
+    },
+    error: {
+        type: String,
+        required: false
     }
 })
+
+const emit = defineEmits(['update:value'])
 </script>
 
 <template>
@@ -58,10 +64,15 @@ const { type, placeholder, value, label, name, variant } = defineProps({
             v-if="type != 'select'"
             :type="type"
             :placeholder="placeholder"
+            @input="$emit('update:value', $event.target.value)"
             :value="value"
             :name="name"
+            :id="name"
         />
         <Listbox v-else :selected="placeholder" :values="values" :name="name" variant="lite" />
+        <p v-if="error">
+            {{ Array.isArray(error) ? error.join('\n') : error }}
+        </p>
     </div>
 </template>
 
@@ -71,11 +82,20 @@ const { type, placeholder, value, label, name, variant } = defineProps({
     flex-direction: column;
     gap: 1rem;
     padding: 0.6rem 0rem;
+    position: relative;
     > label {
         color: var(--color-text-secondary);
         font-size: 1rem !important;
         line-height: 1rem !important;
         font-weight: 500;
+    }
+    > p {
+        color: var(--color-error);
+        position: absolute;
+        bottom: -0.7rem;
+        font-size: 0.85rem;
+        line-height: 1.1rem;
+        font-weight: 400;
     }
     > input {
         border: unset;

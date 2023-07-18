@@ -16,7 +16,7 @@ import IconDelete from '@/components/icons/IconDelete.vue'
 import IconScreenshotMonitor from '@/components/icons/IconScreenshotMonitor.vue'
 import IconAutorenew from '@/components/icons/IconAutorenew.vue'
 
-const { title, variant, icon } = defineProps({
+const { title, variant, icon, type } = defineProps({
     title: {
         type: String
     },
@@ -50,12 +50,21 @@ const { title, variant, icon } = defineProps({
     onClick: {
         type: Function,
         default: () => {}
+    },
+    type: {
+        type: String,
+        required: false
     }
 })
 </script>
 
 <template>
-    <button class="button" :class="[variant ? 'button--' + variant : '']" v-on:click="onClick">
+    <button
+        :type="type"
+        class="button"
+        :class="[variant ? 'button--' + variant : '']"
+        v-on:click="onClick"
+    >
         <IconArrowLeft v-if="icon == 'ArrowLeft'" />
         <IconArrowRight v-if="icon == 'ArrowRight'" />
         <IconAccountTree v-if="icon == 'AccountTree'" />
