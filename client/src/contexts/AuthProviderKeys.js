@@ -1,3 +1,5 @@
-export const userKey = Symbol('user');
-export const loginKey = Symbol('login');
-export const logoutKey = Symbol('logout');
+export const userKey = Symbol('user')
+export const loginKey = Symbol('login')
+export const registerKey = Symbol('register')
+export const errorsKey = Symbol('errors')
+export const logoutKey = Symbol('logout')

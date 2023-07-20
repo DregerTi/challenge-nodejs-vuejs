@@ -1,42 +1,26 @@
 <script setup>
 import Button from '@/components/atoms/Button.vue'
 import Input from '@/components/atoms/Input.vue'
-import { reactive, ref } from 'vue'
+import { reactive } from 'vue'
 import AuthProvider from '@/contexts/AuthProvider.vue'
-import { register } from '@/services/securityService'
-import { useRouter } from 'vue-router'
 
-const defaultValue = {
+const formData = reactive({
     firstname: '',
     lastname: '',
     email: '',
     password: '',
     confirmPassword: ''
-}
-
-const formData = reactive({ ...defaultValue })
-const errors = ref({})
-const router = useRouter()
-async function handleSubmit() {
-    try {
-        await register(formData)
-        Object.assign(formData, defaultValue)
-        errors.value = {}
-        router.push({ name: 'login' })
-    } catch (error) {
-        errors.value = error
-    }
-}
+})
 </script>
 
 <template>
     <section>
-        <AuthProvider #default="{ user, login }">
+        <AuthProvider #default="{ user, register, errors }">
             <div>
                 <h2>Signup</h2>
                 <p>Welcome! Are you ready to digitanalyze your website?</p>
             </div>
-            <form @submit.prevent="handleSubmit">
+            <form @submit.prevent="register(formData)">
                 <div class="flex flex-col gap-8 w-full md:flex-row">
                     <Input
                         :error="errors.firstname"
