@@ -3,18 +3,18 @@ import { provide, onMounted, ref } from 'vue'
 import { userKey, loginKey, logoutKey, registerKey, errorsKey } from './AuthProviderKeys'
 import * as securityService from '../services/securityService'
 import * as tokenStorage from '../services/tokenStorage'
-import { useRouter } from 'vue-router'
+import router from '../router'
 
 const user = ref(null)
 const errors = ref({})
 
 async function login(email, password) {
     try {
-        const token = await securityService.login(email, password)
+        const response = await securityService.login(email, password)
         errors.value = {}
-        await tokenStorage.saveToken(token)
-        user.value = await tokenStorage.getUser()
-        useRouter().push({ name: 'analytics' })
+        await tokenStorage.saveToken(response.token)
+        user.value = tokenStorage.getUser()
+        await router.push({ name: 'signup' })
     } catch (error) {
         errors.value = error
     }
@@ -24,7 +24,7 @@ async function register(_user) {
     try {
         await securityService.register(_user)
         errors.value = {}
-        useRouter().push({ name: 'login' })
+        //redirect to login
     } catch (error) {
         errors.value = error
     }
