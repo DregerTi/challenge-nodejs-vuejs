@@ -6,7 +6,8 @@ const controller = require("../controllers/site");
 
 const routesList = [
     {
-        path: "/", method: "get", action: "getAll"},
+        path: "/", method: "get", action: "getAll"
+    },
     {
         path: "/my-sites", method: "get", action: "getMySites",
         middlewares: [checkAuth.requireAuthentication]
@@ -40,6 +41,14 @@ const routesList = [
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['USER', 'ADMIN'])]
     },
     {
+        path: "/:id/users/:email", method: "patch", action: "updateUserRoleForSite",
+        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
+    },
+    {
+        path: "/:id/users/:email", method: "delete", action: "deleteUserFromSite",
+        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
+    },
+    {
         path: "/:id/tags", method: "get", action: "getTags",
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['USER', 'ADMIN'])]
     },
@@ -68,7 +77,7 @@ const routesList = [
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['USER', 'ADMIN'])]
     },
     {
-        path: "/:id/conversion-tunnels/:conversionTunnelId", method: "get", action: "getOneConversionTunnel",
+        path: "/:id/conversion-tunnels/:name", method: "get", action: "getOneConversionTunnel",
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
     },
     {
@@ -87,6 +96,35 @@ const routesList = [
         path: "/:id/conversion-tunnels/:conversionTunnelId", method: "delete", action: "deleteConversionTunnel",
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
     },
+    {
+        path: "/:id/conversion-tunnels/:conversionTunnelId/tags/:tagId", method: "post", action: "addTagToConversionTunnel",
+        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
+    },
+    {
+        path: "/:id/conversion-tunnels/:conversionTunnelId/tags/:tagId", method: "patch", action: "updateTagFromConversionTunnel",
+        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
+    },
+    {
+        path: "/:id/conversion-tunnels/:conversionTunnelId/tags/:tagId", method: "delete", action: "removeTagFromConversionTunnel",
+        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
+    },
+    {
+        path: "/:id/untrack-paths", method: "post", action: "createUntrackPath",
+        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
+    },
+    {
+        path: "/:id/untrack-paths/:untrackPathId", method: "patch", action: "updateUntrackPath",
+        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
+    },
+    {
+        path: "/:id/untrack-paths/:untrackPathId", method: "delete", action: "deleteUntrackPath",
+        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
+    },
+    {
+        path: "/:id/untrack-paths/", method: "get", action: "getUntrackPaths",
+        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
+    },
+
 ]
 
 module.exports = new specificRouter(

@@ -1,12 +1,16 @@
 module.exports = function Controller(Service, options = {}) {
   return {
     getAll: async (req, res, next) => {
-      const { page, itemsPerPage, order, ...filters } = req.query;
+      const { page, order, ...filters } = req.query;
       try {
+        if (page !== undefined && page < 1) {
+          res.json("Page can't be lower than 1").status(400);
+          return;
+        }
         const results = await Service.findAll(filters, {
           order,
-          limit: itemsPerPage,
-          offset: (page - 1) * itemsPerPage,
+          limit: page ? 10 : undefined,
+          offset: page ? (page - 1) * 10 : undefined
         });
 
         res.json(results);

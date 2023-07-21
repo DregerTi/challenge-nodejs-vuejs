@@ -5,9 +5,30 @@ const ValidationError = require("../errors/ValidationError");
 module.exports = function SiteService() {
     return {
         findAll: async function (filters, options) {
+            for (const key in filters) {
+                if (!["name", "url", "createdAt", "updatedAt", "userId"].includes(key)) {
+                    delete filters[key];
+                }
+            }
+            let showSiteUsers = true;
+            if (filters?.userId) {
+                filters = {
+                    ...filters,
+                    "$SiteUsers.userId$": filters.userId,
+                };
+                delete filters.userId;
+                showSiteUsers = false;
+            }
             let dbOptions = {
                 where: filters,
+                subQuery: false,
+                include: [{
+                    model: SiteUser,
+                }],
             };
+            if (!showSiteUsers) {
+                dbOptions.include[0].attributes = [];
+            }
             // options.order = {name: "ASC", dob: "DESC"}
             if (options?.order) {
                 // => [["name", "ASC"], ["dob", "DESC"]]
@@ -18,27 +39,6 @@ module.exports = function SiteService() {
                 dbOptions.offset = options?.offset;
             }
             return Site.findAll(dbOptions);
-        },
-        findUserSites: async function (filters, options) {
-            let dbOptions = {
-                where: filters,
-            };
-            // options?.order = {name: "ASC", dob: "DESC"}
-            if (options?.order) {
-                // => [["name", "ASC"], ["dob", "DESC"]]
-                dbOptions.order = Object.entries(options.order);
-            }
-            if (options?.limit) {
-                dbOptions.limit = options.limit;
-                dbOptions.offset = options.offset;
-            }
-            const siteUsers = await SiteUser.findAll(dbOptions);
-
-            return Site.findAll({
-                where: {
-                    id: siteUsers.map(site => site.siteId)
-                }
-            });
         },
         findOne: async function (filters) {
             return Site.findOne({ where: filters });

@@ -5,12 +5,39 @@ const ValidationError = require("../errors/ValidationError");
 module.exports = function UserService() {
     return {
         findAll: async function (filters, options) {
+            for (const key in filters) {
+                if (!["firstname", "lastname", "email", "password", "siteId", "role", "createdAt", "updatedAt"].includes(key)) {
+                    delete filters[key];
+                }
+            }
+            let showSiteUsers = true;
+            if (filters?.siteId) {
+                filters = {
+                    ...filters,
+                    "$SiteUsers.siteId$": filters.siteId,
+                };
+                delete filters.siteId;
+                showSiteUsers = false;
+            }
+            if (filters?.role) {
+                filters = {
+                    ...filters,
+                    "$SiteUsers.role$": filters.role,
+                };
+                delete filters.role;
+                showSiteUsers = false;
+            }
             let dbOptions = {
                 where: filters,
+                attributes: ["firstname", "lastname", "email", "createdAt", "updatedAt"],
+                subQuery: false,
                 include: [{
                     model: SiteUser,
                 }],
             };
+            if (!showSiteUsers) {
+                dbOptions.include[0].attributes = [];
+            }
             // options.order = {name: "ASC", dob: "DESC"}
             if (options?.order) {
                 // => [["name", "ASC"], ["dob", "DESC"]]

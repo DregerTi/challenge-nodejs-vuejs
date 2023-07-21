@@ -24,15 +24,23 @@ module.exports = (connection) => {
       tagKey: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true
       },
       createdAt: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW
       }
     },
-    { sequelize: connection, tableName: "tag" }
+    {
+      sequelize: connection, tableName: "tag",
+      indexes: [
+        {
+          unique: true,
+          fields: ['name', 'tagKey', 'siteId']
+        }
+      ]
+    }
   );
+
 
   Tag.associate = (models) => {
     Tag.belongsTo(models.User, { foreignKey: "createdBy" });

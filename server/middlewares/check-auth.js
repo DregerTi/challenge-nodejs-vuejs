@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 const UnauthorizedError = require("../errors/UnauthorizedError");
-const SiteUserService = require("../services/siteUser");
 const UserService = require("../services/user");
 
 module.exports = {
@@ -28,7 +27,6 @@ module.exports = {
             delete user.SiteUsers;
 
             req.user = user;
-
         } catch (err) {
             console.log(err);
             return next(new UnauthorizedError());

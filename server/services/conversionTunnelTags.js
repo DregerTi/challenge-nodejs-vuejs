@@ -1,28 +1,13 @@
-const { ConversionTunnel, User, Site} = require("../db");
+const { ConversionTunnelTag, User } = require("../db");
 const Sequelize = require("sequelize");
 const ValidationError = require("../errors/ValidationError");
 
 module.exports = function TagService() {
   return {
-    findAll: async function (filters, options) {
-      for (const key in filters) {
-        if (!["siteId", "name", "tagKey", "createdAt", "updatedAt", "userEmail"].includes(key)) {
-          delete filters[key];
-        }
-      }
-      if (filters?.userEmail) {
-        filters = {
-          ...filters,
-          "$User.email$": filters.userEmail,
-        };
-        delete filters.userEmail;
-      }
+    findAll: async function(filters, options) {
       let dbOptions = {
         where: filters,
-        include: [{
-          model: User,
-          attributes: ["firstname", "lastname", "email"],
-        }]
+        include: [User]
       };
       // options.order = {name: "ASC", dob: "DESC"}
       if (options?.order) {
@@ -33,14 +18,17 @@ module.exports = function TagService() {
         dbOptions.limit = options.limit;
         dbOptions.offset = options?.offset;
       }
-      return ConversionTunnel.findAll(dbOptions);
+      return ConversionTunnelTag.findAll(dbOptions);
     },
-    findOne: async function (filters) {
-      return ConversionTunnel.findOne({ where: filters });
+    findOne: async function(filters) {
+      return ConversionTunnelTag.findOne({
+        where: filters,
+        include: [User]
+      });
     },
-    create: async function (data) {
+    create: async function(data) {
       try {
-        return await ConversionTunnel.create(data);
+        return await ConversionTunnelTag.create(data);
       } catch (e) {
         if (e instanceof Sequelize.ValidationError) {
           throw ValidationError.fromSequelizeValidationError(e);
@@ -48,7 +36,7 @@ module.exports = function TagService() {
         throw e;
       }
     },
-    replace: async function (filters, newData) {
+    replace: async function(filters, newData) {
       try {
         const nbDeleted = await this.delete(filters);
         const user = await this.create(newData);
@@ -62,10 +50,10 @@ module.exports = function TagService() {
     },
     update: async (filters, newData) => {
       try {
-        const [nbUpdated, users] = await ConversionTunnel.update(newData, {
+        const [nbUpdated, users] = await ConversionTunnelTag.update(newData, {
           where: filters,
           returning: true,
-          individualHooks: true,
+          individualHooks: true
         });
 
         return users;
@@ -77,7 +65,7 @@ module.exports = function TagService() {
       }
     },
     delete: async (filters) => {
-      return ConversionTunnel.destroy({ where: filters });
+      return ConversionTunnelTag.destroy({ where: filters });
     }
   };
 };

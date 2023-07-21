@@ -14,7 +14,6 @@ module.exports = (connection) => {
       name: {
         type: DataTypes.STRING(32),
         allowNull: false,
-        unique: true,
         validate: {
           len: {
             args: [1, 32],
@@ -27,7 +26,13 @@ module.exports = (connection) => {
         defaultValue: DataTypes.NOW
       }
     },
-    { sequelize: connection, tableName: "conversionTunnel" }
+    {
+      sequelize: connection, tableName: "conversionTunnel",
+      indexes: [{
+        unique: true, fields: ["name", "siteId"],
+        msg: "Name must be unique for a site"
+      }]
+    }
   );
 
   ConversionTunnel.associate = (models) => {

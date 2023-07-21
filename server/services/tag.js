@@ -5,9 +5,18 @@ const ValidationError = require("../errors/ValidationError");
 module.exports = function TagService() {
     return {
         findAll: async function (filters, options) {
+            for (const key in filters) {
+                if (!["siteId", "name", "tagKey", "createdAt", "updatedAt"].includes(key)) {
+                    delete filters[key];
+                }
+            }
             let dbOptions = {
                 where: filters,
-                include: [User, Site]
+                attributes: ["id", "name", "tagKey", "createdAt", "updatedAt"],
+                include: [{
+                    model: User,
+                    attributes: ["firstname", "lastname", "email"],
+                }]
             };
             // options.order = {name: "ASC", dob: "DESC"}
             if (options?.order) {
