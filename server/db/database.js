@@ -5,6 +5,7 @@ NODE_ENV = process.env.NODE_ENV || "development";
 const config = {
     development: {
         databaseUrl: 'postgres://root:password@db:5432/app',
+        mongooseUrl: 'mongodb://root:password@mongo:27017/app',
         username: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         database: 'app',
@@ -13,6 +14,7 @@ const config = {
     },
     testLocal: {
         databaseUrl: 'postgres://root:password@db:5432/app',
+        mongooseUrl: 'mongodb://root:password@mongo:27017/app',
         username: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         database: 'app_test',
@@ -21,6 +23,7 @@ const config = {
     },
     test: {
         databaseUrl: 'postgres://root:password@127.0.0.1:5432/test',
+        mongooseUrl: 'mongodb://root:password@localhost:27017/test',
         username: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         database: 'app_test',
@@ -29,6 +32,7 @@ const config = {
     },
     production: {
         databaseUrl: 'postgres://root:password@127.0.0.1:5432/prod',
+        mongooseUrl: 'mongodb://root:password@localhost:27017/prod',
         username: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         database: 'app_production',
