@@ -6,7 +6,8 @@ const eventPermission = require("../middlewares/event-permissions");
 
 const routesList = [
   {
-    path: "/:siteId", method: "get", action: "getAllEventsForSite"
+    path: "/:siteId", method: "get", action: "getAllEventsForSite",
+    middlewares: [eventPermission.canAccesEvent]
   },
   {
     path: "/:siteId", method: "post", action: "create",
