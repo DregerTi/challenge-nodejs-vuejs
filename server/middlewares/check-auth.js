@@ -18,6 +18,7 @@ module.exports = {
             const serviceUser = new UserService();
             let user = await serviceUser.findOne({id: parseInt(userToken.id, 10)});
 
+            //TODO mdoifier ça
             user.roles = user.SiteUsers.map((role) => {
                 return {
                     siteId: role.siteId,

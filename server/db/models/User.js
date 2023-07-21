@@ -1,3 +1,4 @@
+const { DataTypes } = require("sequelize");
 module.exports = (connection) => {
     const {DataTypes, Model} = require("sequelize");
     const bcrypt = require("bcryptjs");
@@ -10,8 +11,26 @@ module.exports = (connection) => {
 
     User.init(
         {
-            lastname: DataTypes.STRING,
-            firstname: DataTypes.STRING,
+            lastname: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                validate: {
+                    len: {
+                        args: [1, 32],
+                        msg: "Lastname must be between 1 and 32 characters long",
+                    }
+                }
+            },
+            firstname: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                validate: {
+                    len: {
+                        args: [1, 32],
+                        msg: "Lastname must be between 1 and 32 characters long",
+                    }
+                }
+            },
             email: {
                 type: DataTypes.STRING,
                 allowNull: false,

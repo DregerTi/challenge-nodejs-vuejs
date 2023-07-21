@@ -28,6 +28,7 @@ services:
       - 3000:3000
     environment:
       JWT_SECRET: ImAstrongSecret
+      URL_MONGO: mongodb://root:password@mongo:27017
     working_dir: /usr/src/app
     volumes:
       - ./server:/usr/src/app
