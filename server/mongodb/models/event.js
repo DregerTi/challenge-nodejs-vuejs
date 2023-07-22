@@ -20,7 +20,6 @@ const Event = new Schema({
   tagId: {
     type: String,
     ref: 'Tag',
-    required: true
   },
   path: {
     type: String,
@@ -40,10 +39,17 @@ const Event = new Schema({
     type: String,
     required: true
   },
+  coordinates: {
+    x: {
+      type: Number,
+    },
+    y: {
+      type: Number,
+    }
+  },
   createdAt: {
     type: Date,
     default: Date.now()
   }
 });
-console.log('trop cool');
 module.exports = mongoose.model('Event', Event);

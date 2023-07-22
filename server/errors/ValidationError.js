@@ -14,6 +14,15 @@ class ValidationError extends Error {
     }, {});
     return new ValidationError(errors);
   }
+
+  static fromMongooseValidationError(e) {
+    let errors = {};
+
+    Object.keys(e.errors).forEach((key) => {
+      errors[key] = e.errors[key].message;
+    });
+    return new ValidationError(errors);
+  }
 }
 
 module.exports = ValidationError;

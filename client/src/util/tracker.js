@@ -17,9 +17,9 @@ export default {
                     sendEvent({
                         ...configData,
                         user_agent: navigator.userAgent,
-                        url: window.location.href,
-                        event: 'tag',
-                        tag: binding.arg
+                        path: window.location.href,
+                        type: 'tag',
+                        tagKey: binding.arg
                     })
                 }
                 el.addEventListener('click', eventListeners[binding.arg])
@@ -50,8 +50,8 @@ export default {
             sendEvent({
                 ...configData,
                 user_agent: navigator.userAgent,
-                url: window.location.href,
-                event: 'click',
+                path: window.location.href,
+                type: 'click',
                 coordinates: { x: clientX, y: clientY }
             })
         }
@@ -60,8 +60,8 @@ export default {
             sendEvent({
                 ...configData,
                 user_agent: navigator.userAgent,
-                url: window.location.href,
-                event: 'view'
+                path: window.location.href,
+                type: 'view'
             })
         }
     }

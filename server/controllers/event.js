@@ -1,4 +1,5 @@
-module.exports = function Controller(EventService, SiteService, options) {
+const ValidationError = require("../errors/ValidationError");
+module.exports = function Controller(EventService, TagService, SiteService, options) {
   return {
     getAllEventsForSite: async function(req, res, next) {
       const { siteId } = req.params;
@@ -15,7 +16,6 @@ module.exports = function Controller(EventService, SiteService, options) {
           options = { skip: (page - 1) * 10, limit: page * 10 };
         }
         const result = await EventService.findAll(filters, null, options);
-        console.log(await EventService.countDocuments(filters, null, options))
         if (result) res.json({
           events: result,
           totalItems: await EventService.countDocuments(filters, null, options)
@@ -29,11 +29,26 @@ module.exports = function Controller(EventService, SiteService, options) {
     create: async function(req, res, next) {
       const { body } = req;
       try {
-        const data = {};
-        const result = await EventService.create(body);
+        const data = {
+          ...body,
+          ip: req.socket.remoteAddress,
+          sessionId: 'test',
+          viewerId: 'test',
+          siteId: req.site.id,
+        };
+        if (data.type === "tag") {
+          if (!data.tagKey) throw new ValidationError("tagKey is required for click event");
+          const tag = await TagService.findOne({ siteId: req.params.siteId, tagKey: body.tagKey });
+          data.tagId = tag.id;
+        }
+
+        const result = await EventService.create(data);
         res.status(201).json(result);
 
       } catch (err) {
+        if (err.name === "ValidationError") {
+          err = ValidationError.fromMongooseValidationError(err);
+        }
         next(err);
       }
     }

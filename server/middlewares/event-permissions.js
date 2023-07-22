@@ -3,7 +3,7 @@ const SiteService = require("../services/site");
 const UnauthorizedError = require("../errors/UnauthorizedError");
 
 module.exports = {
-  canAccesEvent: async function(req, res, next) {
+  canAccessEvent: async function(req, res, next) {
     const siteService = new SiteService();
     const apiKey = req.headers["x-api-key"];
     if (!apiKey) {
@@ -18,6 +18,7 @@ module.exports = {
       if (site.url !== req.headers.origin) {
         return next(new ForbiddenError());
       }
+      req.site = site;
 
     } catch (err) {
       return next(new UnauthorizedError());

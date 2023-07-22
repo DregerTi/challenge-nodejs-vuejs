@@ -16,7 +16,7 @@ mongodb.initClientDbConnection();
 
 app.use(checkFormat);
 app.use(express.json());
-app.use(cors())
+app.use(cors());
 
 app.use("/events", EventRouter);
 

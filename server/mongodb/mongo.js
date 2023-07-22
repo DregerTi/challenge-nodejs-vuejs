@@ -7,7 +7,6 @@ const clientOptions = {
 
 exports.initClientDbConnection = async () => {
   try {
-    console.log('MONGO_URL', process.env.URL_MONGO);
     await mongoose.connect(process.env.URL_MONGO, clientOptions)
     console.log('Connected');
   } catch (error) {

@@ -1,4 +1,6 @@
 const Event = require('../mongodb/models/event');
+const { Sequelize } = require("sequelize");
+const { fromSequelizeValidationError } = require("../errors/ValidationError");
 
 module.exports = function EventService() {
   return {
@@ -10,7 +12,11 @@ module.exports = function EventService() {
     },
     create: async function (data) {
       // create a new event
-      return Event.create(data);
+      try {
+        return Event.create(data);
+      } catch (e) {
+        throw e;
+      }
     },
     countDocuments: async function(filter, options) {
       return Event.countDocuments(filter, options);
