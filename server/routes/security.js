@@ -8,8 +8,8 @@ const SecurityController = require("../controllers/security")(
   new UserService(),
     new SiteUserService()
 );
-const UserController = require("../controllers/generic")(new UserService());
-
+const UserController = require("../controllers/user")(new UserService());
+ 
 router.post("/login", SecurityController.login);
 router.post("/register", UserController.create);
 

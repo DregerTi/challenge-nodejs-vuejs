@@ -175,6 +175,7 @@ controller.createTag = async function(req, res, next) {
   try {
     body.createdBy = req.user.id;
     body.siteId = parseInt(req.params.id, 10);
+    body.tagKey = await tokenGenerator().tagKey();
     const tag = await tagService.create(req.body);
     res.status(201).json(tag);
   } catch (err) {

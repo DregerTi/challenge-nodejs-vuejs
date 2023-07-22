@@ -18,8 +18,7 @@ module.exports = function Controller(EventService, TagService, SiteService, opti
         const result = await EventService.findAll(filters, null, options);
         if (result) res.json({
           events: result,
-          totalItems: await EventService.countDocuments(filters, null, options)
-
+          totalItems: await EventService.countDocuments(filters, null, options),
         });
         else res.sendStatus(404);
       } catch (err) {
@@ -28,7 +27,6 @@ module.exports = function Controller(EventService, TagService, SiteService, opti
     },
     create: async function(req, res, next) {
       const { body } = req;
-      console.log(body);
       try {
         const data = {
           ...body,
@@ -37,7 +35,8 @@ module.exports = function Controller(EventService, TagService, SiteService, opti
           viewerId: 'test',
           siteId: req.site.id,
           //TODO : à modifier + rajouter country
-          os: "Other",
+          //TODO : gérer les untrack path
+          system: "Other",
         };
         if (data.type === "tag") {
           if (!data.tagKey) throw new ValidationError("tagKey is required for click event");

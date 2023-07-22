@@ -49,7 +49,7 @@ const { type, placeholder, value, label, name, variant, error } = defineProps({
         required: false
     },
     error: {
-        type: String,
+        type: Array || String,
         required: false
     }
 })
@@ -61,7 +61,7 @@ const emit = defineEmits(['update:value'])
     <div class="input" :class="[variant ? 'input--' + variant : '']">
         <label v-if="label">{{ label }}</label>
         <input
-            v-if="type != 'select'"
+            v-if="type !== 'select'"
             :type="type"
             :placeholder="placeholder"
             @input="$emit('update:value', $event.target.value)"
