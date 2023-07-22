@@ -62,7 +62,7 @@ function mouseOver() {
                         <Button
                             icon="Settings"
                             v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
-                            v-bind:title="isOpen ? 'Site settings' : ''"
+                            v-bind:title="isOpen ? 'Settings' : ''"
                         />
                     </RouterLink>
                 </nav>

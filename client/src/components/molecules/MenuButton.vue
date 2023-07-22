@@ -14,6 +14,7 @@ import IconTrackChanges from '@/components/icons/IconTrackChanges.vue'
 import IconLocalFire from '@/components/icons/IconLocalFire.vue'
 import IconVpnKey from '@/components/icons/IconVpnKey.vue'
 import IconLinkOff from '@/components/icons/IconLinkOff.vue'
+import IconLogout from '@/components/icons/IconLogout.vue'
 
 const { title, description, icon, path } = defineProps({
     title: {
@@ -22,7 +23,7 @@ const { title, description, icon, path } = defineProps({
     },
     description: {
         type: String,
-        required: true
+        required: false
     },
     icon: {
         type: String,
@@ -54,9 +55,10 @@ const { title, description, icon, path } = defineProps({
             <IconRoundaboutRight v-if="icon == 'RoundaboutRight'" />
             <IconVpnKey v-if="icon == 'VpnKey'" />
             <IconLinkOff v-if="icon == 'LinkOff'" />
+            <IconLogout v-if="icon == 'Logout'" />
             <div>
                 <h5>{{ title }}</h5>
-                <p>{{ description }}</p>
+                <p v-if="description">{{ description }}</p>
             </div>
         </section>
     </RouterLink>
