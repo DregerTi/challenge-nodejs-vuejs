@@ -2,14 +2,24 @@
 import { onMounted, provide, ref } from 'vue'
 import * as siteService from '../services/siteService'
 import router from '../router'
-import { createSiteKey, refreshApiKeyKey, siteKey, sitesKey } from '@/contexts/SiteProviderKeys'
+import {
+    apiKeyKey,
+    createSiteKey,
+    refreshApiKeyKey,
+    siteKey,
+    sitesKey
+} from '@/contexts/SiteProviderKeys'
 import { errorsKey } from '@/contexts/AuthProviderKeys'
 
 const site = ref(null)
 const sites = ref(null)
 const errors = ref({})
+const apiKey = ref('************')
 
 onMounted(async () => {
+    if (router.currentRoute.value.name === 'site-create') {
+        return
+    }
     const sitees = await siteService.getUserSites()
     sites.value = sitees
 
@@ -23,8 +33,7 @@ onMounted(async () => {
     }
 
     try {
-        const response = await siteService.getSite(router.currentRoute.value.params.site)
-        site.value = response
+        site.value = await siteService.getSite(router.currentRoute.value.params.site)
     } catch (error) {
         await router.push({ name: 'site-create' })
     }
@@ -40,9 +49,13 @@ async function createSite(_site) {
     }
 }
 
-async function refreshApiKey(id) {
+async function refreshApiKey() {
     try {
-        await siteService.refreshApiKey(id)
+        const apiKeyResponse = await siteService.refreshApiKey(
+            router.currentRoute.value.params.site
+        )
+        apiKey.value = apiKeyResponse.apiKey
+        site.value.apiKey = apiKeyResponse.apiKey
         errors.value = {}
     } catch (error) {
         errors.value = error
@@ -54,8 +67,9 @@ provide(sitesKey, sites)
 provide(errorsKey, errors)
 provide(createSiteKey, createSite)
 provide(refreshApiKeyKey, refreshApiKey)
+provide(apiKeyKey, apiKey)
 </script>
 
 <template>
-    <slot v-bind="{ site, errors, createSite, refreshApiKey, sitesKey, sites }"></slot>
+    <slot v-bind="{ site, errors, createSite, refreshApiKey, sitesKey, sites, apiKey }"></slot>
 </template>

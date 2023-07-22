@@ -28,6 +28,7 @@ module.exports = function Controller(EventService, TagService, SiteService, opti
     },
     create: async function(req, res, next) {
       const { body } = req;
+      console.log(body);
       try {
         const data = {
           ...body,
@@ -35,10 +36,13 @@ module.exports = function Controller(EventService, TagService, SiteService, opti
           sessionId: 'test',
           viewerId: 'test',
           siteId: req.site.id,
+          //TODO : à modifier + rajouter country
+          os: "Other",
         };
         if (data.type === "tag") {
           if (!data.tagKey) throw new ValidationError("tagKey is required for click event");
           const tag = await TagService.findOne({ siteId: req.params.siteId, tagKey: body.tagKey });
+          if(!tag) throw new ValidationError("tagKey is not valid");
           data.tagId = tag.id;
         }
 

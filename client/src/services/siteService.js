@@ -25,10 +25,10 @@ export const createSite = async function createSite(_site) {
 export const refreshApiKey = async function refreshApiKey(id) {
     try {
         const response = await requester(
-            ROUTES.RENEW_API_KEY(),
+            ROUTES.RENEW_API_KEY(id),
             'GET',
             {
-                id
+
             },
             true
         )
@@ -60,10 +60,9 @@ export const getUserSites = async function getUserSites() {
 export const getSite = async function getSite(id) {
     try {
         const response = await requester(
-            ROUTES.SITE(),
+            ROUTES.SITE(id),
             'GET',
             {
-                id
             },
             true
         )

@@ -28,9 +28,6 @@ const Event = new Schema({
   country: {
     type: String,
   },
-  city: {
-    type: String,
-  },
   type: {
     type: String,
     required: true
@@ -46,6 +43,10 @@ const Event = new Schema({
     y: {
       type: Number,
     }
+  },
+  system: {
+    type: String,
+    required: true,
   },
   createdAt: {
     type: Date,
