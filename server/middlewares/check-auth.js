@@ -29,7 +29,6 @@ module.exports = {
 
             req.user = user;
         } catch (err) {
-            console.log(err);
             return next(new UnauthorizedError());
         }
         next();

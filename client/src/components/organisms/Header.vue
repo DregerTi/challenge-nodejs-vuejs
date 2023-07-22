@@ -4,6 +4,7 @@ import { RouterLink } from 'vue-router'
 import Button from '@/components/atoms/Button.vue'
 import { ref } from 'vue'
 import Switch from '@/components/atoms/Switch.vue'
+import SiteProvider from '@/contexts/SiteProvider.vue'
 
 const isOpen = ref(true)
 const isOpenBtn = 'xl-primary-bg-unset'
@@ -25,47 +26,49 @@ function mouseOver() {
         v-on:mouseover="mouseOver"
         v-on:mouseleave="mouseLeave"
     >
-        <img src="@/assets/logo.svg" alt="logo" class="header-logo" />
-        <div>
-            <nav>
-                <RouterLink :to="'/analytics/' + $route.params.site + '/'">
-                    <Button
-                        icon="Dashboard"
-                        v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
-                        v-bind:title="isOpen ? 'Dashboard' : ''"
-                    />
-                </RouterLink>
-                <RouterLink :to="'/analytics/' + $route.params.site + '/audience'">
-                    <Button
-                        icon="Timeline"
-                        v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
-                        v-bind:title="isOpen ? 'Audience' : ''"
-                    />
-                </RouterLink>
-                <RouterLink :to="'/analytics/' + $route.params.site + '/explore'">
-                    <Button
-                        icon="AccountTree"
-                        v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
-                        v-bind:title="isOpen ? 'Explore' : ''"
-                    />
-                </RouterLink>
-                <RouterLink :to="'/analytics/' + $route.params.site + '/me'">
-                    <Button
-                        icon="Person"
-                        v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
-                        v-bind:title="isOpen ? 'My account' : ''"
-                    />
-                </RouterLink>
-                <RouterLink :to="'/analytics/' + $route.params.site + '/setting'">
-                    <Button
-                        icon="Settings"
-                        v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
-                        v-bind:title="isOpen ? 'Site settings' : ''"
-                    />
-                </RouterLink>
-            </nav>
-            <Switch class="switch" />
-        </div>
+        <SiteProvider #default="{ site }">
+            <img src="@/assets/logo.svg" alt="logo" class="header-logo" />
+            <div>
+                <nav>
+                    <RouterLink v-if="site" :to="'/analytics/' + $route.params.site + '/'">
+                        <Button
+                            icon="Dashboard"
+                            v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
+                            v-bind:title="isOpen ? 'Dashboard' : ''"
+                        />
+                    </RouterLink>
+                    <RouterLink v-if="site" :to="'/analytics/' + $route.params.site + '/audience'">
+                        <Button
+                            icon="Timeline"
+                            v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
+                            v-bind:title="isOpen ? 'Audience' : ''"
+                        />
+                    </RouterLink>
+                    <RouterLink v-if="site" :to="'/analytics/' + $route.params.site + '/explore'">
+                        <Button
+                            icon="AccountTree"
+                            v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
+                            v-bind:title="isOpen ? 'Explore' : ''"
+                        />
+                    </RouterLink>
+                    <RouterLink :to="'/analytics/' + $route.params.site + '/me'">
+                        <Button
+                            icon="Person"
+                            v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
+                            v-bind:title="isOpen ? 'My account' : ''"
+                        />
+                    </RouterLink>
+                    <RouterLink :to="'/analytics/' + $route.params.site + '/setting'">
+                        <Button
+                            icon="Settings"
+                            v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
+                            v-bind:title="isOpen ? 'Site settings' : ''"
+                        />
+                    </RouterLink>
+                </nav>
+                <Switch class="switch" />
+            </div>
+        </SiteProvider>
     </header>
 </template>
 

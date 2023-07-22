@@ -1,10 +1,12 @@
 <script setup>
-import { RouterView } from 'vue-router'
+import { RouterView, useRoute } from 'vue-router'
 import Button from '@/components/atoms/Button.vue'
 import Header from '@/components/organisms/Header.vue'
 import { ref } from 'vue'
 import Listbox from '@/components/atoms/Listbox.vue'
 import Calendar from '../molecules/Calendar.vue'
+import SiteProvider from '@/contexts/SiteProvider.vue'
+import router from '@/router'
 
 const setDateButton = ref(false)
 const dashboardEditButton = ref(false)
@@ -17,42 +19,49 @@ function toogleDashboardEditMode() {
 
 <template>
     <div class="body">
-        <Header />
-        <div>
-            <div class="container">
-                <header>
-                    <Listbox variant="lg" selected="La route du trône" />
-                    <div class="actions">
-                        <Calendar class="dateButton" v-if="setDateButton" />
-                        <Button
-                            v-if="dashboardEditButton && !dashboardEditMode"
-                            v-bind:onClick="toogleDashboardEditMode"
-                            icon="Edit"
+        <SiteProvider #default="{ site, sites }">
+            <Header :site="site" />
+            <div>
+                <div class="container">
+                    <header v-if="site">
+                        <Listbox
+                            variant="lg"
+                            :values="sites"
+                            :selected="site.name"
+                            path="dashboard"
                         />
-                        <Button
-                            v-if="dashboardEditButton && dashboardEditMode"
-                            v-bind:onClick="toogleDashboardEditMode"
-                            icon="Check"
-                        />
-                    </div>
-                </header>
-                <RouterView
-                    v-slot="{ Component }"
-                    :dashboardEditMode="dashboardEditMode"
-                    v-model:setDateButton="setDateButton"
-                    v-model:dashboardEditButton="dashboardEditButton"
-                >
-                    <transition
-                        v-if="Component"
-                        enter-active-class="animate__animated animate__fadeInRight"
-                        leave-active-class="animate__animated animate__fadeOutLeft"
-                        mode="out-in"
+                        <div class="actions">
+                            <Calendar class="dateButton" v-if="setDateButton" />
+                            <Button
+                                v-if="dashboardEditButton && !dashboardEditMode"
+                                v-bind:onClick="toogleDashboardEditMode"
+                                icon="Edit"
+                            />
+                            <Button
+                                v-if="dashboardEditButton && dashboardEditMode"
+                                v-bind:onClick="toogleDashboardEditMode"
+                                icon="Check"
+                            />
+                        </div>
+                    </header>
+                    <RouterView
+                        v-slot="{ Component }"
+                        :dashboardEditMode="dashboardEditMode"
+                        v-model:setDateButton="setDateButton"
+                        v-model:dashboardEditButton="dashboardEditButton"
                     >
-                        <component :is="Component" />
-                    </transition>
-                </RouterView>
+                        <transition
+                            v-if="Component"
+                            enter-active-class="animate__animated animate__fadeInRight"
+                            leave-active-class="animate__animated animate__fadeOutLeft"
+                            mode="out-in"
+                        >
+                            <component :is="Component" />
+                        </transition>
+                    </RouterView>
+                </div>
             </div>
-        </div>
+        </SiteProvider>
     </div>
 </template>
 

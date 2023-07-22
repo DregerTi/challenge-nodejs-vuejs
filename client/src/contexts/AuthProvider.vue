@@ -14,7 +14,7 @@ async function login(email, password) {
         errors.value = {}
         await tokenStorage.saveToken(response.token)
         user.value = tokenStorage.getUser()
-        await router.push({ name: 'signup' })
+        await router.push({ name: 'dashboard' })
     } catch (error) {
         errors.value = error
     }
@@ -24,7 +24,7 @@ async function register(_user) {
     try {
         await securityService.register(_user)
         errors.value = {}
-        //redirect to login
+        await router.push({ name: 'login' })
     } catch (error) {
         errors.value = error
     }

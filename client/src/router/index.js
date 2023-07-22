@@ -7,6 +7,13 @@ const router = createRouter({
             path: '/auth/',
             redirect: '/auth/login',
             name: 'auth',
+            beforeEnter: (to, from, next) => {
+                if (localStorage.getItem('token')) {
+                    next({ name: 'dashboard' })
+                } else {
+                    next()
+                }
+            },
             component: () => import('../components/templates/AuthLayout.vue'),
             children: [
                 {
@@ -27,9 +34,34 @@ const router = createRouter({
             ]
         },
         {
-            path: '/analytics/:site/',
-            redirect: '/analytics/:site/dashboard',
+            path: '/site/',
+            name: 'site',
+            component: () => import('../components/templates/AnalyticsLayout.vue'),
+            beforeEnter: (to, from, next) => {
+                if (!localStorage.getItem('token')) {
+                    next({ name: 'login' })
+                } else {
+                    next()
+                }
+            },
+            children: [
+                {
+                    path: 'create',
+                    name: 'site-create',
+                    component: () => import('../views/setting/websiteInfo/WebsiteCreateView.vue')
+                }
+            ]
+        },
+        {
+            path: '/analytics/:site?/',
             name: 'analytics',
+            beforeEnter: (to, from, next) => {
+                if (!localStorage.getItem('token')) {
+                    next({ name: 'login' })
+                } else {
+                    next()
+                }
+            },
             component: () => import('../components/templates/AnalyticsLayout.vue'),
             children: [
                 {

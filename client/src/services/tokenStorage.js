@@ -1,5 +1,4 @@
 export const getUser = async function getUser() {
-    console.log('getUser')
     const token = await getToken()
     if (!token) {
         return null
