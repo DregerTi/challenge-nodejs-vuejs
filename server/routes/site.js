@@ -129,6 +129,10 @@ const routesList = [
         path: "/:id/untrack-paths/", method: "get", action: "getUntrackPaths",
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
     },
+    {
+        path: "/:id/untrack-paths/:untrackPathId", method: "get", action: "getOneUntrackPath",
+        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
+    },
 
 ]
 

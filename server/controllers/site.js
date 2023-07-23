@@ -389,7 +389,7 @@ controller.createUntrackPath = async function(req, res, next) {
   }
 }
 controller.updateUntrackPath = async function(req, res, next) {
-  const { untrackPathId } = req.params;
+  const { untrackPathId, id } = req.params;
   const { url } = req.body;
   try {
     const [result] = await untrackPathService.update({ id: parseInt(untrackPathId, 10),
@@ -426,6 +426,18 @@ controller.getUntrackPaths = async function(req, res, next) {
       offset: page ? (page - 1) * 10 : undefined
     });
     res.json(untrackPaths);
+  } catch (err) {
+    next(err);
+  }
+}
+controller.getOneUntrackPath = async function(req, res, next) {
+  const { untrackPathId, id } = req.params;
+  try {
+    const untrackPath = await untrackPathService.findOne({ id: parseInt(untrackPathId, 10),
+      siteId: parseInt(id, 10)
+    });
+    if (untrackPath) res.json(untrackPath);
+    else res.sendStatus(404);
   } catch (err) {
     next(err);
   }
