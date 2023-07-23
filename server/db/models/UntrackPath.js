@@ -13,11 +13,6 @@ module.exports = (connection) => {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
-        validate: {
-          isUrl: {
-            msg: 'URL must be a valid URL'
-          }
-        }
       },
       createdAt: {
         type: DataTypes.DATE,

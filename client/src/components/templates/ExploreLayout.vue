@@ -3,7 +3,6 @@ import { RouterView } from 'vue-router'
 import Button from '@/components/atoms/Button.vue'
 import Header from '@/components/organisms/Header.vue'
 import { defineEmits, ref } from 'vue'
-import Listbox from '@/components/atoms/Listbox.vue'
 import Input from '@/components/atoms/Input.vue'
 import Calendar from '../molecules/Calendar.vue'
 
@@ -50,9 +49,9 @@ const { title, items, description, createNewPath, path } = defineProps({
                 <Button title="Create new" />
             </RouterLink>
             <nav>
-                <RouterLink v-for="item in items" :to="path + '/' + item.id">
+                <RouterLink v-for="item in items" :key="item.id" :to="path + '/' + item.id">
                     <Button
-                        :title="item.title"
+                        :title="item.name ? item.name : item.url"
                         :variant="[
                             $route.params.id && $route.params.id === item.id
                                 ? 'dark-grey'

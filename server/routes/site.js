@@ -113,6 +113,10 @@ const routesList = [
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
     },
     {
+        path: "/:id/untrack-paths/:untrackPathId", method: "get", action: "getOneUntrackPath",
+        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
+    },
+    {
         path: "/:id/untrack-paths/:untrackPathId", method: "patch", action: "updateUntrackPath",
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
     },

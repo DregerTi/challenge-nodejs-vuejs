@@ -410,6 +410,17 @@ controller.getUntrackPaths = async function(req, res, next) {
     next(err);
   }
 }
-
+controller.getOneUntrackPath = async function(req, res, next) {
+  const { untrackPathId, id } = req.params;
+  try {
+    const result = await untrackPathService.findOne({ id: parseInt(untrackPathId, 10),
+      siteId: parseInt(id, 10)
+    });
+    if (result) res.json(result);
+    else res.sendStatus(404);
+  } catch (err) {
+    next(err);
+  }
+}
 
 module.exports = controller;
