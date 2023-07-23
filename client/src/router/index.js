@@ -308,7 +308,7 @@ const router = createRouter({
                                         import('../views/setting/websiteUser/WebsiteUserView.vue')
                                 },
                                 {
-                                    path: ':id/edit',
+                                    path: ':userId/edit',
                                     name: 'Website-users-edit',
                                     component: () =>
                                         import(
@@ -316,7 +316,7 @@ const router = createRouter({
                                         )
                                 },
                                 {
-                                    path: ':id/delete',
+                                    path: ':userId/delete',
                                     name: 'Website-users-delete',
                                     component: () =>
                                         import(

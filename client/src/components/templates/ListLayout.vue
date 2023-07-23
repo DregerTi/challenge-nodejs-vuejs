@@ -1,6 +1,5 @@
 <script setup>
 import Button from '@/components/atoms/Button.vue'
-import Header from '@/components/organisms/Header.vue'
 import { defineEmits, ref } from 'vue'
 import Input from '@/components/atoms/Input.vue'
 import StatRowXl from '@/components/atoms/StatRowXl.vue'
@@ -80,7 +79,7 @@ const { title, items, path, labels, description, createPath } = defineProps({
                 </thead>
                 <tbody>
                     <RouterLink v-for="item in items" :to="path + '/' + item.id + '/edit'">
-                        <StatRowXl :key="item.id" :title="item.title" :value="item.createdAt">
+                        <StatRowXl :key="item.id" :title="item.title">
                             <template v-slot:default>
                                 <div v-if="item.role">
                                     <Badge :value="item.role" />

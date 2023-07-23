@@ -54,6 +54,7 @@ const { type, placeholder, value, label, name, variant, error } = defineProps({
     }
 })
 
+
 const emit = defineEmits(['update:value'])
 </script>
 
@@ -70,7 +71,7 @@ const emit = defineEmits(['update:value'])
             :id="name"
         />
         <Listbox v-else :selected="placeholder" :values="values" :name="name" variant="lite" />
-        <p v-if="error">
+      <p v-if="error">
             {{ Array.isArray(error) ? error.join('\n') : error }}
         </p>
     </div>

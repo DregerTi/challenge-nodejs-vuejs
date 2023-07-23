@@ -41,11 +41,15 @@ const routesList = [
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['USER', 'ADMIN'])]
     },
     {
-        path: "/:id/users/:email", method: "patch", action: "updateUserRoleForSite",
+        path: "/:id/users/:userId", method: "get", action: "getOneUser",
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
     },
     {
-        path: "/:id/users/:email", method: "delete", action: "deleteUserFromSite",
+        path: "/:id/users/:userId", method: "patch", action: "updateUserRoleForSite",
+        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
+    },
+    {
+        path: "/:id/users/:userId", method: "delete", action: "deleteUserFromSite",
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
     },
     {
@@ -100,6 +104,7 @@ const routesList = [
         path: "/:id/conversion-tunnels/:conversionTunnelId/tags/:tagId", method: "post", action: "addTagToConversionTunnel",
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
     },
+
     {
         path: "/:id/conversion-tunnels/:conversionTunnelId/tags/:tagId", method: "patch", action: "updateTagFromConversionTunnel",
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]

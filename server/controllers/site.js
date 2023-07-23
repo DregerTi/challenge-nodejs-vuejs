@@ -90,15 +90,35 @@ controller.getUsers = async function getUsers(req, res, next) {
     next(err);
   }
 };
+controller.getOneUser = async function getOneUser(req, res, next) {
+  const { id, userId } = req.params;
+  try {
+    const user = await userService.findOne({ id: parseInt(userId, 10) }, false);
+    if (!user) {
+      res.sendStatus(404);
+      return;
+    }
+
+    const siteUser = await userSiteService.findOne({ siteId: parseInt(id, 10), userId: parseInt(user.id, 10) });
+    if (!siteUser) {
+      res.sendStatus(404);
+      return;
+    }
+
+    res.json(user);
+  } catch (err) {
+    next(err);
+  }
+}
 controller.updateUserRoleForSite = async function updateUserRoleForSite(req, res, next) {
-  const { id, email } = req.params;
+  const { id, userId } = req.params;
   const { role } = req.body;
   try {
     if (!["ADMIN", "USER"].includes(role)) {
       res.sendStatus(400);
       return;
     }
-    const user = await userService.findOne({ email });
+    const user = await userService.findOne({ id: parseInt(userId, 10) });
     if (!user) {
       res.sendStatus(404);
       return;
@@ -118,9 +138,9 @@ controller.updateUserRoleForSite = async function updateUserRoleForSite(req, res
   }
 };
 controller.deleteUserFromSite = async function deleteUserForSite(req, res, next) {
-  const { id, email } = req.params;
+  const { id, userId } = req.params;
   try {
-    const user = await userService.findOne({ email });
+    const user = await userService.findOne({ id: parseInt(userId, 10) });
     if (!user) {
       res.sendStatus(404);
       return;

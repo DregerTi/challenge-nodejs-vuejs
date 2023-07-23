@@ -29,15 +29,14 @@ module.exports = function UserService() {
             }
             let dbOptions = {
                 where: filters,
-                attributes: ["firstname", "lastname", "email", "createdAt", "updatedAt"],
+                attributes: ["id", "firstname", "lastname", "email", "createdAt", "updatedAt"],
                 subQuery: false,
                 include: [{
                     model: SiteUser,
+                    attributes: ["role"],
                 }],
             };
-            if (!showSiteUsers) {
-                dbOptions.include[0].attributes = [];
-            }
+
             // options.order = {name: "ASC", dob: "DESC"}
             if (options?.order) {
                 // => [["name", "ASC"], ["dob", "DESC"]]
@@ -49,12 +48,21 @@ module.exports = function UserService() {
             }
             return User.findAll(dbOptions);
         },
-        findOne: async function (filters) {
+        findOne: async function (filters, showSiteUsers = true) {
+            const dbOptions = {
+                where: filters,
+                attributes: ["id", "firstname", "lastname", "email"],
+            }
+            if (showSiteUsers) {
+                dbOptions.include = SiteUser;
+            } else {
+                dbOptions.include = [{
+                    model: SiteUser,
+                    attributes: ["role"],
+                }];
+            }
             return User.findOne(
-                {
-                    where: filters,
-                    include: SiteUser
-                }
+                dbOptions,
             );
         },
         create: async function (data) {
