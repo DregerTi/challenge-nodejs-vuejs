@@ -7,6 +7,14 @@ const routesList = [
   {
     path: "/me", method: "get", action: "getMyAccount",
     middlewares: [checkAuth.requireAuthentication]
+  },
+  {
+    path: "/:id", method: "patch", action: "updateMyAccount",
+    middlewares: [checkAuth.requireAuthentication]
+  },
+  {
+    path: "/:id", method: "delete", action: "deleteMyAccount",
+    middlewares: [checkAuth.requireAuthentication]
   }
 ];
 

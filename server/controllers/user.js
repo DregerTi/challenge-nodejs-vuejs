@@ -15,12 +15,31 @@ module.exports = function Controller(Service, options = {}) {
     },
     getMyAccount: async (req, res, next) => {
       try {
-const result = await Service.findOne({ id: req.user.id });
+        const result = await Service.findOne({ id: req.user.id });
         if (result) res.json(result);
         else res.sendStatus(404);
       } catch (err) {
         next(err);
       }
+    },
+    updateMyAccount: async (req, res, next) => {
+      const { body } = req;
+      try {
+        const result = await Service.update(req.user.id, body);
+        if (result) res.json(result);
+        else res.sendStatus(404);
+      } catch (err) {
+        next(err);
+      }
+    },
+    deleteMyAccount: async (req, res, next) => {
+      try {
+        const result = await Service.delete(req.user.id);
+        if (result) res.sendStatus(204);
+        else res.sendStatus(404);
+      } catch (err) {
+        next(err);
+      }
     }
-  }
-}
+  };
+};
