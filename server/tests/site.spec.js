@@ -6,19 +6,19 @@ const clearDatabase = require("./dropDatabase");
 
 let adminUser = {
   email: "t@toto.com",
-  password: "123456",
+  password: "test123456",
   firstname: "admin",
   lastname: "admin"
 };
 let userOne = {
   email: "user1@t.com",
-  password: "123456",
+  password: "test123456",
   firstname: "user1",
   lastname: "user1"
 };
 let userTwo = {
   email: "user2@t.com",
-  password: "123456",
+  password: "test123456",
   firstname: "user2",
   lastname: "user2"
 };
@@ -49,7 +49,7 @@ describe("Site and SiteInvitation API", function() {
 
                 chai.request(index)
                   .post("/login")
-                  .send({ email: "t@toto.com", password: "123456" })
+                  .send({ email: "t@toto.com", password: "test123456" })
                   .end((err, res) => {
                     chai.expect(res).to.have.status(200);
                     chai.expect(res.body).to.have.property("token");

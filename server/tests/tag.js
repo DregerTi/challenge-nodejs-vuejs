@@ -8,7 +8,7 @@ describe("Tag API", function() {
   it("should return 200", (done) => {
     chai.request(index)
       .post("/login")
-      .send({ email: "t@toto.com", password: "123456" })
+      .send({ email: "t@toto.com", password: "test123456" })
       .end((err, res) => {
         chai.expect(res).to.have.status(200);
         chai.expect(res.body).to.have.property("token");

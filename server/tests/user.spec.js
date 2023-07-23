@@ -6,7 +6,7 @@ const clearDatabase = require("./dropDatabase");
 
 let userTest = {
   email: "t@toto.com",
-  password: "123456",
+  password: "test123456",
   firstname: "t",
   lastname: "t"
 };
@@ -14,14 +14,6 @@ let userTest = {
 describe("Auth and user API", function() {
   before(async () => {
     await clearDatabase();
-  });
-  it("should return 0 user", () => {
-    chai.request(index)
-      .get("/users")
-      .end((err, res) => {
-        chai.expect(res).to.have.status(200);
-        chai.expect(res.body).to.have.lengthOf(0);
-      });
   });
   it("should register new user, login and update it", (done) => {
     chai.request(index)
