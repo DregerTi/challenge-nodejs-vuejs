@@ -1,7 +1,8 @@
 <script setup>
-import { defineEmits } from 'vue'
+import { computed, defineEmits, reactive } from 'vue'
 import Input from '@/components/atoms/Input.vue'
 import Button from '@/components/atoms/Button.vue'
+import { useStore } from 'vuex'
 
 const emit = defineEmits([
     'update:descriptionHidden',
@@ -15,15 +16,28 @@ emit('update:updateBtn', false)
 emit('update:mdMenuExplore', true)
 emit('update:calendarBtn', false)
 emit('update:descriptionHidden', false)
+
+const store = useStore()
+const tagsErrors = computed(() => store.state.tag.tagsErrors)
+
+const createTag = async (formData) => {
+    await store.dispatch('createTag', formData)
+}
+
+const formData = reactive({
+    name: ''
+})
 </script>
 
 <template>
-    <form class="event-form">
+    <form class="event-form" @submit.prevent="createTag(formData)">
         <Input
-            label="Title for this new conversion tunnel"
+            :error="tagsErrors.name"
+            label="Title for this new tag"
             type="text"
-            placeholder="Purchase funnel"
+            placeholder="Tag name"
             name="name"
+            v-model:value="formData.name"
         />
         <Button title="Create" />
     </form>

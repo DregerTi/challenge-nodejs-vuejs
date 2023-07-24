@@ -19,7 +19,7 @@ emit('update:descriptionHidden', false)
 
 const store = useStore()
 const untrackedPage = computed(() => store.state.untrackedPage.untrackedPage)
-const errors = computed(() => store.state.untrackedPage.errors)
+const untrackedPagesErrors = computed(() => store.state.untrackedPage.untrackedPagesErrors)
 
 const updateUntrackedPage = async (formData) => {
     await store.dispatch('updateUntrackedPage', formData)
@@ -36,7 +36,7 @@ onBeforeMount(async () => {
 <template>
     <form class="event-form" @submit.prevent="updateUntrackedPage(formData)">
         <Input
-            :error="errors?.url"
+            :error="untrackedPagesErrors?.url"
             label="URL of the page you want to exclude"
             type="text"
             placeholder="https://example.com/checkout"

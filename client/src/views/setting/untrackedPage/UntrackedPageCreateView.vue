@@ -18,7 +18,7 @@ emit('update:calendarBtn', false)
 emit('update:descriptionHidden', false)
 
 const store = useStore()
-const errors = computed(() => store.state.untrackedPage.errors)
+const untrackedPagesErrors = computed(() => store.state.untrackedPage.untrackedPagesErrors)
 
 const createUntrackedPage = async (formData) => {
     await store.dispatch('createUntrackedPage', formData)
@@ -33,7 +33,7 @@ const formData = reactive({
     <div>
         <form class="event-form" @submit.prevent="createUntrackedPage(formData)">
             <Input
-                :error="errors.url"
+                :error="untrackedPagesErrors.url"
                 label="URL or Regex of the page you want to exclude"
                 type="text"
                 placeholder="https://example.com/checkout"

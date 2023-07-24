@@ -5,13 +5,13 @@ import router from '@/router'
 const state = {
     untrackedPage: null,
     untrackedPages: [],
-    errors: []
+    untrackedPagesErrors: []
 }
 
 const getters = {
     untrackedPage: (state) => state.untrackedPage,
     untrackedPages: (state) => state.untrackedPages,
-    errors: (state) => state.errors
+    untrackedPagesErrors: (state) => state.untrackedPagesErrors
 }
 
 const actions = {
@@ -29,7 +29,7 @@ const actions = {
                 }
             })
         } catch (error) {
-            commit('setErrors', error)
+            commit('setUntrackedPagesErrors', error)
         }
     },
     async getUntrackedPages({ commit }) {
@@ -37,7 +37,7 @@ const actions = {
             const untrackedPages = await untrackedPageService.getUntrackedPages()
             commit('setUntrackedPages', untrackedPages)
         } catch (error) {
-            commit('setErrors', error)
+            commit('setUntrackedPagesErrors', error)
         }
     },
     async updateUntrackedPage({ commit }, _untrackedPage) {
@@ -54,7 +54,7 @@ const actions = {
                 }
             })
         } catch (error) {
-            commit('setErrors', error)
+            commit('setUntrackedPagesErrors', error)
         }
     },
     async deleteUntrackedPage({ commit }, id) {
@@ -67,7 +67,7 @@ const actions = {
                 params: { site: router.currentRoute.value.params.site }
             })
         } catch (error) {
-            commit('setErrors', error)
+            commit('setUntrackedPagesErrors', error)
         }
     },
     async getUntrackedPage({ commit }, id) {
@@ -75,7 +75,7 @@ const actions = {
             const untrackedPage = await untrackedPageService.getUntrackedPage(id)
             commit('setUntrackedPage', untrackedPage)
         } catch (error) {
-            commit('setErrors', error)
+            commit('setUntrackedPagesErrors', error)
         }
     }
 }
@@ -87,8 +87,8 @@ const mutations = {
     setUntrackedPages(state, untrackedPages) {
         state.untrackedPages = untrackedPages
     },
-    setErrors(state, errors) {
-        state.errors = errors
+    setUntrackedPagesErrors(state, errors) {
+        state.untrackedPagesErrors = errors
     }
 }
 

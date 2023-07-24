@@ -4,13 +4,13 @@ import router from '@/router'
 const state = {
     tag: null,
     tags: [],
-    errors: []
+    tagsErrors: []
 }
 
 const getters = {
     tag: (state) => state.tag,
     tags: (state) => state.tags,
-    errors: (state) => state.errors
+    tagsErrors: (state) => state.tagsErrors
 }
 
 const actions = {
@@ -21,14 +21,14 @@ const actions = {
             const Tags = await tagService.getTags()
             commit('setTags', Tags)
             await router.push({
-                name: 'untracked-page-show',
+                name: 'tag-show',
                 params: {
                     site: router.currentRoute.value.params.site,
                     id: tag.id
                 }
             })
         } catch (error) {
-            commit('setErrors', error)
+            commit('setTagsErrors', error)
         }
     },
     async getTags({ commit }) {
@@ -36,7 +36,7 @@ const actions = {
             const tags = await tagService.getTags()
             commit('setTags', tags)
         } catch (error) {
-            commit('setErrors', error)
+            commit('setTagsErrors', error)
         }
     },
     async updateTag({ commit }, _tag) {
@@ -46,14 +46,14 @@ const actions = {
             const tags = await tagService.getTags()
             commit('setTags', tags)
             await router.push({
-                name: 'untracked-page-show',
+                name: 'tag-show',
                 params: {
                     site: router.currentRoute.value.params.site,
                     id: router.currentRoute.value.params.id
                 }
             })
         } catch (error) {
-            commit('setErrors', error)
+            commit('setTagsErrors', error)
         }
     },
     async deleteTag({ commit }, id) {
@@ -62,11 +62,11 @@ const actions = {
             const tags = await tagService.getTags()
             commit('setTags', tags)
             await router.push({
-                name: 'untracked-page',
+                name: 'tag',
                 params: { site: router.currentRoute.value.params.site }
             })
         } catch (error) {
-            commit('setErrors', error)
+            commit('setTagsErrors', error)
         }
     },
     async getTag({ commit }, id) {
@@ -74,7 +74,7 @@ const actions = {
             const tag = await tagService.getTag(id)
             commit('setTag', tag)
         } catch (error) {
-            commit('setErrors', error)
+            commit('setTagsErrors', error)
         }
     }
 }
@@ -86,8 +86,8 @@ const mutations = {
     setTags(state, tags) {
         state.tags = tags
     },
-    setErrors(state, errors) {
-        state.errors = errors
+    setTagsErrors(state, errors) {
+        state.tagsErrors = errors
     }
 }
 
