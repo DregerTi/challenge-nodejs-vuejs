@@ -85,7 +85,7 @@ export const deleteUntrackedPage = async function deleteUntrackedPage(id) {
 export const getUntrackedPage = async function getUntrackedPage() {
     try {
         if (!router.currentRoute.value.params.site || !router.currentRoute.value.params.id) {
-            throw new Error('Fetch failed')
+            return
         }
         const response = await requester(
             ROUTES.UNTRACKED_PATH(

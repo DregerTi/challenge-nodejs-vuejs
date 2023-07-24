@@ -20,11 +20,9 @@ const tag = computed(() => store.state.tag.tag)
 </script>
 
 <template>
-    <p>
-        <b>
-            {{ tag?.name }}
-        </b>
-    </p>
+    <h2>
+        {{ tag?.name }}
+    </h2>
 </template>
 
 <style scoped lang="scss"></style>

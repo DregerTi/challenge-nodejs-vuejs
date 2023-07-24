@@ -85,7 +85,7 @@ export const deleteConversionTunnel = async function deleteConversionTunnel(id) 
 export const getConversionTunnel = async function getConversionTunnel() {
     try {
         if (!router.currentRoute.value.params.site || !router.currentRoute.value.params.id) {
-            throw new Error('Fetch failed')
+            return
         }
         const response = await requester(
             ROUTES.CONVERSION_TUNNEL(

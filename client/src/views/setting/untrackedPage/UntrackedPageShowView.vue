@@ -20,9 +20,7 @@ emit('update:descriptionHidden', false)
 </script>
 
 <template>
-    <p>
-        <b>{{ untrackedPage?.url }}</b>
-    </p>
+    <h2>{{ untrackedPage?.url }}</h2>
 </template>
 
 <style scoped lang="scss"></style>

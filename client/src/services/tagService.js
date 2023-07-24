@@ -85,7 +85,7 @@ export const deleteTag = async function deleteTag(id) {
 export const getTag = async function getTag() {
     try {
         if (!router.currentRoute.value.params.site || !router.currentRoute.value.params.id) {
-            throw new Error('Fetch failed')
+            return
         }
         const response = await requester(
             ROUTES.TAG(router.currentRoute.value.params.site, router.currentRoute.value.params.id),

@@ -4,13 +4,13 @@ import router from '@/router'
 const state = {
     conversionTunnel: null,
     conversionTunnels: [],
-    errors: []
+    conversionTunnelsErrors: []
 }
 
 const getters = {
     conversionTunnel: (state) => state.conversionTunnel,
     conversionTunnels: (state) => state.conversionTunnels,
-    errors: (state) => state.errors
+    conversionTunnelsErrors: (state) => state.conversionTunnelsErrors
 }
 
 const actions = {
@@ -23,14 +23,14 @@ const actions = {
             const ConversionTunnels = await conversionTunnelService.getConversionTunnels()
             commit('setConversionTunnels', ConversionTunnels)
             await router.push({
-                name: 'untracked-page-show',
+                name: 'conversion-tunnel-show',
                 params: {
                     site: router.currentRoute.value.params.site,
                     id: conversionTunnel.id
                 }
             })
         } catch (error) {
-            commit('setErrors', error)
+            commit('setConversionTunnelsErrors', error)
         }
     },
     async getConversionTunnels({ commit }) {
@@ -38,7 +38,7 @@ const actions = {
             const conversionTunnels = await conversionTunnelService.getConversionTunnels()
             commit('setConversionTunnels', conversionTunnels)
         } catch (error) {
-            commit('setErrors', error)
+            commit('setConversionTunnelsErrors', error)
         }
     },
     async updateConversionTunnel({ commit }, _conversionTunnel) {
@@ -50,14 +50,14 @@ const actions = {
             const conversionTunnels = await conversionTunnelService.getConversionTunnels()
             commit('setConversionTunnels', conversionTunnels)
             await router.push({
-                name: 'untracked-page-show',
+                name: 'conversion-tunnel-show',
                 params: {
                     site: router.currentRoute.value.params.site,
                     id: router.currentRoute.value.params.id
                 }
             })
         } catch (error) {
-            commit('setErrors', error)
+            commit('setConversionTunnelsErrors', error)
         }
     },
     async deleteConversionTunnel({ commit }, id) {
@@ -66,19 +66,19 @@ const actions = {
             const conversionTunnels = await conversionTunnelService.getConversionTunnels()
             commit('setConversionTunnels', conversionTunnels)
             await router.push({
-                name: 'untracked-page',
+                name: 'conversion-tunnel',
                 params: { site: router.currentRoute.value.params.site }
             })
         } catch (error) {
-            commit('setErrors', error)
+            commit('setConversionTunnelsErrors', error)
         }
     },
-    async getConversionTunnel({ commit }, id) {
+    async getConversionTunnel({ commit }) {
         try {
-            const conversionTunnel = await conversionTunnelService.getConversionTunnel(id)
+            const conversionTunnel = await conversionTunnelService.getConversionTunnel()
             commit('setConversionTunnel', conversionTunnel)
         } catch (error) {
-            commit('setErrors', error)
+            commit('setConversionTunnelsErrors', error)
         }
     }
 }
@@ -90,8 +90,8 @@ const mutations = {
     setConversionTunnels(state, conversionTunnels) {
         state.conversionTunnels = conversionTunnels
     },
-    setErrors(state, errors) {
-        state.errors = errors
+    setConversionTunnelsErrors(state, errors) {
+        state.conversionTunnelsErrors = errors
     }
 }
 

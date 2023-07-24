@@ -39,7 +39,7 @@ const formData = reactive({
             name="name"
             v-model:value="formData.name"
         />
-        <Button title="Create" />
+        <Button title="Create" type="submit" />
     </form>
 </template>
 

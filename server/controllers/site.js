@@ -228,9 +228,9 @@ controller.getConversionTunnels = async function getConversionTunnels(req, res, 
 };
 
 controller.getOneConversionTunnel = async function(req, res, next) {
-  const { name } = req.params;
+  const { conversionTunnelId } = req.params;
   try {
-    const conversionTunnel = await conversionTunnelService.findOne({ name: name });
+    const conversionTunnel = await conversionTunnelService.findOne({ id: parseInt(conversionTunnelId, 10) });
     if (conversionTunnel) res.status(200).json(conversionTunnel);
     else res.sendStatus(404);
   } catch (err) {
