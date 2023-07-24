@@ -1,3 +1,5 @@
+const EmailService = require("../services/email");
+
 module.exports = function Controller(Service, options = {}) {
   return {
     create: async (req, res, next) => {
@@ -8,6 +10,7 @@ module.exports = function Controller(Service, options = {}) {
           return;
         }
         const result = await Service.create(body);
+        const emailService = await EmailService.sendConfirmationEmail(result.email);
         res.status(201).json(result);
       } catch (err) {
         next(err);

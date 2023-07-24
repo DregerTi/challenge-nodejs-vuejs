@@ -9,7 +9,7 @@ const formData = reactive({
     lastname: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    passwordConfirmation: ''
 })
 </script>
 
@@ -61,12 +61,12 @@ const formData = reactive({
                 />
 
                 <Input
-                    :error="errors.confirmPassword"
+                    :error="errors.passwordConfirmation"
                     type="password"
                     placeholder="Confirm password"
                     name="confirm-password"
                     label="Confirm Password"
-                    v-model:value="formData.confirmPassword"
+                    v-model:value="formData.passwordConfirmation"
                 />
                 <div>
                     <p>
