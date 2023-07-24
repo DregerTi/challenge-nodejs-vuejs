@@ -6,7 +6,7 @@ async function requester(route, method, body, auth = true) {
     if (!['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) return false
     const url = new URL(apiBaseUrl + route)
 
-    const response =  await fetch(url, {
+    const response = await fetch(url, {
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
@@ -17,13 +17,13 @@ async function requester(route, method, body, auth = true) {
     })
 
     if (response.status === 401) {
-        if (await tokenStorage.getToken() !== null) {
-            await tokenStorage.removeToken();
-            window.location.reload();
+        if ((await tokenStorage.getToken()) !== null) {
+            await tokenStorage.removeToken()
+            window.location.reload()
         }
     }
 
-    return response;
+    return response
 }
 
 export default requester

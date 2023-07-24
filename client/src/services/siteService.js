@@ -24,14 +24,7 @@ export const createSite = async function createSite(_site) {
 
 export const refreshApiKey = async function refreshApiKey(id) {
     try {
-        const response = await requester(
-            ROUTES.RENEW_API_KEY(id),
-            'GET',
-            {
-
-            },
-            true
-        )
+        const response = await requester(ROUTES.RENEW_API_KEY(id), 'GET', {}, true)
 
         if (response.status === 422) {
             throw await response.json()
@@ -59,13 +52,7 @@ export const getUserSites = async function getUserSites() {
 
 export const getSite = async function getSite(id) {
     try {
-        const response = await requester(
-            ROUTES.SITE(id),
-            'GET',
-            {
-            },
-            true
-        )
+        const response = await requester(ROUTES.SITE(id), 'GET', {}, true)
 
         if (response.status === 422) {
             throw await response.json()
