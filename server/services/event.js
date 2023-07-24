@@ -20,6 +20,9 @@ module.exports = function EventService() {
     },
     countDocuments: async function(filter, options) {
       return Event.countDocuments(filter, options);
+    },
+    findAllAggregate: async function(aggregate) {
+      return Event.aggregate(aggregate);
     }
   }
 }
