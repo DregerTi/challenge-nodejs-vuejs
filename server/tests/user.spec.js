@@ -3,9 +3,10 @@ const chaiHttp = require("chai-http");
 chai.use(chaiHttp);
 const index = require("../index");
 const clearDatabase = require("./dropDatabase");
+const generalFixtures = require("./fixtures");
 
 let userTest = {
-  email: "t@toto.com",
+  email: "test@toto.com",
   password: "test123456",
   passwordConfirmation: "test123456",
   firstname: "t",
@@ -13,57 +14,10 @@ let userTest = {
 };
 
 describe("As a user, I", function() {
-  before(async () => {
+  before(async() => {
     await clearDatabase();
+    await generalFixtures();
   });
-  // it("I should be able to register should register new user, login and update it", (done) => {
-  //   chai.request(index)
-  //     .post("/register")
-  //     .send(userTest)
-  //     .end((err, res) => {
-  //       chai.expect(res).to.have.status(201);
-  //       chai.expect(res.body).to.have.property("id");
-  //       const connectedUser = res.body;
-  //       connectedUser.password = userTest.password;
-  //       chai.request(index)
-  //         .post("/register")
-  //         .send(userTest)
-  //         .end((err, res) => {
-  //           chai.expect(res).to.have.status(422);
-  //           chai.expect(res.body).to.have.property("email");
-
-  //           chai.request(index)
-  //             .post("/login")
-  //             .send({ email, password } = connectedUser)
-  //             .end((err, res) => {
-  //               chai.expect(res).to.have.status(200);
-  //               chai.expect(res.body).to.have.property("token");
-  //               const token = res.body.token;
-
-  //               connectedUser.firstname = "gael";
-  //               connectedUser.lastname = "stervinou";
-  //               chai.request(index)
-  //                 .put(`/users/${connectedUser.id}`)
-  //                 .auth(token, { type: "bearer" })
-  //                 .send(connectedUser)
-  //                 .end((err, res) => {
-  //                   chai.expect(res).to.have.status(200);
-  //                   chai.expect(res.body).to.have.property("firstname");
-  //                   chai.expect(res.body).to.have.property("lastname");
-
-  //                   chai.request(index)
-  //                     .delete(`/users/${connectedUser.id}`)
-  //                     .auth(token, { type: "bearer" })
-  //                     .end((err, res) => {
-  //                       chai.expect(res).to.have.status(204);
-
-  //                       done();
-  //                     });
-  //                 });
-  //             });
-  //         });
-  //     });
-  // });
   
   it("should register a new user", (done) => {
     chai.request(index)
@@ -155,7 +109,6 @@ describe("As a user, I", function() {
         chai.expect(res.body).to.have.property("id");
 
         connectedUser.id = res.body.id;
-        console.log(connectedUser);
         chai.request(index)
           .delete(`/users/${connectedUser.id}`)
           .auth(token, { type: "bearer" })

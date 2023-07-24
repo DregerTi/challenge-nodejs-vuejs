@@ -88,10 +88,7 @@ export const getTag = async function getTag() {
             throw new Error('Fetch failed')
         }
         const response = await requester(
-            ROUTES.TAG(
-                router.currentRoute.value.params.site,
-                router.currentRoute.value.params.id
-            ),
+            ROUTES.TAG(router.currentRoute.value.params.site, router.currentRoute.value.params.id),
             'GET',
             {},
             true
