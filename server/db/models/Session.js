@@ -19,9 +19,6 @@ module.exports = (connection) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      stoppedAt: {
-        type: DataTypes.DATE,
-      },
       createdAt: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW

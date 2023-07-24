@@ -69,10 +69,6 @@ const routesList = [
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
     },
     {
-        path: "/:id/tags/:tagId", method: "delete", action: "deleteTag",
-        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
-    },
-    {
         path: "/:id/conversion-tunnels", method: "get", action: "getConversionTunnels",
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['USER', 'ADMIN'])]
     },

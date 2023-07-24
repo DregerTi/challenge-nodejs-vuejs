@@ -207,17 +207,6 @@ controller.replaceTag = async function(req, res, next) {
     next(err);
   }
 };
-controller.deleteTag = async function(req, res, next) {
-  const { tagId } = req.params;
-  try {
-    const result = await tagService.delete({ id: parseInt(tagId, 10) });
-    if (result) res.sendStatus(204);
-    else res.sendStatus(404);
-  } catch (err) {
-    next(err);
-  }
-};
-
 controller.getConversionTunnels = async function getConversionTunnels(req, res, next) {
   const { page, order, ...filters } = req.query;
   try {

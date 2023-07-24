@@ -3,6 +3,8 @@ const controller = require("../controllers/event");
 const EventService = require("../services/event");
 const TagService = require("../services/tag");
 const eventPermission = require("../middlewares/event-permissions");
+const SessionService = require("../services/session");
+const ViewerService = require("../services/viewer");
 
 
 const routesList = [
@@ -16,7 +18,7 @@ const routesList = [
 ];
 
 const eventController =
-  new controller(new EventService(), new TagService());
+  new controller(new EventService(), new TagService(), new SessionService(), new ViewerService(), {});
 
 module.exports = new specificRouter(
   eventController,

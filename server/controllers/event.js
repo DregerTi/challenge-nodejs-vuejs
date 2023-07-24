@@ -1,5 +1,7 @@
 const ValidationError = require("../errors/ValidationError");
-module.exports = function Controller(EventService, TagService, SiteService, options) {
+const tokenGenerator = require("../utils/token-generator");
+
+module.exports = function Controller(EventService, TagService, SessionService, ViewerService, options) {
   return {
     getAllEventsForSite: async function(req, res, next) {
       const { siteId } = req.params;
@@ -28,12 +30,27 @@ module.exports = function Controller(EventService, TagService, SiteService, opti
     create: async function(req, res, next) {
       const { body } = req;
       try {
+        let viewer = await ViewerService.findOne({ viewerKey: body?.viewerKey });
+
+        if (!viewer) {
+          viewer = await ViewerService.create({ viewerKey: body?.viewerKey });
+        } else {
+          await ViewerService.update({ id: viewer.id }, {});
+        }
+        let session = await SessionService.findOne({ viewerId: viewer.id }, [ [ 'updatedAt', 'DESC' ]]);
+
+        if (!session || Date.now() - session.updatedAt > 15 * 60 * 1000) {
+          const sessionKey = await tokenGenerator().sessionKey();
+          session = await SessionService.create({ sessionKey: sessionKey , viewerId: viewer.id, device: body?.device});
+        } else {
+          session = (await SessionService.update({ id: parseInt(session.id,10) }, { updatedAt: Date.now()}))[0];
+        }
         const data = {
           ...body,
           ip: req.socket.remoteAddress,
-          sessionId: 'test',
-          viewerId: 'test',
           siteId: req.site.id,
+          sessionId: session.id,
+          viewerId: viewer.id,
           //TODO : à modifier + rajouter country
           //TODO : gérer les untrack path
           system: "Other",
