@@ -34,19 +34,17 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-    <div>
-        <form class="event-form" @submit.prevent="updateUntrackedPage(formData)">
-            <Input
-                :error="errors?.url"
-                label="URL of the page you want to exclude"
-                type="text"
-                placeholder="https://example.com/checkout"
-                name="url"
-                v-model:value="formData.url"
-            />
-            <Button type="submit" title="Update" />
-        </form>
-    </div>
+    <form class="event-form" @submit.prevent="updateUntrackedPage(formData)">
+        <Input
+            :error="errors?.url"
+            label="URL of the page you want to exclude"
+            type="text"
+            placeholder="https://example.com/checkout"
+            name="url"
+            v-model:value="formData.url"
+        />
+        <Button type="submit" title="Update" />
+    </form>
 </template>
 
 <style scoped lang="scss"></style>

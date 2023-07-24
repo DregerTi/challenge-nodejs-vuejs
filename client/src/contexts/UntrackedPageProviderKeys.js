@@ -1,8 +1,0 @@
-export const untrackedPagesKey = Symbol('untrackedPages')
-export const untrackedPageKey = Symbol('untrackedPage')
-export const errorsKey = Symbol('errors')
-export const createUntrackedPageKey = Symbol('createUntrackedPage')
-export const updateUntrackedPageKey = Symbol('updateUntrackedPage')
-export const deleteUntrackedPageKey = Symbol('deleteUntrackedPage')
-export const getUntrackedPageKey = Symbol('getUntrackedPage')
-export const getUntrackedPagesKey = Symbol('getUntrackedPages')
