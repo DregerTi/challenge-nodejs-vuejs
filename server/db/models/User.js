@@ -51,6 +51,15 @@ module.exports = (connection) => {
                     },
                 }
             },
+            status: {
+                type: DataTypes.ENUM("valid", "pending", "deleted"),
+                defaultValue: "pending",
+                allowNull: false,
+            },
+            token: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
         },
         {sequelize: connection, tableName: "users"}
     );

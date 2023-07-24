@@ -43,6 +43,29 @@ module.exports = function Controller(Service, options = {}) {
       } catch (err) {
         next(err);
       }
+    },
+    resetPassword: async (req, res, next) => {
+      const { body } = req;
+      try {
+        if (body.password !== body?.passwordConfirmation) {
+          res.status(422).json({ password: "Password and password confirmation must match" });
+          return;
+        }
+        const result = await Service.resetPassword(req.params.token, body);
+        if (result) res.json(result);
+        else res.sendStatus(404);
+      } catch (err) {
+        next(err);
+      }
+    },
+    validateAccount: async (req, res, next) => {
+      try {
+        const result = await Service.validateAccount(req.params.token);
+        if (result) res.json(result);
+        else res.sendStatus(404);
+      } catch (err) {
+        next(err);
+      }
     }
   };
 };

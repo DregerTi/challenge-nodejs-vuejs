@@ -1,6 +1,7 @@
 const {User, SiteUser} = require("../db");
 const Sequelize = require("sequelize");
 const ValidationError = require("../errors/ValidationError");
+const tokenGenerator = require("../utils/token-generator");
 
 module.exports = function UserService() {
     return {
@@ -114,5 +115,35 @@ module.exports = function UserService() {
 
             return user;
         },
+        resetPassword: async (token, data) => {
+            const user = await User.findOne({where: {token: token}});
+            if (!user) {
+                throw new ValidationError({
+                    email: "User not found",
+                });
+            }
+            if (data.password !== data?.passwordConfirmation) {
+                throw new ValidationError({
+                    password: "Password and password confirmation must match",
+                });
+            }
+            const isPasswordValid = await user.isPasswordValid(data.oldPassword);
+            if (!isPasswordValid) {
+                throw new ValidationError({
+                    oldPassword: "Invalid password",
+                });
+            }
+            const newToken = await tokenGenerator().token();
+            return user.update({password: data.password, token: newToken});
+        },
+        validateAccount: async (token) => {
+            const user = await User.findOne({where: {token: token}});
+            if (!user) {
+                throw new ValidationError({
+                    email: "User not found",
+                });
+            }
+            return user.update({status: "valid"});
+        }
     };
 };

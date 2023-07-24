@@ -1,17 +1,17 @@
 export default {
     getDeviceType() {
-        const ua = navigator.userAgent;
+        const ua = navigator.userAgent
         if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
-            return "tablet";
+            return 'tablet'
         }
         if (
-          /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
-            ua
-          )
+            /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
+                ua
+            )
         ) {
-            return "mobile";
+            return 'mobile'
         }
-        return "desktop";
+        return 'desktop'
     },
     getViewerKey() {
         const key = localStorage.getItem('viewerKey')
@@ -31,7 +31,7 @@ export default {
         let currentHref = null
         const eventListeners = {}
         const configData = {
-            APP_ID: option.APP_ID,
+            APP_ID: option.APP_ID
         }
 
         Vue.directive('track', {

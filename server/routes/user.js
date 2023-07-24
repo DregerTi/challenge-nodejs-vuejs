@@ -15,7 +15,13 @@ const routesList = [
   {
     path: "/:id", method: "delete", action: "deleteMyAccount",
     middlewares: [checkAuth.requireAuthentication]
-  }
+  },
+  {
+    path: "/reset-password/:token", method: "patch", action: "resetPassword",
+  },
+  {
+    path: "/validate/:token", method: "get", action: "validateAccount",
+  },
 ];
 
   module.exports = new specificRouter(new controller(new UserService()), routesList);
