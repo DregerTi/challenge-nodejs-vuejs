@@ -1,6 +1,9 @@
 <script setup>
-import { defineEmits, onBeforeMount, onMounted, onUpdated, ref } from 'vue'
-import { getUntrackedPage } from '@/services/untrackedPageService'
+import { defineEmits, computed, onUpdated } from 'vue'
+import { useStore } from 'vuex'
+
+const store = useStore()
+const untrackedPage = computed(() => store.state.untrackedPage.untrackedPage)
 
 const emit = defineEmits([
     'update:descriptionHidden',
@@ -14,16 +17,11 @@ emit('update:updateBtn', true)
 emit('update:mdMenuExplore', true)
 emit('update:calendarBtn', false)
 emit('update:descriptionHidden', false)
-
-const untrackedPage = ref(null)
-onMounted(async () => {
-    untrackedPage.value = await getUntrackedPage()
-})
 </script>
 
 <template>
     <p>
-        {{ untrackedPage?.url }}
+        <b>{{ untrackedPage?.url }}</b>
     </p>
 </template>
 

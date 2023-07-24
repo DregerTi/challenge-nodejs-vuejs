@@ -22,7 +22,8 @@
     "vue": "^3.3.4",
     "vue-chartjs": "^5.2.0",
     "vue-router": "^4.2.2",
-    "vue-tailwind-datepicker": "^1.4.5"
+    "vue-tailwind-datepicker": "^1.4.5",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",

@@ -26,10 +26,7 @@ const { title, description, icon, path } = defineProps({
         required: false
     },
     icon: {
-        type: String,
-        validator: (value) => {
-            return ['Edit'].includes(value)
-        }
+        type: String
     },
     path: {
         type: String,

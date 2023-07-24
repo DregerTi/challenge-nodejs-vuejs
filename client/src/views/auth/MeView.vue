@@ -1,25 +1,34 @@
 <script setup>
 import Button from '@/components/atoms/Button.vue'
+import AuthProvider from '@/contexts/AuthProvider.vue'
+import { getUserKey, logoutKey } from '@/contexts/AuthProviderKeys'
+import { inject, onMounted, ref } from 'vue'
+
+const logout = inject(logoutKey)
+logout()
 </script>
 
 <template>
     <div>
-        <header class="flex justify-between items-base">
-            <h2>My account</h2>
-            <RouterLink :to="'/analytics/' + $route.params.site + '/me/edit'">
-                <Button icon="Edit" />
-            </RouterLink>
-        </header>
-        <div class="mt-12 mb-12 flex flex-col gap-4">
-            <div class="info">
-                <span>Username</span>
-                <p>Username value</p>
+        <AuthProvider #default="{ user }">
+            <header class="flex justify-between items-base">
+                <h2>My account</h2>
+                <RouterLink :to="'/analytics/' + $route.params.site + '/me/edit'">
+                    <Button icon="Edit" />
+                </RouterLink>
+            </header>
+            <div class="mt-12 mb-12 flex flex-col gap-4">
+                {{ user }}
+                <div class="info">
+                    <span>Username</span>
+                    <p>Username value</p>
+                </div>
+                <div class="info">
+                    <span>Email</span>
+                    <p>example@email.com</p>
+                </div>
             </div>
-            <div class="info">
-                <span>Email</span>
-                <p>example@email.com</p>
-            </div>
-        </div>
+        </AuthProvider>
     </div>
 </template>
 

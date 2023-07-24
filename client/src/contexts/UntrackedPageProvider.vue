@@ -7,7 +7,9 @@ import {
     errorsKey,
     createUntrackedPageKey,
     updateUntrackedPageKey,
-    deleteUntrackedPageKey
+    deleteUntrackedPageKey,
+    getUntrackedPageKey,
+    getUntrackedPagesKey
 } from '@/contexts/UntrackedPageProviderKeys'
 import * as untrackedPageService from '@/services/untrackedPageService'
 
@@ -17,6 +19,7 @@ const errors = ref({})
 
 onMounted(async () => {
     untrackedPages.value = await untrackedPageService.getUntrackedPages()
+    untrackedPage.value = await untrackedPageService.getUntrackedPage()
 })
 
 async function createUntrackedPage(_untrackedPage) {
@@ -74,6 +77,8 @@ async function getUntrackedPage() {
     try {
         const untrackedPageResponse = await untrackedPageService.getUntrackedPage()
         untrackedPage.value = untrackedPageResponse
+        console.log(untrackedPage.value)
+        //return untrackedPage.value
         errors.value = {}
     } catch (error) {
         errors.value = error
@@ -86,6 +91,8 @@ provide(errorsKey, errors)
 provide(createUntrackedPageKey, createUntrackedPage)
 provide(updateUntrackedPageKey, updateUntrackedPage)
 provide(deleteUntrackedPageKey, deleteUntrackedPage)
+provide(getUntrackedPageKey, getUntrackedPage)
+provide(getUntrackedPagesKey, getUntrackedPages)
 </script>
 
 <template>

@@ -68,13 +68,13 @@ export default {
 }
 
 const sendEvent = (data) => {
-    const apiKey = data.APP_ID;
-    delete data.APP_ID;
+    const apiKey = data.APP_ID
+    delete data.APP_ID
     fetch(`http://localhost:3000/events`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'x-api-key': apiKey,
+            'x-api-key': apiKey
         },
         body: JSON.stringify(data)
     })

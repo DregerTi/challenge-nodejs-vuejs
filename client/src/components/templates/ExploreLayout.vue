@@ -5,6 +5,7 @@ import Header from '@/components/organisms/Header.vue'
 import { defineEmits, ref } from 'vue'
 import Input from '@/components/atoms/Input.vue'
 import Calendar from '../molecules/Calendar.vue'
+import router from '@/router'
 
 const deleteBtn = ref(false)
 const updateBtn = ref(false)
@@ -52,11 +53,12 @@ const { title, items, description, createNewPath, path } = defineProps({
                 <RouterLink v-for="item in items" :key="item.id" :to="path + '/' + item.id">
                     <Button
                         :title="item.name ? item.name : item.url"
-                        :variant="[
-                            $route.params.id && $route.params.id === item.id
+                        :variant="
+                            router.currentRoute.value.params.id &&
+                            router.currentRoute.value.params.id == item.id
                                 ? 'dark-grey'
                                 : 'light-grey'
-                        ]"
+                        "
                     />
                 </RouterLink>
             </nav>

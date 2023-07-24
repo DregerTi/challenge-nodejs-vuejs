@@ -1,7 +1,18 @@
 <script setup>
 import ExploreLayout from '@/components/templates/ExploreLayout.vue'
-import { defineEmits } from 'vue'
-import UntrackedPageProvider from '@/contexts/UntrackedPageProvider.vue'
+import { computed, defineEmits, onBeforeMount, onMounted, onUpdated, ref } from 'vue'
+import { useStore } from 'vuex'
+
+const store = useStore()
+const untrackedPages = computed(() => store.state.untrackedPage.untrackedPages)
+
+onBeforeMount(async () => {
+    await store.dispatch('getUntrackedPages')
+})
+
+onUpdated(async () => {
+    await store.dispatch('getUntrackedPage')
+})
 
 const emit = defineEmits([
     'update:descriptionHidden',
@@ -22,16 +33,14 @@ emit('update:screenShotBtn', false)
 
 <template>
     <div class="mh">
-        <UntrackedPageProvider #default="{ untrackedPages, errors }">
-            <ExploreLayout
-                title="Untracked Pages"
-                :items="untrackedPages"
-                description="Manage the pages that are not tracked by the analytics script"
-                :createNewPath="'/analytics/' + $route.params.site + '/setting/untracked-page/add'"
-                :path="'/analytics/' + $route.params.site + '/setting/untracked-page'"
-            >
-            </ExploreLayout>
-        </UntrackedPageProvider>
+        <ExploreLayout
+            title="Untracked Pages"
+            :items="untrackedPages"
+            description="Manage the pages that are not tracked by the analytics script"
+            :createNewPath="'/analytics/' + $route.params.site + '/setting/untracked-page/add'"
+            :path="'/analytics/' + $route.params.site + '/setting/untracked-page'"
+        >
+        </ExploreLayout>
     </div>
 </template>
 

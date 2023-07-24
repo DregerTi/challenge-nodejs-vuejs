@@ -1,6 +1,13 @@
 <script setup>
 import { provide, onMounted, ref } from 'vue'
-import { userKey, loginKey, logoutKey, registerKey, errorsKey } from './AuthProviderKeys'
+import {
+    userKey,
+    loginKey,
+    logoutKey,
+    registerKey,
+    errorsKey,
+    getUserKey
+} from './AuthProviderKeys'
 import * as securityService from '../services/securityService'
 import * as tokenStorage from '../services/tokenStorage'
 import router from '../router'
