@@ -2,7 +2,8 @@ const ValidationError = require("../errors/ValidationError");
 const tokenGenerator = require("../utils/token-generator");
 const eventUtils = require("../utils/events-utils");
 const Event = require("../mongodb/models/event");
-const mongoose = require("mongoose");
+
+
 
 module.exports = function Controller(EventService, TagService, SessionService, ViewerService, UntrackPathService, options) {
   return {
@@ -57,15 +58,21 @@ module.exports = function Controller(EventService, TagService, SessionService, V
         } else {
           session = (await SessionService.update({ id: parseInt(session.id, 10) }, { updatedAt: Date.now() }))[0];
         }
+        const ip = req.socket.remoteAddress.replace(/^.*:/, '');
+
+        const info = await fetch(`http://ip-api.com/json/${ip}`);
+        const ipInfo = await info.json();
+        const country = ipInfo?.countryCode ?? "FR";
+
+        // Handle the result
         const data = {
           ...body,
           ip: req.socket.remoteAddress,
           siteId: req.site.id,
           sessionId: session.id,
           viewerId: viewer.id,
-          //TODO : à modifier + rajouter country
+          country: country,
           //TODO : gérer les untrack path
-          system: "Other"
         };
         if (data.type === "tag") {
           if (!data.tagKey) throw new ValidationError("tagKey is required for click event");
@@ -99,7 +106,6 @@ module.exports = function Controller(EventService, TagService, SessionService, V
         const { start, end, previousPeriodStart, previousPeriodEnd } =
           eventUtils().getRangeDates(startDate, endDate);
 
-        //TODO
         const aggregate = [
           {
             $match: {
@@ -223,7 +229,7 @@ module.exports = function Controller(EventService, TagService, SessionService, V
             }
           }
         ];
-        const result = ( await EventService.findAllAggregate(aggregate))[0];
+        const result = (await EventService.findAllAggregate(aggregate))[0];
         return res.json(result);
       } catch (err) {
         next(err);
@@ -299,7 +305,7 @@ module.exports = function Controller(EventService, TagService, SessionService, V
         eventUtils().getRangeDates(startDate, endDate);
 
       // Envoi d'un événement initial au client
-      const aggregate = eventUtils().getSessionsDataAggregate(id, start,end, previousPeriodStart, previousPeriodEnd);
+      const aggregate = eventUtils().getSessionsDataAggregate(id, start, end, previousPeriodStart, previousPeriodEnd);
       const result = (await EventService.findAllAggregate(aggregate))[0];
       if (result?.totalSessionsPrevious === undefined) {
         result.totalSessionsPrevious = 0;
@@ -315,7 +321,7 @@ module.exports = function Controller(EventService, TagService, SessionService, V
         // Récupération de la mise à jour
         try {
           // Envoi d'un événement initial au client
-          const aggregate = eventUtils().getSessionsDataAggregate(id, start,end, previousPeriodStart, previousPeriodEnd);
+          const aggregate = eventUtils().getSessionsDataAggregate(id, start, end, previousPeriodStart, previousPeriodEnd);
           const result = (await EventService.findAllAggregate(aggregate))[0];
           if (result?.totalSessionsPrevious === undefined) {
             result.totalSessionsPrevious = 0;
@@ -346,19 +352,76 @@ module.exports = function Controller(EventService, TagService, SessionService, V
     },
     getSessionsData: async function(id, startDate, endDate) {
 
-
     },
     getSystemByViewer: async function(req, res, next) {
-      //TODO une ligne pour chaque os contentant le nb total de viewer + range de dates avec période précédente
-    },
-    getBounceRate: async function(req, res, next) {
-      //TODO renvoyer tous les events dont la session n'a qu'un seul event + le pourcentage que ça représente sur la globalité des sessions + range par dates + période précédente
+      const { id } = req.params;
+      res.setHeader("Content-Type", "text/event-stream");
+      res.setHeader("Cache-Control", "no-cache");
+      res.setHeader("Connection", "keep-alive");
+
+      // Envoi d'un événement initial au client
+      const aggregate = eventUtils().getOsAggregate(id);
+      const result = await EventService.findAllAggregate(aggregate);
+
+      res.write(`data: ${JSON.stringify(result)}\n\n`);
+
+      // Fonction pour envoyer des mises à jour au client
+      const changeStream = Event.watch();
+      changeStream.on("change", async () => {
+        // Récupération de la mise à jour
+        try {
+          // Envoi d'un événement initial au client
+          const result = await EventService.findAllAggregate(aggregate);
+
+          res.write(`data: ${JSON.stringify(result)}\n\n`);
+        } catch (err) {
+          next(err);
+        }
+
+        // Envoi de la mise à jour au client via SSE
+      });
+
+      // Exemple de mise à jour périodique (vous pouvez remplacer cette partie avec vos données en temps réel)
+      req.on("close", () => {
+        changeStream.close(); // Fermer le Change Stream lorsque la connexion est fermée
+        res.end();
+      });
     },
     getLocalization: async function(req, res, next) {
-      //TODO une ligne pour chaque pays contenant le nb total de viewer + range de dates avec période précédente
-    },
+      const { id } = req.params;
+      res.setHeader("Content-Type", "text/event-stream");
+      res.setHeader("Cache-Control", "no-cache");
+      res.setHeader("Connection", "keep-alive");
+
+      // Envoi d'un événement initial au client
+      const aggregate = eventUtils().getLocalizationDatas(id);
+      const result = await EventService.findAllAggregate(aggregate);
+
+      res.write(`data: ${JSON.stringify(result)}\n\n`);
+
+      // Fonction pour envoyer des mises à jour au client
+      const changeStream = Event.watch();
+      changeStream.on("change", async () => {
+        // Récupération de la mise à jour
+        try {
+          // Envoi d'un événement initial au client
+          const result = await EventService.findAllAggregate(aggregate);
+
+          res.write(`data: ${JSON.stringify(result)}\n\n`);
+        } catch (err) {
+          next(err);
+        }
+
+        // Envoi de la mise à jour au client via SSE
+      });
+
+      // Exemple de mise à jour périodique (vous pouvez remplacer cette partie avec vos données en temps réel)
+      req.on("close", () => {
+        changeStream.close(); // Fermer le Change Stream lorsque la connexion est fermée
+        res.end();
+      });    },
     getHeatmap: async function(req, res, next) {
-      //TODO renvoyer pour un path donné tous les events rangés par device + range par dates
+
     },
     getNewUsers: async function(req, res, next) {
       const { id } = req.params;
@@ -372,6 +435,7 @@ module.exports = function Controller(EventService, TagService, SessionService, V
               totalNewUsersCurrentPeriod: [
                 {
                   $match: {
+                    siteId: id,
                     createdAt: { $gte: start, $lte: end }
                   }
                 },
@@ -402,6 +466,7 @@ module.exports = function Controller(EventService, TagService, SessionService, V
               totalNewUsersPreviousPeriod: [
                 {
                   $match: {
+                    siteId: id,
                     createdAt: { $gte: previousPeriodStart, $lte: previousPeriodEnd }
                   }
                 },
@@ -432,6 +497,7 @@ module.exports = function Controller(EventService, TagService, SessionService, V
               dailyNewUsers: [
                 {
                   $match: {
+                    siteId: id,
                     createdAt: { $gte: start, $lte: end }
                   }
                 },

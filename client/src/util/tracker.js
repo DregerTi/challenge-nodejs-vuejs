@@ -1,4 +1,24 @@
 export default {
+    getUserOs() {
+        const userAgent = window.navigator.userAgent
+        const platform = window.navigator.platform
+        const macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K']
+        const windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE']
+        const iosPlatforms = ['iPhone', 'iPad', 'iPod']
+        let os = null
+        if (macosPlatforms.indexOf(platform) !== -1) {
+            os = 'Mac OS'
+        } else if (iosPlatforms.indexOf(platform) !== -1) {
+            os = 'iOS'
+        } else if (windowsPlatforms.indexOf(platform) !== -1) {
+            os = 'Windows'
+        } else if (/Android/.test(userAgent)) {
+            os = 'Android'
+        } else if ( /Linux/.test(platform)) {
+            os = 'Linux'
+        }
+        return os
+    },
     getDeviceType() {
         const ua = navigator.userAgent
         if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
@@ -41,6 +61,7 @@ export default {
                         ...configData,
                         viewerKey: this.getViewerKey(),
                         device: this.getDeviceType(),
+                        system: this.getUserOs(),
                         user_agent: navigator.userAgent,
                         path: window.location.href,
                         type: 'tag',
@@ -76,6 +97,7 @@ export default {
                 ...configData,
                 viewerKey: this.getViewerKey(),
                 device: this.getDeviceType(),
+                system: this.getUserOs(),
                 user_agent: navigator.userAgent,
                 path: window.location.href,
                 type: 'click',
@@ -88,6 +110,7 @@ export default {
                 ...configData,
                 viewerKey: this.getViewerKey(),
                 device: this.getDeviceType(),
+                system: this.getUserOs(),
                 user_agent: navigator.userAgent,
                 path: window.location.href,
                 type: 'view'

@@ -91,6 +91,88 @@ module.exports = function eventUtil() {
           }
         }
       ];
+    },
+    getOsAggregate: (id) => {
+      return [
+        {
+          $match: {
+            siteId: id,
+          }
+        },
+        {
+          $group: {
+            _id: { system: "$system", viewerId: "$viewerId" },
+            count: { $sum: 1 }
+          }
+        },
+        {
+          $group: {
+            _id: "$_id.system",
+            nbViewers: { $sum: 1 },
+          }
+        },
+        {
+          $group: {
+            _id: null,
+            viewersBySystem: { $push: { system: "$_id", nbViewers: "$nbViewers" } }
+          }
+        },
+        {
+          $unwind: "$viewersBySystem"
+        },
+        {
+          $project: {
+            _id: 0,
+            system: "$viewersBySystem.system",
+            nbViewers: "$viewersBySystem.nbViewers",
+
+          }
+        },
+        {
+          $sort: { system: 1 } // Tri par ordre alphabétique du système (facultatif)
+        }
+      ]
+    },
+    getLocalizationDatas: (id) => {
+      return [
+        {
+          $match: {
+            siteId: id,
+          }
+        },
+        {
+          $group: {
+            _id: { country: "$country", viewerId: "$viewerId" },
+            count: { $sum: 1 }
+          }
+        },
+        {
+          $group: {
+            _id: "$_id.country",
+            nbViewers: { $sum: 1 },
+          }
+        },
+        {
+          $group: {
+            _id: null,
+            viewersBycountry: { $push: { country: "$_id", nbViewers: "$nbViewers" } }
+          }
+        },
+        {
+          $unwind: "$viewersBycountry"
+        },
+        {
+          $project: {
+            _id: 0,
+            country: "$viewersBycountry.country",
+            nbViewers: "$viewersBycountry.nbViewers",
+
+          }
+        },
+        {
+          $sort: { country: 1 } // Tri par ordre alphabétique du système (facultatif)
+        }
+      ]
     }
   }
 }

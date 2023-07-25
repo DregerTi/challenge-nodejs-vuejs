@@ -19,6 +19,14 @@ const routesList = [
     middlewares: [checkAuth.requireAuthentication, sitePermission.canAccessSite(["ADMIN", "USER"])]
   },
   {
+    path: "/:id/viewer-by-os", method: "get", action: "getSystemByViewer",
+    middlewares: [checkAuth.requireAuthentication, sitePermission.canAccessSite(["ADMIN", "USER"])]
+  },
+  {
+    path: "/:id/viewer-by-country", method: "get", action: "getLocalization",
+    middlewares: [checkAuth.requireAuthentication, sitePermission.canAccessSite(["ADMIN", "USER"])]
+  },
+  {
     path: "/:id/session-avg-time", method: "get", action: "getAvgTimeBySession",
     middlewares: [checkAuth.requireAuthentication, sitePermission.canAccessSite(["ADMIN", "USER"])]
   },
