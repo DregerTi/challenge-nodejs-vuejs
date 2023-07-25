@@ -5,11 +5,13 @@ services:
     image: mongo
     ports:
       - 27017:27017
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: password
     volumes:
       - db-data:/data/db
+    command: ["mongod", "--replSet", "analytics", "--bind_ip_all"]
+    healthcheck:
+      test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo -u root -p password --quiet) -eq 1
+      interval: 10s
+      start_period: 10s
 
   db:
     image: postgres
@@ -28,7 +30,7 @@ services:
       - 3000:3000
     environment:
       JWT_SECRET: ImAstrongSecret
-      URL_MONGO: mongodb://root:password@mongo:27017
+      URL_MONGO: mongodb://mongo:27017/?replicaSet=analytics
     working_dir: /usr/src/app
     volumes:
       - ./server:/usr/src/app
@@ -36,4 +38,5 @@ services:
 
 volumes:
   db-data: {}
+  db-data-2: {}
   pg-data: {}

@@ -13,4 +13,5 @@ exports.initClientDbConnection = async () => {
     console.log(error);
     throw error;
   }
+
 };

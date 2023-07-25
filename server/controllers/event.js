@@ -1,6 +1,8 @@
 const ValidationError = require("../errors/ValidationError");
 const tokenGenerator = require("../utils/token-generator");
 const eventUtils = require("../utils/events-utils");
+const Event = require("../mongodb/models/event");
+const mongoose = require("mongoose");
 
 module.exports = function Controller(EventService, TagService, SessionService, ViewerService, UntrackPathService, options) {
   return {
@@ -278,7 +280,7 @@ module.exports = function Controller(EventService, TagService, SessionService, V
           }
         ];
         //TODO rajouter pagination + sessions dans la réponse + date de début et de fin + uniquement moyenne pr période précédente
-        const aggregate = [];
+
 
         const result = await EventService.findAllAggregate(aggregate);
         return res.json(result);
@@ -289,100 +291,62 @@ module.exports = function Controller(EventService, TagService, SessionService, V
     getSessions: async function(req, res, next) {
       const { id } = req.params;
       let { startDate, endDate } = req.query;
-      try {
-        const { start, end, previousPeriodStart, previousPeriodEnd } =
-          eventUtils().getRangeDates(startDate, endDate);
-        const aggregate = [
-          {
-            $facet: {
-              totalSessionsCurrent: [
-                {
-                  $match: {
-                    type: "view",
-                    siteId: id,
-                    createdAt: { $gte: start, $lte: end }
-                  }
-                },
-                {
-                  $group: {
-                    _id: null,
-                    totalSessionsCurrent: { $addToSet: "$sessionId" }
-                  }
-                },
-                {
-                  $project: {
-                    _id: 0,
-                    totalSessionsCurrent: { $size: "$totalSessionsCurrent" }
-                  }
-                }
-              ],
-              totalSessionsPrevious: [
-                {
-                  $match: {
-                    type: "view",
-                    siteId: id,
-                    createdAt: { $gte: previousPeriodStart, $lte: previousPeriodEnd }
-                  }
-                },
-                {
-                  $group: {
-                    _id: null,
-                    totalSessionsPrevious: { $addToSet: "$sessionId" }
-                  }
-                },
-                {
-                  $project: {
-                    _id: 0,
-                    totalSessionsPrevious: { $size: "$totalSessionsPrevious" }
-                  }
-                }
-              ],
-              dailySessions: [
-                {
-                  $match: {
-                    type: "view",
-                    siteId: id,
-                    createdAt: { $gte: start, $lte: end }
-                  }
-                },
-                {
-                  $group: {
-                    _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
-                    totalSessions: { $addToSet: "$sessionId" }
-                  }
-                },
-                {
-                  $project: {
-                    date: "$_id",
-                    _id: 0,
-                    totalSessions: { $size: "$totalSessions" }
-                  }
-                }
-              ]
-            }
-          },
-          {
-            $project: {
-              totalSessionsCurrent: { $arrayElemAt: ["$totalSessionsCurrent.totalSessionsCurrent", 0] },
-              totalSessionsPrevious: { $arrayElemAt: ["$totalSessionsPrevious.totalSessionsPrevious", 0] },
-              dailySessions: 1
-            }
+      res.setHeader("Content-Type", "text/event-stream");
+      res.setHeader("Cache-Control", "no-cache");
+      res.setHeader("Connection", "keep-alive");
+
+      const { start, end, previousPeriodStart, previousPeriodEnd } =
+        eventUtils().getRangeDates(startDate, endDate);
+
+      // Envoi d'un événement initial au client
+      const aggregate = eventUtils().getSessionsDataAggregate(id, start,end, previousPeriodStart, previousPeriodEnd);
+      const result = (await EventService.findAllAggregate(aggregate))[0];
+      if (result?.totalSessionsPrevious === undefined) {
+        result.totalSessionsPrevious = 0;
+      }
+      if (result?.totalSessionsCurrent === undefined) {
+        result.totalSessionsCurrent = 0;
+      }
+      res.write(`data: ${JSON.stringify(result)}\n\n`);
+
+      // Fonction pour envoyer des mises à jour au client
+      const changeStream = Event.watch();
+      changeStream.on("change", async (change) => {
+        // Récupération de la mise à jour
+        try {
+          // Envoi d'un événement initial au client
+          const aggregate = eventUtils().getSessionsDataAggregate(id, start,end, previousPeriodStart, previousPeriodEnd);
+          const result = (await EventService.findAllAggregate(aggregate))[0];
+          if (result?.totalSessionsPrevious === undefined) {
+            result.totalSessionsPrevious = 0;
           }
-        ];
-
-        const result = (await EventService.findAllAggregate(aggregate))[0];
-        if (result?.totalSessionsPrevious === undefined) {
-          result.totalSessionsPrevious = 0;
-        }
-        if (result?.totalSessionsCurrent === undefined) {
-          result.totalSessionsCurrent = 0;
+          if (result?.totalSessionsCurrent === undefined) {
+            result.totalSessionsCurrent = 0;
+          }
+          res.write(`data: ${JSON.stringify(result)}\n\n`);
+        } catch (err) {
+          next(err);
         }
 
-        if (result) res.json(result);
+        // Envoi de la mise à jour au client via SSE
+      });
+
+      // Exemple de mise à jour périodique (vous pouvez remplacer cette partie avec vos données en temps réel)
+      req.on("close", () => {
+        changeStream.close(); // Fermer le Change Stream lorsque la connexion est fermée
+        res.end();
+      });
+      /*
+
+
         else res.sendStatus(404);
       } catch (err) {
         next(err);
-      }
+      }*/
+    },
+    getSessionsData: async function(id, startDate, endDate) {
+
+
     },
     getSystemByViewer: async function(req, res, next) {
       //TODO une ligne pour chaque os contentant le nb total de viewer + range de dates avec période précédente
@@ -501,12 +465,11 @@ module.exports = function Controller(EventService, TagService, SessionService, V
 
 
         const result = (await EventService.findAllAggregate(aggregate))[0];
-        console.log(result)
-        if (result?.newUsersCurrentPeriod === undefined) {
-          result.newUsersCurrentPeriod = 0;
+        if (result?.totalNewUsersCurrentPeriod === undefined) {
+          result.totalNewUsersCurrentPeriod = 0;
         }
-        if (result?.newUsersPreviousPeriod === undefined) {
-          result.newUsersPreviousPeriod = 0;
+        if (result?.totalNewUsersPreviousPeriod === undefined) {
+          result.totalNewUsersPreviousPeriod = 0;
         }
 
         if (result) res.json(result);
@@ -516,7 +479,103 @@ module.exports = function Controller(EventService, TagService, SessionService, V
       }
     },
     getTotalUsers: async function(req, res, next) {
+      const { id } = req.params;
+      let { startDate, endDate } = req.query;
+      try {
+        const { start, end, previousPeriodStart, previousPeriodEnd } =
+          eventUtils().getRangeDates(startDate, endDate);
 
+        const aggregate = [
+
+          {
+            $facet: {
+              totalUsersCurrentPeriod: [
+                {
+                  $match: {
+                    createdAt: { $gte: start, $lte: end }
+                  }
+                },
+                {
+                  $group: {
+                    _id: "$viewerId"
+                  }
+                },
+                {
+                  $group: {
+                    _id: null,
+                    totalUsersCurrentPeriod: { $sum: 1 }
+                  }
+                },
+                {
+                  $project: {
+                    _id: 0,
+                    totalUsersCurrentPeriod: 1
+                  }
+                }
+              ],
+              totalUsersPreviousPeriod: [
+                {
+                  $match: {
+                    createdAt: { $gte: previousPeriodStart, $lte: previousPeriodEnd }
+                  }
+                },
+                {
+                  $group: {
+                    _id: "$viewerId"
+                  }
+                },
+                {
+                  $group: {
+                    _id: null,
+                    totalUsersPreviousPeriod: { $sum: 1 }
+                  }
+                },
+                {
+                  $project: {
+                    _id: 0,
+                    totalUsersPreviousPeriod: 1
+                  }
+                }
+              ],
+              dailyUsers: [
+                {
+                  $match: {
+                    createdAt: { $gte: start, $lte: end }
+                  }
+                },
+                {
+                  $group: {
+                    _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                    users: { $addToSet: "$viewerId" }
+                  }
+                },
+                {
+                  $project: {
+                    date: "$_id",
+                    _id: 0,
+                    usersCount: { $size: "$users" }
+                  }
+                },
+                {
+                  $sort: { date: 1 }
+                }
+              ]
+            }
+          },
+          {
+            $project: {
+              totalUsersCurrentPeriod: { $arrayElemAt: ["$totalUsersCurrentPeriod.totalUsersCurrentPeriod", 0] },
+              totalUsersPreviousPeriod: { $arrayElemAt: ["$totalUsersPreviousPeriod.totalUsersPreviousPeriod", 0] },
+              dailyUsers: 1
+            }
+          }
+        ];
+        const result = (await EventService.findAllAggregate(aggregate));
+        if (result) res.json(result);
+        else res.sendStatus(404);
+      } catch (err) {
+        next(err);
+      }
     },
     getOneTagData: async function(req, res, next) {
       //TODO renvoyer tous les events dans la range et le total + uniquement le total de la période précédentes

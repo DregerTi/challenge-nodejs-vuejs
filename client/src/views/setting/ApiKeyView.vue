@@ -2,6 +2,26 @@
 import Input from '@/components/atoms/Input.vue'
 import Button from '@/components/atoms/Button.vue'
 import SiteProvider from '@/contexts/SiteProvider.vue'
+import { EventSourcePolyfill } from 'event-source-polyfill';
+import * as tokenStorage from "@/services/tokenStorage";
+
+const token = await tokenStorage.getToken()
+const eventSource = new EventSourcePolyfill(
+  'http://localhost:3000/events/1/total-session?startDate=2023-07-23&endDate=2023-07-25',
+  {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }
+);
+const listener = function (event) {
+  console.log(event);
+};
+eventSource.addEventListener("open", listener);
+eventSource.addEventListener("message", listener);
+eventSource.addEventListener("error", listener);
+// Écoute des événements SSE
+
 </script>
 
 <template>
