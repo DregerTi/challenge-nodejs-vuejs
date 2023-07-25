@@ -1,5 +1,6 @@
 const ValidationError = require("../errors/ValidationError");
 const tokenGenerator = require("../utils/token-generator");
+const eventUtils = require("../utils/events-utils");
 
 module.exports = function Controller(EventService, TagService, SessionService, ViewerService, UntrackPathService, options) {
   return {
@@ -93,18 +94,10 @@ module.exports = function Controller(EventService, TagService, SessionService, V
           page = 1;
         }
 
+        const { start, end, previousPeriodStart, previousPeriodEnd } =
+          eventUtils().getRangeDates(startDate, endDate);
 
-        startDate += "T00:00:00.001Z";
-        endDate += "T23:59:59.999Z";
-        const start = new Date(startDate); // Date il y a 30 jours
-        const end = new Date(endDate);
-        const difference = end.getTime() - start.getTime();
-        const differenceInDays = Math.round(difference / (1000 * 3600 * 24));
-        const previousPeriodStart = new Date(start);
-        previousPeriodStart.setDate(previousPeriodStart.getDate() - differenceInDays);
-        const previousPeriodEnd = new Date(end);
-        previousPeriodEnd.setDate(previousPeriodEnd.getDate() - differenceInDays);
-
+        //TODO
         const aggregate = [
           {
             $match: {
@@ -161,7 +154,7 @@ module.exports = function Controller(EventService, TagService, SessionService, V
                 },
                 {
                   $skip: (page - 1) * 10
-                },
+                }
               ],
               previousPeriod: [
                 {
@@ -236,71 +229,185 @@ module.exports = function Controller(EventService, TagService, SessionService, V
     },
     getAvgTimeBySession: async function(req, res, next) {
       const { id } = req.params;
-      let { page } = req.query;
+      let { page, startDate, endDate } = req.query;
       try {
         if (page === undefined || page < 1) {
           page = 1;
         }
-        //TODO rajouter pagination + sessions dans la réponse + date de début et de fin + uniquement moyenne pr période précédente
-        const aggregate = [
+        const { start, end, previousPeriodStart, previousPeriodEnd } =
+          eventUtils().getRangeDates(startDate, endDate);
+        console.log(start, end, previousPeriodStart, previousPeriodEnd);
+        const currentPeriodQuery = [
           {
             $match: {
-              siteId: id,
+              type: "view",
+              createdAt: { $gte: start, $lte: end }
             }
           },
           {
             $group: {
-              _id: "$sessionId", // Grouper par sessionId
-              firstEventDate: { $min: {$toDate: "$createdAt"} }, // Trouver la première date de la session
-              lastEventDate: { $max: {$toDate: "$createdAt"}} // Trouver la dernière date de la session
+              _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+              totalSessionsCurrent: { $addToSet: "$sessionId" }
             }
           },
           {
             $project: {
-              sessionId: "$_id", // Récupérer le sessionId en tant que clé du résultat
-              _id: 0,
-              duration: { $subtract: ["$lastEventDate", "$firstEventDate"] } // Calculer la durée de chaque session
+              date: "$_id",
+              totalSessionsCurrent: { $size: "$totalSessionsCurrent" }
+            }
+          }
+        ];
+        const previousPeriodQuery = [
+          {
+            $match: {
+              type: "view",
+              createdAt: { $gte: previousPeriodStart, $lte: previousPeriodStart }
             }
           },
           {
             $group: {
-              _id: null, // Grouper tous les documents ensemble (pas de clé de regroupement spécifique)
-              avgDuration: { $avg: "$duration" } // Calculer la moyenne des durées
+              _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+              totalSessionsPrevious: { $addToSet: "$sessionId" }
+            }
+          },
+          {
+            $project: {
+              date: "$_id",
+              totalSessionsPrevious: { $size: "$totalSessionsPrevious" }
             }
           }
         ];
+        //TODO rajouter pagination + sessions dans la réponse + date de début et de fin + uniquement moyenne pr période précédente
+        const aggregate = [];
+
         const result = await EventService.findAllAggregate(aggregate);
         return res.json(result);
       } catch (err) {
         next(err);
       }
     },
-    getSessions : async function(req, res, next) {
-      //TODO sessions + total des sessions par range de dates + le total uniquement de la période précédente
+    getSessions: async function(req, res, next) {
+      const { id } = req.params;
+      let { startDate, endDate } = req.query;
+      try {
+        const { start, end, previousPeriodStart, previousPeriodEnd } =
+          eventUtils().getRangeDates(startDate, endDate);
+        const aggregate = [
+          {
+            $facet: {
+              totalSessionsCurrent: [
+                {
+                  $match: {
+                    type: "view",
+                    siteId: id,
+                    createdAt: { $gte: start, $lte: end }
+                  }
+                },
+                {
+                  $group: {
+                    _id: null,
+                    totalSessionsCurrent: { $addToSet: "$sessionId" }
+                  }
+                },
+                {
+                  $project: {
+                    _id: 0,
+                    totalSessionsCurrent: { $size: "$totalSessionsCurrent" }
+                  }
+                }
+              ],
+              totalSessionsPrevious: [
+                {
+                  $match: {
+                    type: "view",
+                    siteId: id,
+                    createdAt: { $gte: previousPeriodStart, $lte: previousPeriodEnd }
+                  }
+                },
+                {
+                  $group: {
+                    _id: null,
+                    totalSessionsPrevious: { $addToSet: "$sessionId" }
+                  }
+                },
+                {
+                  $project: {
+                    _id: 0,
+                    totalSessionsPrevious: { $size: "$totalSessionsPrevious" }
+                  }
+                }
+              ],
+              dailySessions: [
+                {
+                  $match: {
+                    type: "view",
+                    siteId: id,
+                    createdAt: { $gte: start, $lte: end }
+                  }
+                },
+                {
+                  $group: {
+                    _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                    totalSessions: { $addToSet: "$sessionId" }
+                  }
+                },
+                {
+                  $project: {
+                    date: "$_id",
+                    _id: 0,
+                    totalSessions: { $size: "$totalSessions" }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            $project: {
+              totalSessionsCurrent: { $arrayElemAt: ["$totalSessionsCurrent.totalSessionsCurrent", 0] },
+              totalSessionsPrevious: { $arrayElemAt: ["$totalSessionsPrevious.totalSessionsPrevious", 0] },
+              dailySessions: 1
+            }
+          }
+        ];
+        
+        const result = (await EventService.findAllAggregate(aggregate))[0];
+        if (result?.totalSessionsPrevious === undefined) {
+          result.totalSessionsPrevious = 0;
+        }
+        if (result?.totalSessionsCurrent === undefined) {
+          result.totalSessionsCurrent = 0;
+        }
+
+        if (result) res.json(result);
+        else res.sendStatus(404);
+      } catch (err) {
+        next(err);
+      }
     },
-    getSystemByViewer : async function(req, res, next) {
+    getSystemByViewer: async function(req, res, next) {
       //TODO une ligne pour chaque os contentant le nb total de viewer + range de dates avec période précédente
     },
-    getBounceRate : async function(req, res, next) {
+    getBounceRate: async function(req, res, next) {
       //TODO renvoyer tous les events dont la session n'a qu'un seul event + le pourcentage que ça représente sur la globalité des sessions + range par dates + période précédente
     },
-    getLocalization : async function(req, res, next) {
+    getLocalization: async function(req, res, next) {
       //TODO une ligne pour chaque pays contenant le nb total de viewer + range de dates avec période précédente
     },
-    getHeatmap : async function(req, res, next) {
+    getHeatmap: async function(req, res, next) {
       //TODO renvoyer pour un path donné tous les events rangés par device + range par dates
     },
-    getNewUsers : async function(req, res, next) {
+    getNewUsers: async function(req, res, next) {
       //TODO renvoyer le total de nvx users + les viewerId avec le createdAt créés sur la période + range de dates + uniquement le total de nvx users de la période précédente
     },
-    getTotalUsers : async function(req, res, next) {
+    getTotalUsers: async function(req, res, next) {
       //TODO renvoyer le total des users + les viewerId avec le createdAt créés sur la période + range de dates + uniquement le total des users de la période précédente
     },
-    getOneTagData : async function(req, res, next) {
+    getOneTagData: async function(req, res, next) {
       //TODO renvoyer tous les events dans la range et le total + uniquement le total de la période précédentes
     },
-    getConversionTunnels : async function(req, res, next) {
+    getConversionTunnels: async function(req, res, next) {
       //TODO renvoyer le nb de sessions qui ont eu un event de chaque tag dans l'ordre chronologique + le nb de sessions qui ont eu l'event 1 au minimum + le nb de sessions qui ont eu l'event 1 au minimum sur la période précédente + range par dates
     }
+
   };
 };

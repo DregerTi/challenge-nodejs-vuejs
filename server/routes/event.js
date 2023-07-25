@@ -23,6 +23,10 @@ const routesList = [
     middlewares: [checkAuth.requireAuthentication, sitePermission.canAccessSite(["ADMIN", "USER"])]
   },
   {
+    path: "/:id/total-session", method: "get", action: "getSessions",
+    middlewares: [checkAuth.requireAuthentication, sitePermission.canAccessSite(["ADMIN", "USER"])]
+  },
+  {
     path: "/:id/active-users", method: "get", action: "getActiveUsers",
     middlewares: [checkAuth.requireAuthentication, sitePermission.canAccessSite(["ADMIN", "USER"])]
   },
