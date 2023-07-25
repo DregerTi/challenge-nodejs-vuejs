@@ -369,7 +369,7 @@ module.exports = function Controller(EventService, TagService, SessionService, V
             }
           }
         ];
-        
+
         const result = (await EventService.findAllAggregate(aggregate))[0];
         if (result?.totalSessionsPrevious === undefined) {
           result.totalSessionsPrevious = 0;
@@ -397,10 +397,126 @@ module.exports = function Controller(EventService, TagService, SessionService, V
       //TODO renvoyer pour un path donné tous les events rangés par device + range par dates
     },
     getNewUsers: async function(req, res, next) {
-      //TODO renvoyer le total de nvx users + les viewerId avec le createdAt créés sur la période + range de dates + uniquement le total de nvx users de la période précédente
+      const { id } = req.params;
+      let { startDate, endDate } = req.query;
+      try {
+        const { start, end, previousPeriodStart, previousPeriodEnd } =
+          eventUtils().getRangeDates(startDate, endDate);
+        const aggregate = [
+          {
+            $facet: {
+              totalNewUsersCurrentPeriod: [
+                {
+                  $match: {
+                    createdAt: { $gte: start, $lte: end }
+                  }
+                },
+                {
+                  $group: {
+                    _id: "$viewerId",
+                    firstEventDate: { $min: "$createdAt" }
+                  }
+                },
+                {
+                  $match: {
+                    firstEventDate: { $gte: start }
+                  }
+                },
+                {
+                  $group: {
+                    _id: null,
+                    totalNewUsersCurrentPeriod: { $sum: 1 }
+                  }
+                },
+                {
+                  $project: {
+                    _id: 0,
+                    totalNewUsersCurrentPeriod: 1
+                  }
+                }
+              ],
+              totalNewUsersPreviousPeriod: [
+                {
+                  $match: {
+                    createdAt: { $gte: previousPeriodStart, $lte: previousPeriodEnd }
+                  }
+                },
+                {
+                  $group: {
+                    _id: "$viewerId",
+                    firstEventDate: { $min: "$createdAt" }
+                  }
+                },
+                {
+                  $match: {
+                    firstEventDate: { $gte: previousPeriodStart }
+                  }
+                },
+                {
+                  $group: {
+                    _id: null,
+                    totalNewUsersPreviousPeriod: { $sum: 1 }
+                  }
+                },
+                {
+                  $project: {
+                    _id: 0,
+                    totalNewUsersPreviousPeriod: 1
+                  }
+                }
+              ],
+              dailyNewUsers: [
+                {
+                  $match: {
+                    createdAt: { $gte: start, $lte: end }
+                  }
+                },
+                {
+                  $group: {
+                    _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                    newUsers: { $addToSet: "$viewerId" }
+                  }
+                },
+                {
+                  $project: {
+                    date: "$_id",
+                    _id: 0,
+                    newUsersCount: { $size: "$newUsers" }
+                  }
+                },
+                {
+                  $sort: { date: 1 }
+                }
+              ]
+            }
+          },
+          {
+            $project: {
+              totalNewUsersCurrentPeriod: { $arrayElemAt: ["$totalNewUsersCurrentPeriod.totalNewUsersCurrentPeriod", 0] },
+              totalNewUsersPreviousPeriod: { $arrayElemAt: ["$totalNewUsersPreviousPeriod.totalNewUsersPreviousPeriod", 0] },
+              dailyNewUsers: 1
+            }
+          }
+        ];
+
+
+        const result = (await EventService.findAllAggregate(aggregate))[0];
+        console.log(result)
+        if (result?.newUsersCurrentPeriod === undefined) {
+          result.newUsersCurrentPeriod = 0;
+        }
+        if (result?.newUsersPreviousPeriod === undefined) {
+          result.newUsersPreviousPeriod = 0;
+        }
+
+        if (result) res.json(result);
+        else res.sendStatus(404);
+      } catch (err) {
+        next(err);
+      }
     },
     getTotalUsers: async function(req, res, next) {
-      //TODO renvoyer le total des users + les viewerId avec le createdAt créés sur la période + range de dates + uniquement le total des users de la période précédente
+
     },
     getOneTagData: async function(req, res, next) {
       //TODO renvoyer tous les events dans la range et le total + uniquement le total de la période précédentes
