@@ -64,7 +64,6 @@ module.exports = function Controller(EventService, TagService, SessionService, V
         const ipInfo = await info.json();
         const country = ipInfo?.countryCode ?? "FR";
 
-        // Handle the result
         const data = {
           ...body,
           ip: req.socket.remoteAddress,
@@ -93,7 +92,6 @@ module.exports = function Controller(EventService, TagService, SessionService, V
     },
     getViewPerPage: async function(req, res, next) {
 
-      // count the number of view per path
       const { id } = req.params;
       let { startDate, endDate } = req.query;
       let page = req.query.page;
@@ -112,20 +110,20 @@ module.exports = function Controller(EventService, TagService, SessionService, V
               type: "view",
               siteId: id,
               createdAt: { $gte: start, $lte: end }
-            } // Filtrer les documents avec le champ "type" égal à "view"
+            }
           },
           {
             $facet: {
               topFive: [
                 {
                   $group: {
-                    _id: "$path", // Regrouper les données en fonction de la valeur du champ "path"
-                    count: { $sum: 1 } // Compter le nombre de documents dans chaque groupe
+                    _id: "$path",
+                    count: { $sum: 1 }
                   }
                 },
 
                 {
-                  $sort: { count: -1 } // Trier par nombre de vues (count) en ordre descendant (-1)
+                  $sort: { count: -1 }
                 },
                 {
                   $limit: 5
@@ -149,13 +147,13 @@ module.exports = function Controller(EventService, TagService, SessionService, V
               currentPeriod: [
                 {
                   $group: {
-                    _id: "$path", // Regrouper les données en fonction de la valeur du champ "path"
-                    count: { $sum: 1 } // Compter le nombre de documents dans chaque groupe
+                    _id: "$path",
+                    count: { $sum: 1 }
                   }
                 },
 
                 {
-                  $sort: { count: -1 } // Trier par nombre de vues (count) en ordre descendant (-1)
+                  $sort: { count: -1 }
                 },
                 {
                   $limit: page * 10
@@ -218,14 +216,14 @@ module.exports = function Controller(EventService, TagService, SessionService, V
           },
           {
             $group: {
-              _id: null, // Utiliser null comme identifiant pour grouper tous les documents ensemble
-              uniqueViewerIds: { $addToSet: "$viewerId" } // Créer un ensemble distinct des viewerId
+              _id: null,
+              uniqueViewerIds: { $addToSet: "$viewerId" }
             }
           },
           {
             $project: {
               _id: 0,
-              uniqueViewerCount: { $size: "$uniqueViewerIds" } // Compter le nombre d'éléments dans l'ensemble uniqueViewerIds
+              uniqueViewerCount: { $size: "$uniqueViewerIds" }
             }
           }
         ];
@@ -304,7 +302,6 @@ module.exports = function Controller(EventService, TagService, SessionService, V
       const { start, end, previousPeriodStart, previousPeriodEnd } =
         eventUtils().getRangeDates(startDate, endDate);
 
-      // Envoi d'un événement initial au client
       const aggregate = eventUtils().getSessionsDataAggregate(id, start, end, previousPeriodStart, previousPeriodEnd);
       const result = (await EventService.findAllAggregate(aggregate))[0];
       if (result?.totalSessionsPrevious === undefined) {
@@ -315,12 +312,9 @@ module.exports = function Controller(EventService, TagService, SessionService, V
       }
       res.write(`data: ${JSON.stringify(result)}\n\n`);
 
-      // Fonction pour envoyer des mises à jour au client
       const changeStream = Event.watch();
       changeStream.on("change", async (change) => {
-        // Récupération de la mise à jour
         try {
-          // Envoi d'un événement initial au client
           const aggregate = eventUtils().getSessionsDataAggregate(id, start, end, previousPeriodStart, previousPeriodEnd);
           const result = (await EventService.findAllAggregate(aggregate))[0];
           if (result?.totalSessionsPrevious === undefined) {
@@ -334,12 +328,10 @@ module.exports = function Controller(EventService, TagService, SessionService, V
           next(err);
         }
 
-        // Envoi de la mise à jour au client via SSE
       });
 
-      // Exemple de mise à jour périodique (vous pouvez remplacer cette partie avec vos données en temps réel)
       req.on("close", () => {
-        changeStream.close(); // Fermer le Change Stream lorsque la connexion est fermée
+        changeStream.close();
         res.end();
       });
       /*
@@ -359,8 +351,6 @@ module.exports = function Controller(EventService, TagService, SessionService, V
       res.setHeader("Content-Type", "text/event-stream");
       res.setHeader("Cache-Control", "no-cache");
       res.setHeader("Connection", "keep-alive");
-//TODO rajouter la range de date
-      // Envoi d'un événement initial au client
       const { start, end } =
         eventUtils().getRangeDates(startDate, endDate);
       const aggregate = eventUtils().getOsAggregate(id, start, end);
@@ -368,12 +358,9 @@ module.exports = function Controller(EventService, TagService, SessionService, V
 
       res.write(`data: ${JSON.stringify(result)}\n\n`);
 
-      // Fonction pour envoyer des mises à jour au client
       const changeStream = Event.watch();
       changeStream.on("change", async () => {
-        // Récupération de la mise à jour
         try {
-          // Envoi d'un événement initial au client
           const result = await EventService.findAllAggregate(aggregate);
 
           res.write(`data: ${JSON.stringify(result)}\n\n`);
@@ -381,17 +368,14 @@ module.exports = function Controller(EventService, TagService, SessionService, V
           next(err);
         }
 
-        // Envoi de la mise à jour au client via SSE
       });
 
-      // Exemple de mise à jour périodique (vous pouvez remplacer cette partie avec vos données en temps réel)
       req.on("close", () => {
-        changeStream.close(); // Fermer le Change Stream lorsque la connexion est fermée
+        changeStream.close();
         res.end();
       });
     },
     getLocalization: async function(req, res, next) {
-      //TODO rajouter la range de date
       const { id } = req.params;
       const { startDate, endDate } = req.query;
       res.setHeader("Content-Type", "text/event-stream");
@@ -401,18 +385,14 @@ module.exports = function Controller(EventService, TagService, SessionService, V
       const { start, end } =
         eventUtils().getRangeDates(startDate, endDate);
 
-      // Envoi d'un événement initial au client
       const aggregate = eventUtils().getLocalizationDatas(id, start, end);
       const result = await EventService.findAllAggregate(aggregate);
 
       res.write(`data: ${JSON.stringify(result)}\n\n`);
 
-      // Fonction pour envoyer des mises à jour au client
       const changeStream = Event.watch();
       changeStream.on("change", async () => {
-        // Récupération de la mise à jour
         try {
-          // Envoi d'un événement initial au client
           const result = await EventService.findAllAggregate(aggregate);
 
           res.write(`data: ${JSON.stringify(result)}\n\n`);
@@ -420,12 +400,10 @@ module.exports = function Controller(EventService, TagService, SessionService, V
           next(err);
         }
 
-        // Envoi de la mise à jour au client via SSE
       });
 
-      // Exemple de mise à jour périodique (vous pouvez remplacer cette partie avec vos données en temps réel)
       req.on("close", () => {
-        changeStream.close(); // Fermer le Change Stream lorsque la connexion est fermée
+        changeStream.close();
         res.end();
       });    },
     getHeatmap: async function(req, res, next) {
