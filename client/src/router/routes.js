@@ -17,6 +17,7 @@ const ROUTES = {
     EVENT_ACTIVE_USERS: (siteId) =>
         `events/${siteId}/active-users?page=1&startDate=2023-07-25&endDate=2023-07-25`,
     SITE_USERS: (siteId) => `sites/${siteId}/users`,
+    EVENT_DEVICE: (siteId) => `events/${siteId}/viewer-by-os`
 }
 
 export default ROUTES

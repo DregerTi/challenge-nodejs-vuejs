@@ -21,17 +21,20 @@ emit('update:dashboardEditButton', false)
 const store = useStore()
 const sessions = computed(() => store.state.eventStore.sessions)
 
-onBeforeMount(() => {
+onMounted(() => {
     store.dispatch('getSessions')
 })
 
 onMounted(() => {
-    const inputElement = document.querySelector('.date-picoeur')
-    if (inputElement) {
-        inputElement.addEventListener('change', () => {
-            store.dispatch('getSessions')
-        })
-    }
+    setTimeout(() => {
+        const inputElement = document.getElementsByClassName('date-picoeur')[0]
+        if (inputElement) {
+            inputElement[0].addEventListener('change', () => {
+                console.log('change')
+                store.dispatch('getSessions')
+            })
+        }
+    }, 8)
 })
 </script>
 

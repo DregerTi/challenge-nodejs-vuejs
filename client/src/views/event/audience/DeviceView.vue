@@ -1,66 +1,49 @@
 <script setup>
-import { defineEmits } from 'vue'
+import { computed, defineEmits, onMounted } from 'vue'
 import EventStat from '@/components/templates/EventStat.vue'
+import { useStore } from 'vuex'
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
+import { Doughnut } from 'vue-chartjs'
+import StatList from '@/components/organisms/StatList.vue'
+ChartJS.register(ArcElement, Tooltip, Legend)
 
 const emit = defineEmits(['update:setDateButton', 'update:dashboardEditButton'])
 emit('update:setDateButton', true)
 emit('update:dashboardEditButton', false)
 
-let labels = ['page', 'views']
-let rows = [
-    {
-        title: 'Home',
-        value: '3255',
-        trend: 'up',
-        ratio: '23'
-    },
-    {
-        title: 'dsk 1',
-        value: '32898',
-        trend: 'down',
-        ratio: '23'
-    },
-    {
-        title: 'df dffdf d',
-        value: '322',
-        trend: 'down',
-        ratio: '23'
-    },
-    {
-        title: 'df dfdfdgh d',
-        value: '32',
-        trend: 'up',
-        ratio: '2'
-    },
-    {
-        title: 'sdf fddf dffd',
-        value: '32',
-        trend: 'up',
-        ratio: '33'
-    },
-    {
-        title: 'fsd',
-        value: '3',
-        trend: 'down',
-        ratio: '23'
-    },
-    {
-        title: 'sdfdsf',
-        value: '2',
-        trend: 'same',
-        ratio: '21'
-    },
-    {
-        title: 'sd ges d',
-        value: '1',
-        trend: 'up',
-        ratio: '3'
-    }
-]
+const store = useStore()
+const devices = computed(() => store.state.eventStore.devices)
+const devicesBrute = computed(() => store.state.eventStore.devicesBrute)
+
+onMounted(() => {
+    store.dispatch('getDevices')
+})
 </script>
 
 <template>
-    <EventStat title="Devices" :rows="rows" :labels="labels" />
+    <EventStat title="Devices">
+        <section class="chart-card--devices">
+            <div>
+                <Doughnut id="chart-device" :data="devices" />
+            </div>
+            <StatList :rows="devicesBrute" variant="sm" />
+        </section>
+    </EventStat>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.chart-card--devices {
+    width: 100%;
+    display: flex;
+    gap: 4rem;
+    #my-chart-id {
+        width: 100%;
+    }
+    > div {
+        width: 40%;
+    }
+    & > table {
+        width: 60%;
+    }
+}
+</style>
