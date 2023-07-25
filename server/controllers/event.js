@@ -221,7 +221,7 @@ module.exports = function Controller(EventService, TagService, SessionService, V
             }
           }
         ];
-        const result = await EventService.findAllAggregate(aggregate);
+        const result = ( await EventService.findAllAggregate(aggregate))[0];
         return res.json(result);
       } catch (err) {
         next(err);

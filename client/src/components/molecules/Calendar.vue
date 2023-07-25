@@ -10,21 +10,17 @@ const store = useStore()
 const rangeDate = computed(() => store.state.eventStore.rangeDate)
 
 const dateValue = {
-    startDate: dayjs().add(-29, 'day').format('DD/MM/YYYY'),
-    endDate: dayjs().format('DD/MM/YYYY')
+    startDate: dayjs().add(-29, 'day').format('YYYY-MM-DD'),
+    endDate: dayjs().format('YYYY-MM-DD')
 }
 
 const formatter = {
-    date: 'DD/MM/YYYY',
+    date: 'YYYY-MM-DD',
     month: 'MMM'
 }
 const dDate = (date) => {
     return date > new Date()
 }
-
-onBeforeMount(() => {
-    store.commit('setRangeDate', dateValue)
-})
 
 const onClickSomething = (dateValue) => {
     store.commit('setRangeDate', dateValue)
@@ -47,7 +43,7 @@ const onClickSomething = (dateValue) => {
 
 <style scoped lang="scss">
 ::v-deep .calendar {
-    width: 12rem;
+    width: 100%;
     background-color: var(--color-light-black);
     color: var(--color-white);
 }

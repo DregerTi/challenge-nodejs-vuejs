@@ -2,11 +2,13 @@
 import { RouterView, useRoute } from 'vue-router'
 import Button from '@/components/atoms/Button.vue'
 import Header from '@/components/organisms/Header.vue'
-import { ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import Listbox from '@/components/atoms/Listbox.vue'
 import Calendar from '../molecules/Calendar.vue'
 import SiteProvider from '@/contexts/SiteProvider.vue'
 import router from '@/router'
+import { useStore } from 'vuex'
+import dayjs from 'dayjs'
 
 const setDateButton = ref(false)
 const dashboardEditButton = ref(false)
@@ -15,6 +17,16 @@ const dashboardEditMode = ref(false)
 function toogleDashboardEditMode() {
     dashboardEditMode.value = !dashboardEditMode.value
 }
+
+const store = useStore()
+const dateValue = {
+    startDate: dayjs().add(-29, 'day').format('YYYY-MM-DD'),
+    endDate: dayjs().format('YYYY-MM-DD')
+}
+
+onBeforeMount(() => {
+    store.commit('setRangeDate', dateValue)
+})
 </script>
 
 <template>

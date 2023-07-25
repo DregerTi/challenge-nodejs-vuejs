@@ -15,10 +15,6 @@ const { dashboardEditMode } = defineProps({
 const emit = defineEmits(['update:setDateButton', 'update:dashboardEditButton'])
 emit('update:setDateButton', true)
 emit('update:dashboardEditButton', true)
-
-const store = useStore()
-
-const rangeDate = computed(() => store.state.eventStore.rangeDate)
 </script>
 
 <template>

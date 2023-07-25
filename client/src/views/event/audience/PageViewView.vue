@@ -58,16 +58,97 @@ let rows = [
         ratio: '3'
     }
 ]
-const store = useStore()
-const viewPerPages = computed(() => store.state.eventStore.viewPerPages)
-/*const viewPerPages = computed(() => store.state.event.viewPerPages.map((viewPerPage) => {
+
+let viewPerPages = {
+    topFive: [
+        {
+            viewsPerDay: [
+                {
+                    date: '2023-07-25',
+                    total: '1000'
+                },
+                {
+                    date: '2023-07-24',
+                    total: '900'
+                },
+                {
+                    date: '2023-07-23',
+                    total: '800'
+                },
+                {
+                    date: '2023-07-22',
+                    total: '750'
+                },
+                {
+                    date: '2023-07-20',
+                    total: '700'
+                }
+            ]
+        }
+    ],
+    pages: [
+        {
+            path: '/example-page-1',
+            currentTotal: '5000',
+            previousTotal: '4500'
+        },
+        {
+            path: '/example-page-2',
+            currentTotal: '3000',
+            previousTotal: '2800'
+        },
+        {
+            path: '/example-page-3',
+            currentTotal: '2000',
+            previousTotal: '1800'
+        },
+        {
+            path: '/example-page-4',
+            currentTotal: '1500',
+            previousTotal: '1400'
+        },
+        {
+            path: '/example-page-5',
+            currentTotal: '1000',
+            previousTotal: '900'
+        }
+    ]
+}
+
+const range = ['2023-07-19', '2023-07-25']
+const startDate = new Date(range[0])
+const endDate = new Date(range[1])
+
+const dayList = []
+
+const currentDate = new Date(startDate)
+while (currentDate <= endDate) {
+    const formattedDate = currentDate.toISOString().slice(0, 10)
+    dayList.push(formattedDate)
+    currentDate.setDate(currentDate.getDate() + 1)
+}
+
+const totalList = dayList.map((date) => {
+    const foundDay = viewPerPages.topFive.viewsPerDay.find((item) => item.date === date)
+    return foundDay ? parseInt(foundDay.total) : 0
+})
+
+console.log(totalList)
+
+console.log(dayList)
+
+//create dynamique array with each day in range
+
+viewPerPages.pages = viewPerPages.pages.map((page) => {
+    const trend = page.currentTotal > page.previousTotal ? 'up' : 'down'
     return {
-        title: viewPerPage.page,
-        value: viewPerPage.count,
-        trend: viewPerPage.trend,
-        ratio: viewPerPage.ratio
+        title: page.path,
+        value: page.currentTotal,
+        trend: trend
     }
-}))*/
+})
+
+//fill viewPerPages
 
 onBeforeMount(async () => {
     await store.dispatch('getViewPerPages')
@@ -76,7 +157,7 @@ onBeforeMount(async () => {
 
 <template>
     {{ viewPerPages }}
-    <EventStat title="Page ranking" :rows="rows" :labels="labels" />
+    <EventStat title="Page ranking" :rows="viewPerPages.pages" :labels="labels"> </EventStat>
 </template>
 
 <style lang="scss"></style>
