@@ -1,8 +1,9 @@
 <script setup>
 import PinCard from '@/components/molecules/PinCard.vue'
 import Card from '@/components/molecules/Card.vue'
-import { defineProps, defineEmits } from 'vue'
+import { defineProps, defineEmits, onBeforeMount, computed } from 'vue'
 import RoundedButton from '@/components/atoms/RoundedButton.vue'
+import { useStore } from 'vuex'
 
 const { dashboardEditMode } = defineProps({
     dashboardEditMode: {
@@ -14,129 +15,42 @@ const { dashboardEditMode } = defineProps({
 const emit = defineEmits(['update:setDateButton', 'update:dashboardEditButton'])
 emit('update:setDateButton', true)
 emit('update:dashboardEditButton', true)
+
+const store = useStore()
+
+const rangeDate = computed(() => store.state.eventStore.rangeDate)
 </script>
 
 <template>
     <div>
+        <div>{{ rangeDate }}</div>
         <section class="pin-container">
-            <PinCard
-                title="Active users"
-                description="10% less from last month"
-                value="32"
-                trend="up"
-                :editMode="dashboardEditMode"
-            />
-            <PinCard
-                title="Active users"
-                description="10% less from last month"
-                value="33"
-                trend="down"
-                variant="primary"
-                :editMode="dashboardEditMode"
-            />
-            <PinCard
-                title="Active users"
-                description="10% less from last month"
-                value="33"
-                trend="down"
-                variant="primary"
-                :editMode="dashboardEditMode"
-            />
-            <PinCard
-                title="Active users"
-                description="10% less from last month"
-                value="33"
-                trend="down"
-                variant="primary"
-                :editMode="dashboardEditMode"
-            />
+            <PinCard title="Active users" description="10% less from last month" value="32" trend="up"
+                :editMode="dashboardEditMode" />
+            <PinCard title="Active users" description="10% less from last month" value="33" trend="down" variant="primary"
+                :editMode="dashboardEditMode" />
+            <PinCard title="Active users" description="10% less from last month" value="33" trend="down" variant="primary"
+                :editMode="dashboardEditMode" />
+            <PinCard title="Active users" description="10% less from last month" value="33" trend="down" variant="primary"
+                :editMode="dashboardEditMode" />
         </section>
         <div class="dashboard-grid">
-            <Card
-                title="Bounce trade"
-                buttonType="text"
-                :editMode="dashboardEditMode"
-                :path="'/analytics/' + $route.params.site + '/audience/total-users'"
-            />
-            <Card
-                title="Bounce trade"
-                buttonType="rounded"
-                :editMode="dashboardEditMode"
-                path="/"
-            />
-            <Card
-                title="Bounce trade"
-                buttonType="rounded"
-                :editMode="dashboardEditMode"
-                path="/"
-            />
-            <Card
-                title="Bounce trade"
-                buttonType="rounded"
-                :editMode="dashboardEditMode"
-                path="/"
-            />
-            <Card
-                title="Bounce trade"
-                buttonType="rounded"
-                :editMode="dashboardEditMode"
-                path="/"
-            />
-            <Card
-                title="Bounce trade"
-                buttonType="rounded"
-                :editMode="dashboardEditMode"
-                path="/"
-            />
-            <Card
-                title="Bounce trade"
-                buttonType="rounded"
-                :editMode="dashboardEditMode"
-                path="/"
-            />
-            <Card
-                title="Bounce trade"
-                buttonType="rounded"
-                :editMode="dashboardEditMode"
-                path="/"
-            />
-            <Card
-                title="Bounce trade"
-                buttonType="rounded"
-                :editMode="dashboardEditMode"
-                path="/"
-            />
-            <Card
-                title="Bounce trade"
-                buttonType="rounded"
-                :editMode="dashboardEditMode"
-                path="/"
-            />
-            <Card
-                title="Bounce trade"
-                buttonType="rounded"
-                :editMode="dashboardEditMode"
-                path="/"
-            />
-            <Card
-                title="Bounce trade"
-                buttonType="rounded"
-                :editMode="dashboardEditMode"
-                path="/"
-            />
-            <Card
-                title="Bounce trade"
-                buttonType="rounded"
-                :editMode="dashboardEditMode"
-                path="/"
-            />
+            <Card title="Bounce trade" buttonType="text" :editMode="dashboardEditMode"
+                :path="'/analytics/' + $route.params.site + '/audience/total-users'" />
+            <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/" />
+            <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/" />
+            <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/" />
+            <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/" />
+            <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/" />
+            <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/" />
+            <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/" />
+            <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/" />
+            <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/" />
+            <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/" />
+            <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/" />
+            <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/" />
             <Card class="cta-add-card" v-if="dashboardEditMode">
-                <RoundedButton
-                    icon="Close"
-                    variant="primary"
-                    size="md"
-                    :editMode="dashboardEditMode"
-                />
+                <RoundedButton icon="Close" variant="primary" size="md" :editMode="dashboardEditMode" />
             </Card>
         </div>
     </div>
@@ -160,7 +74,7 @@ emit('update:dashboardEditButton', true)
     grid-column-gap: 2rem;
     grid-row-gap: 2.62rem;
 
-    > .cta-add-card {
+    >.cta-add-card {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -172,7 +86,7 @@ emit('update:dashboardEditButton', true)
         }
     }
 
-    > div {
+    >div {
         background-color: red;
     }
 }
