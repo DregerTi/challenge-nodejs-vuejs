@@ -10,7 +10,7 @@ const { title, labels, rows } = defineProps({
     },
     rows: {
         type: Array,
-        required: true
+        required: false
     },
     labels: {
         type: Array,
@@ -34,7 +34,7 @@ const { title, labels, rows } = defineProps({
                 <p>fssd</p>
             </slot>
         </Card>
-        <section>
+        <section v-if="rows">
             <StatList :labels="labels" :rows="rows" />
         </section>
     </div>

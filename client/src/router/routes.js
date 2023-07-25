@@ -11,7 +11,7 @@ const ROUTES = {
         `sites/${siteId}/conversion-tunnels/${conversionTunnelId ? conversionTunnelId : ''}`,
     EVENT_VIEW_PER_PAGE: (siteId) =>
         `events/${siteId}/view-per-page?page=1&startDate=2023-07-25&endDate=2023-07-25`,
-    EVENT_SESSION: (siteId) => `events/${siteId}/total-session?page=1`,
+    EVENT_SESSION: (siteId) => `events/${siteId}/total-session`,
     EVENT_SESSION_DURATION: (siteId) =>
         `events/${siteId}/session-avg-time?page=1&startDate=2023-07-25&endDate=2023-07-25`,
     EVENT_ACTIVE_USERS: (siteId) =>

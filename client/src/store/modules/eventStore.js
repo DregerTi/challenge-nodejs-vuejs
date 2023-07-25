@@ -1,12 +1,27 @@
 import * as eventService from '@/services/eventService'
 import { getViewPerPage } from '@/services/eventService'
+import { EventSourcePolyfill } from 'event-source-polyfill'
+import * as tokenStorage from '@/services/tokenStorage'
+import ROUTES from '@/router/routes'
+import router from '@/router'
+import { computed } from 'vue'
+
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL
 
 const state = {
     viewPerPages: null,
-    sessions: null,
+    sessions: {
+        labels: [],
+        datasets: [
+            {
+                data: []
+            }
+        ]
+    },
     sessionsDuration: null,
     activeUsers: null,
-    rangeDate: []
+    rangeDate: [],
+    dayList: null
 }
 
 const getters = {
@@ -18,36 +33,53 @@ const getters = {
 }
 
 const actions = {
-    async getViewPerPages({ commit }) {
+    async getViewPerPages({ commit }) {},
+    async getSessions({ commit }) {
         try {
-            const viewPerPages = await eventService.getViewPerPage()
-            commit('setViewPerPages', viewPerPages)
-        } catch (error) {}
-    },
-    async getSessions({ commit }, _rangeDate) {
-        try {
-            const sessions = await eventService.getSessions(_rangeDate)
+            const url = new URL(
+                apiBaseUrl + ROUTES.EVENT_SESSION(router.currentRoute.value.params.site)
+            )
+
+            Object.keys(state.rangeDate).forEach((key) =>
+                url.searchParams.append(key, state.rangeDate[key])
+            )
+
+            const eventSourceSession = new EventSourcePolyfill(url, {
+                headers: {
+                    Authorization: `Bearer ${await tokenStorage.getToken()}`
+                }
+            })
 
             const listener = function (event) {
-                commit('setSessions', event)
+                const dayList = state.dayList
+                const totalList = dayList.map((date) => {
+                    const foundDay = JSON.parse(event.data).dailySessions.find(
+                        (item) => item.date === date
+                    )
+                    return foundDay ? parseInt(foundDay.totalSessions) : 0
+                })
+
+                const chartData = {
+                    labels: dayList,
+                    datasets: [
+                        {
+                            label: 'Sessions',
+                            data: totalList,
+                            backgroundColor: '#a8dae3',
+                            borderColor: '#a8dae3',
+                            borderWidth: 1
+                        }
+                    ]
+                }
+
+                commit('setSessions', chartData)
             }
-            sessions.addEventListener('open', listener)
-            sessions.addEventListener('message', listener)
-            sessions.addEventListener('error', listener)
+            //eventSourceSession.addEventListener('open', listener)
+            eventSourceSession.addEventListener('message', listener)
+            //eventSourceSession.addEventListener('error', listener)
         } catch (error) {}
     },
-    async getSessionsDuration({ commit }) {
-        try {
-            const sessionsDuration = await eventService.getSessionsDuration()
-            commit('setSessionsDuration', sessionsDuration)
-        } catch (error) {}
-    },
-    async getActiveUsers({ commit }) {
-        try {
-            const activeUsers = await eventService.getActiveUsers()
-            commit('setActiveUsers', activeUsers)
-        } catch (error) {}
-    }
+    async getActiveUsers({ commit }) {}
 }
 
 const mutations = {
@@ -65,6 +97,17 @@ const mutations = {
     },
     setRangeDate(state, rangeDate) {
         state.rangeDate = rangeDate
+
+        const dayListVal = []
+        const currentDate = new Date(rangeDate.startDate)
+        const endDate = new Date(rangeDate.endDate)
+        while (currentDate <= endDate) {
+            const formattedDate = currentDate.toISOString().slice(0, 10)
+            dayListVal.push(formattedDate)
+            currentDate.setDate(currentDate.getDate() + 1)
+        }
+
+        state.dayList = dayListVal
     }
 }
 

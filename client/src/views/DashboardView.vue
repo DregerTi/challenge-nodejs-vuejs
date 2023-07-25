@@ -15,19 +15,19 @@ const { dashboardEditMode } = defineProps({
 const emit = defineEmits(['update:setDateButton', 'update:dashboardEditButton'])
 emit('update:setDateButton', true)
 emit('update:dashboardEditButton', true)
+
+const store = useStore()
+const activeUsers = computed(() => store.state.eventStore.activeUsers)
+
+onBeforeMount(() => {
+    store.dispatch('getActiveUsers')
+})
 </script>
 
 <template>
     <div>
-        <div>{{ rangeDate }}</div>
         <section class="pin-container">
-            <PinCard
-                title="Active users"
-                description="10% less from last month"
-                value="32"
-                trend="up"
-                :editMode="dashboardEditMode"
-            />
+            <PinCard title="Active users" :value="activeUsers" :editMode="dashboardEditMode" />
             <PinCard
                 title="Active users"
                 description="10% less from last month"

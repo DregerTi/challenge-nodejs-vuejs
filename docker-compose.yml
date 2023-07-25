@@ -38,5 +38,4 @@ services:
 
 volumes:
   db-data: {}
-  db-data-2: {}
   pg-data: {}
