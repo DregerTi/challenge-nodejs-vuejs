@@ -160,6 +160,14 @@ const router = createRouter({
                                         )
                                 },
                                 {
+                                    path: ':id/settings',
+                                    name: 'conversion-tunnel-settings',
+                                    component: () =>
+                                        import(
+                                            '../views/event/explore/conversionTunnel/ConversionTunnelSettingsView.vue'
+                                        )
+                                },
+                                {
                                     path: ':id/delete',
                                     name: 'conversion-tunnel-delete',
                                     component: () =>

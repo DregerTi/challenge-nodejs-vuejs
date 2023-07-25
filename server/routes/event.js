@@ -14,7 +14,6 @@ const routesList = [
   },
   {
     path: "/:siteId/view-per-page", method: "get", action: "getViewPerPage",
-    middlewares: [eventPermission.canAccessEvent]
   },
   {
     path: "/:siteId/session-avg-time", method: "get", action: "getAvgTimeBySession",

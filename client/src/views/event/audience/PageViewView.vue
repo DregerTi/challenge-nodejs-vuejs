@@ -1,6 +1,7 @@
 <script setup>
-import { defineEmits } from 'vue'
+import { computed, defineEmits, onBeforeMount } from 'vue'
 import EventStat from '@/components/templates/EventStat.vue'
+import { useStore } from 'vuex'
 
 const emit = defineEmits(['update:setDateButton', 'update:dashboardEditButton'])
 emit('update:setDateButton', true)
@@ -57,9 +58,24 @@ let rows = [
         ratio: '3'
     }
 ]
+const store = useStore()
+const viewPerPages = computed(() => store.state.eventStore.viewPerPages)
+/*const viewPerPages = computed(() => store.state.event.viewPerPages.map((viewPerPage) => {
+    return {
+        title: viewPerPage.page,
+        value: viewPerPage.count,
+        trend: viewPerPage.trend,
+        ratio: viewPerPage.ratio
+    }
+}))*/
+
+onBeforeMount(async () => {
+    await store.dispatch('getViewPerPages')
+})
 </script>
 
 <template>
+    {{ viewPerPages }}
     <EventStat title="Page ranking" :rows="rows" :labels="labels" />
 </template>
 
