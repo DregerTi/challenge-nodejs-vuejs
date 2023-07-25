@@ -175,6 +175,28 @@ module.exports = function eventUtil() {
           $sort: { country: 1 } // Tri par ordre alphabétique du système (facultatif)
         }
       ]
+    },
+    getActiveUsersAggregate: (id) => {
+      return [
+        {
+          $match: {
+            siteId: id,
+            createdAt: { $gte: new Date(Date.now() - 15 * 60 * 1000) }
+          }
+        },
+        {
+          $group: {
+            _id: null,
+            uniqueViewerIds: { $addToSet: "$viewerId" }
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            uniqueViewerCount: { $size: "$uniqueViewerIds" }
+          }
+        }
+      ];
     }
   }
 }

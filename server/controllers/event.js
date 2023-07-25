@@ -205,29 +205,33 @@ module.exports = function Controller(EventService, TagService, SessionService, V
     },
     getActiveUsers: async function(req, res, next) {
       const { id } = req.params;
+      res.setHeader("Content-Type", "text/event-stream");
+      res.setHeader("Cache-Control", "no-cache");
+      res.setHeader("Connection", "keep-alive");
 
       try {
-        const aggregate = [
-          {
-            $match: {
-              siteId: id,
-              createdAt: { $gte: new Date(Date.now() - 15 * 60 * 1000) }
-            }
-          },
-          {
-            $group: {
-              _id: null,
-              uniqueViewerIds: { $addToSet: "$viewerId" }
-            }
-          },
-          {
-            $project: {
-              _id: 0,
-              uniqueViewerCount: { $size: "$uniqueViewerIds" }
-            }
+        const aggregate = eventUtils().getActiveUsersAggregate(id);
+        const result = await EventService.findAllAggregate(aggregate);
+        console.log(result[0]);
+        res.write(`data: ${JSON.stringify(result)}\n\n`);
+
+        const changeStream = Event.watch();
+        changeStream.on("change", async () => {
+          try {
+            const aggregate = eventUtils().getActiveUsersAggregate(id);
+            const result = (await EventService.findAllAggregate(aggregate))[0];
+
+            res.write(`data: ${JSON.stringify(result)}\n\n`);
+          } catch (err) {
+            next(err);
           }
-        ];
-        const result = (await EventService.findAllAggregate(aggregate))[0];
+
+        });
+
+        req.on("close", () => {
+          changeStream.close();
+          res.end();
+        });
         return res.json(result);
       } catch (err) {
         next(err);
@@ -247,6 +251,7 @@ module.exports = function Controller(EventService, TagService, SessionService, V
           {
             $match: {
               type: "view",
+              siteId: id,
               createdAt: { $gte: start, $lte: end }
             }
           },
@@ -313,8 +318,9 @@ module.exports = function Controller(EventService, TagService, SessionService, V
       res.write(`data: ${JSON.stringify(result)}\n\n`);
 
       const changeStream = Event.watch();
-      changeStream.on("change", async (change) => {
+      changeStream.on("change", async () => {
         try {
+          console.log('test');
           const aggregate = eventUtils().getSessionsDataAggregate(id, start, end, previousPeriodStart, previousPeriodEnd);
           const result = (await EventService.findAllAggregate(aggregate))[0];
           if (result?.totalSessionsPrevious === undefined) {

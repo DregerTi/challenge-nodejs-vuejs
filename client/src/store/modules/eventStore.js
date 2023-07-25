@@ -51,6 +51,10 @@ const actions = {
             })
 
             const listener = function (event) {
+                if (event.type === 'error') {
+                    this.close();
+                    return;
+                }
                 const dayList = state.dayList
                 const totalList = dayList.map((date) => {
                     const foundDay = JSON.parse(event.data).dailySessions.find(
@@ -76,7 +80,7 @@ const actions = {
             }
             //eventSourceSession.addEventListener('open', listener)
             eventSourceSession.addEventListener('message', listener)
-            //eventSourceSession.addEventListener('error', listener)
+            eventSourceSession.addEventListener('error', listener)
         } catch (error) {}
     },
     async getActiveUsers({ commit }) {}
