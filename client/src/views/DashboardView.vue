@@ -1,7 +1,7 @@
 <script setup>
 import PinCard from '@/components/molecules/PinCard.vue'
 import Card from '@/components/molecules/Card.vue'
-import { defineProps, defineEmits, onBeforeMount, computed } from 'vue'
+import { defineProps, defineEmits, onBeforeMount, computed, onUpdated } from 'vue'
 import RoundedButton from '@/components/atoms/RoundedButton.vue'
 import { useStore } from 'vuex'
 

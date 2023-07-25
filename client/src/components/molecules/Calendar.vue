@@ -35,7 +35,7 @@ const onClickSomething = (dateValue) => {
         as-single
         use-range
         :disable-date="dDate"
-        input-classes="pl-3 pr-3 py-2.5 rounded-lg overflow-hidden border-solid text-sm calendar"
+        input-classes="pl-3 pr-3 py-2.5 rounded-lg overflow-hidden border-solid text-sm calendar date-picoeur"
         v-model="dateValue"
         @click="onClickSomething(dateValue)"
     />
