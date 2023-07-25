@@ -6,22 +6,25 @@ const eventPermission = require("../middlewares/event-permissions");
 const SessionService = require("../services/session");
 const ViewerService = require("../services/viewer");
 const UntrackPathService = require("../services/untrackPath");
+const checkAuth = require("../middlewares/check-auth");
+const sitePermission = require("../middlewares/site-permissions");
 
 const routesList = [
   {
-    path: "/:siteId", method: "get", action: "getAllEventsForSite",
-    middlewares: [eventPermission.canAccessEvent]
+    path: "/:id", method: "get", action: "getAllEventsForSite",
+    middlewares: [checkAuth.requireAuthentication, sitePermission.canAccessSite(["ADMIN", "USER"])]
   },
   {
-    path: "/:siteId/view-per-page", method: "get", action: "getViewPerPage",
+    path: "/:id/view-per-page", method: "get", action: "getViewPerPage",
+    middlewares: [checkAuth.requireAuthentication, sitePermission.canAccessSite(["ADMIN", "USER"])]
   },
   {
-    path: "/:siteId/session-avg-time", method: "get", action: "getAvgTimeBySession",
-    middlewares: [eventPermission.canAccessEvent]
+    path: "/:id/session-avg-time", method: "get", action: "getAvgTimeBySession",
+    middlewares: [checkAuth.requireAuthentication, sitePermission.canAccessSite(["ADMIN", "USER"])]
   },
   {
-    path: "/:siteId/active-users", method: "get", action: "getActiveUsers",
-    middlewares: [eventPermission.canAccessEvent]
+    path: "/:id/active-users", method: "get", action: "getActiveUsers",
+    middlewares: [checkAuth.requireAuthentication, sitePermission.canAccessSite(["ADMIN", "USER"])]
   },
   {
     path: "/", method: "post", action: "create",

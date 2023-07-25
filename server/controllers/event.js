@@ -4,7 +4,7 @@ const tokenGenerator = require("../utils/token-generator");
 module.exports = function Controller(EventService, TagService, SessionService, ViewerService, UntrackPathService, options) {
   return {
     getAllEventsForSite: async function(req, res, next) {
-      const { siteId } = req.params;
+      const { id } = req.params;
       const { page, order, ...filters } = req.query;
 
       try {
@@ -12,7 +12,7 @@ module.exports = function Controller(EventService, TagService, SessionService, V
           res.json("Page can't be lower than 1").status(400);
           return;
         }
-        filters.siteId = siteId;
+        filters.siteId = id;
         let options = {};
         if (page) {
           options = { skip: (page - 1) * 10, limit: page * 10 };
@@ -84,7 +84,7 @@ module.exports = function Controller(EventService, TagService, SessionService, V
     getViewPerPage: async function(req, res, next) {
 
       // count the number of view per path
-      const { siteId } = req.params;
+      const { id } = req.params;
       let { startDate, endDate } = req.query;
       let page = req.query.page;
 
@@ -109,7 +109,7 @@ module.exports = function Controller(EventService, TagService, SessionService, V
           {
             $match: {
               type: "view",
-              siteId: siteId,
+              siteId: id,
               createdAt: { $gte: start, $lte: end }
             } // Filtrer les documents avec le champ "type" égal à "view"
           },
@@ -167,7 +167,7 @@ module.exports = function Controller(EventService, TagService, SessionService, V
                 {
                   $match: {
                     type: "view",
-                    siteId: siteId,
+                    siteId: id,
                     createdAt: { $gte: previousPeriodStart, $lte: previousPeriodEnd }
                   }
                 },
@@ -205,13 +205,13 @@ module.exports = function Controller(EventService, TagService, SessionService, V
       }
     },
     getActiveUsers: async function(req, res, next) {
-      const { siteId } = req.params;
+      const { id } = req.params;
 
       try {
         const aggregate = [
           {
             $match: {
-              siteId: siteId,
+              siteId: id,
               createdAt: { $gte: new Date(Date.now() - 15 * 60 * 1000) }
             }
           },
@@ -235,7 +235,7 @@ module.exports = function Controller(EventService, TagService, SessionService, V
       }
     },
     getAvgTimeBySession: async function(req, res, next) {
-      const { siteId } = req.params;
+      const { id } = req.params;
       let { page } = req.query;
       try {
         if (page === undefined || page < 1) {
@@ -245,7 +245,7 @@ module.exports = function Controller(EventService, TagService, SessionService, V
         const aggregate = [
           {
             $match: {
-              siteId: siteId,
+              siteId: id,
             }
           },
           {
