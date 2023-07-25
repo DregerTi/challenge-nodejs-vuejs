@@ -3,11 +3,12 @@ import { getViewPerPage } from '@/services/eventService'
 
 const state = {
     viewPerPages: null,
-    rangeDate: []
+    rangeDate: {}
 }
 
 const getters = {
-    viewPerPages: (state) => state.viewPerPages
+    viewPerPages: (state) => state.viewPerPages,
+    rangeDate: (state) => state.rangeDate
 }
 
 const actions = {
@@ -18,12 +19,15 @@ const actions = {
         } catch (error) {
             //commit('setUntrackedPagesErrors', error)
         }
-    }
+    },
 }
 
 const mutations = {
     setViewPerPages(state, viewPerPages) {
         state.viewPerPages = viewPerPages
+    },
+    setRangeDate(state, rangeDate) {
+        state.rangeDate = rangeDate
     }
 }
 
