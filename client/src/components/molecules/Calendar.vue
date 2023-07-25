@@ -2,7 +2,6 @@
 import VueTailwindDatepicker from 'vue-tailwind-datepicker'
 import { ref } from 'vue'
 import dayjs from 'dayjs'
-import * as dateService from '@/services/dateService'
 import { useStore } from 'vuex'
 import { computed, onBeforeMount } from 'vue'
 
