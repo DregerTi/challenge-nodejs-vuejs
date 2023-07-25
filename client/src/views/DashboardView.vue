@@ -25,32 +25,124 @@ const rangeDate = computed(() => store.state.eventStore.rangeDate)
     <div>
         <div>{{ rangeDate }}</div>
         <section class="pin-container">
-            <PinCard title="Active users" description="10% less from last month" value="32" trend="up"
-                :editMode="dashboardEditMode" />
-            <PinCard title="Active users" description="10% less from last month" value="33" trend="down" variant="primary"
-                :editMode="dashboardEditMode" />
-            <PinCard title="Active users" description="10% less from last month" value="33" trend="down" variant="primary"
-                :editMode="dashboardEditMode" />
-            <PinCard title="Active users" description="10% less from last month" value="33" trend="down" variant="primary"
-                :editMode="dashboardEditMode" />
+            <PinCard
+                title="Active users"
+                description="10% less from last month"
+                value="32"
+                trend="up"
+                :editMode="dashboardEditMode"
+            />
+            <PinCard
+                title="Active users"
+                description="10% less from last month"
+                value="33"
+                trend="down"
+                variant="primary"
+                :editMode="dashboardEditMode"
+            />
+            <PinCard
+                title="Active users"
+                description="10% less from last month"
+                value="33"
+                trend="down"
+                variant="primary"
+                :editMode="dashboardEditMode"
+            />
+            <PinCard
+                title="Active users"
+                description="10% less from last month"
+                value="33"
+                trend="down"
+                variant="primary"
+                :editMode="dashboardEditMode"
+            />
         </section>
         <div class="dashboard-grid">
-            <Card title="Bounce trade" buttonType="text" :editMode="dashboardEditMode"
-                :path="'/analytics/' + $route.params.site + '/audience/total-users'" />
-            <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/" />
-            <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/" />
-            <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/" />
-            <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/" />
-            <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/" />
-            <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/" />
-            <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/" />
-            <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/" />
-            <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/" />
-            <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/" />
-            <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/" />
-            <Card title="Bounce trade" buttonType="rounded" :editMode="dashboardEditMode" path="/" />
+            <Card
+                title="Bounce trade"
+                buttonType="text"
+                :editMode="dashboardEditMode"
+                :path="'/analytics/' + $route.params.site + '/audience/total-users'"
+            />
+            <Card
+                title="Bounce trade"
+                buttonType="rounded"
+                :editMode="dashboardEditMode"
+                path="/"
+            />
+            <Card
+                title="Bounce trade"
+                buttonType="rounded"
+                :editMode="dashboardEditMode"
+                path="/"
+            />
+            <Card
+                title="Bounce trade"
+                buttonType="rounded"
+                :editMode="dashboardEditMode"
+                path="/"
+            />
+            <Card
+                title="Bounce trade"
+                buttonType="rounded"
+                :editMode="dashboardEditMode"
+                path="/"
+            />
+            <Card
+                title="Bounce trade"
+                buttonType="rounded"
+                :editMode="dashboardEditMode"
+                path="/"
+            />
+            <Card
+                title="Bounce trade"
+                buttonType="rounded"
+                :editMode="dashboardEditMode"
+                path="/"
+            />
+            <Card
+                title="Bounce trade"
+                buttonType="rounded"
+                :editMode="dashboardEditMode"
+                path="/"
+            />
+            <Card
+                title="Bounce trade"
+                buttonType="rounded"
+                :editMode="dashboardEditMode"
+                path="/"
+            />
+            <Card
+                title="Bounce trade"
+                buttonType="rounded"
+                :editMode="dashboardEditMode"
+                path="/"
+            />
+            <Card
+                title="Bounce trade"
+                buttonType="rounded"
+                :editMode="dashboardEditMode"
+                path="/"
+            />
+            <Card
+                title="Bounce trade"
+                buttonType="rounded"
+                :editMode="dashboardEditMode"
+                path="/"
+            />
+            <Card
+                title="Bounce trade"
+                buttonType="rounded"
+                :editMode="dashboardEditMode"
+                path="/"
+            />
             <Card class="cta-add-card" v-if="dashboardEditMode">
-                <RoundedButton icon="Close" variant="primary" size="md" :editMode="dashboardEditMode" />
+                <RoundedButton
+                    icon="Close"
+                    variant="primary"
+                    size="md"
+                    :editMode="dashboardEditMode"
+                />
             </Card>
         </div>
     </div>
@@ -74,7 +166,7 @@ const rangeDate = computed(() => store.state.eventStore.rangeDate)
     grid-column-gap: 2rem;
     grid-row-gap: 2.62rem;
 
-    >.cta-add-card {
+    > .cta-add-card {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -86,7 +178,7 @@ const rangeDate = computed(() => store.state.eventStore.rangeDate)
         }
     }
 
-    >div {
+    > div {
         background-color: red;
     }
 }
