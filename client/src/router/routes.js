@@ -9,7 +9,7 @@ const ROUTES = {
     TAG: (siteId, tagId = null) => `sites/${siteId}/tags/${tagId ? tagId : ''}`,
     CONVERSION_TUNNEL: (siteId, conversionTunnelId = null) =>
         `sites/${siteId}/conversion-tunnels/${conversionTunnelId ? conversionTunnelId : ''}`,
-    EVENT_VIEW_PER_PAGE: (siteId) => `sites/${siteId}/events/view-per-page`,
+    EVENT_VIEW_PER_PAGE: (siteId) => `events/${siteId}/view-per-page`,
 }
 
 export default ROUTES
