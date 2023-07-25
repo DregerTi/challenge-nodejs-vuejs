@@ -20,50 +20,31 @@ function mouseOver() {
 </script>
 
 <template>
-    <header
-        class="header"
-        v-bind:class="[isOpen ? 'header--open' : '']"
-        v-on:mouseover="mouseOver"
-        v-on:mouseleave="mouseLeave"
-    >
+    <header class="header" v-bind:class="[isOpen ? 'header--open' : '']" v-on:mouseover="mouseOver"
+        v-on:mouseleave="mouseLeave">
         <SiteProvider #default="{ site }">
             <img src="@/assets/logo.svg" alt="logo" class="header-logo" />
             <div>
                 <nav>
-                    <RouterLink v-if="site" :to="'/analytics/' + $route.params.site + '/'">
-                        <Button
-                            icon="Dashboard"
-                            v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
-                            v-bind:title="isOpen ? 'Dashboard' : ''"
-                        />
+                    <RouterLink v-if="site" :to="'/analytics/' + $route.params.site + '/dashboard'">
+                        <Button icon="Dashboard" v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
+                            v-bind:title="isOpen ? 'Dashboard' : ''" />
                     </RouterLink>
                     <RouterLink v-if="site" :to="'/analytics/' + $route.params.site + '/audience'">
-                        <Button
-                            icon="Timeline"
-                            v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
-                            v-bind:title="isOpen ? 'Audience' : ''"
-                        />
+                        <Button icon="Timeline" v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
+                            v-bind:title="isOpen ? 'Audience' : ''" />
                     </RouterLink>
                     <RouterLink v-if="site" :to="'/analytics/' + $route.params.site + '/explore'">
-                        <Button
-                            icon="AccountTree"
-                            v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
-                            v-bind:title="isOpen ? 'Explore' : ''"
-                        />
+                        <Button icon="AccountTree" v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
+                            v-bind:title="isOpen ? 'Explore' : ''" />
                     </RouterLink>
                     <RouterLink :to="'/analytics/' + $route.params.site + '/me'">
-                        <Button
-                            icon="Person"
-                            v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
-                            v-bind:title="isOpen ? 'My account' : ''"
-                        />
+                        <Button icon="Person" v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
+                            v-bind:title="isOpen ? 'My account' : ''" />
                     </RouterLink>
                     <RouterLink :to="'/analytics/' + $route.params.site + '/setting'">
-                        <Button
-                            icon="Settings"
-                            v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
-                            v-bind:title="isOpen ? 'Settings' : ''"
-                        />
+                        <Button icon="Settings" v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
+                            v-bind:title="isOpen ? 'Settings' : ''" />
                     </RouterLink>
                 </nav>
                 <Switch class="switch" />
@@ -90,11 +71,11 @@ function mouseOver() {
     transition: all 0.3s ease-in-out;
     z-index: 30;
 
-    > .header-logo {
+    >.header-logo {
         width: 50px;
     }
 
-    > div {
+    >div {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -102,7 +83,7 @@ function mouseOver() {
         flex: 1 0 0;
         width: 100%;
 
-        > nav {
+        >nav {
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -130,7 +111,8 @@ function mouseOver() {
         top: calc(100vh - 92.5px);
         transition: top 0s !important;
         width: 100vw;
-        > .header-logo {
+
+        >.header-logo {
             display: none;
         }
 
@@ -138,8 +120,8 @@ function mouseOver() {
             display: none;
         }
 
-        > div {
-            > nav {
+        >div {
+            >nav {
                 flex-direction: row;
                 justify-content: space-between;
                 align-items: center;
@@ -154,7 +136,7 @@ function mouseOver() {
             background-color: var(--color-background);
 
             .button--xl-bg-unset {
-                > p {
+                >p {
                     display: none;
                 }
 
