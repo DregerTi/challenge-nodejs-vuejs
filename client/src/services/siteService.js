@@ -1,5 +1,6 @@
 import ROUTES from '@/router/routes'
 import requester from '@/util/requester'
+import router from '@/router'
 
 export const createSite = async function createSite(_site) {
     try {
@@ -39,6 +40,25 @@ export const refreshApiKey = async function refreshApiKey(id) {
 export const getUserSites = async function getUserSites() {
     try {
         const response = await requester(ROUTES.USER_SITE(), 'GET', {}, true)
+
+        if (response.status === 422) {
+            throw await response.json()
+        }
+
+        return await response.json()
+    } catch (error) {
+        throw error
+    }
+}
+
+export const getSiteUsers = async function getSiteUsers() {
+    try {
+        const response = await requester(
+            ROUTES.SITE_USERS(router.currentRoute.value.params.site),
+            'GET',
+            {},
+            true
+        )
 
         if (response.status === 422) {
             throw await response.json()

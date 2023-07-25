@@ -18,7 +18,6 @@ module.exports = function UserService() {
                     "$SiteUsers.siteId$": filters.siteId,
                 };
                 delete filters.siteId;
-                showSiteUsers = false;
             }
             if (filters?.role) {
                 filters = {
@@ -30,10 +29,11 @@ module.exports = function UserService() {
             }
             let dbOptions = {
                 where: filters,
-                attributes: ["firstname", "lastname", "email", "createdAt", "updatedAt"],
+                attributes: ["id", "firstname", "lastname", "email", "createdAt", "updatedAt"],
                 subQuery: false,
                 include: [{
                     model: SiteUser,
+                    attributes: ["role"],
                 }],
             };
             if (!showSiteUsers) {
