@@ -355,12 +355,15 @@ module.exports = function Controller(EventService, TagService, SessionService, V
     },
     getSystemByViewer: async function(req, res, next) {
       const { id } = req.params;
+      const { startDate, endDate } = req.query;
       res.setHeader("Content-Type", "text/event-stream");
       res.setHeader("Cache-Control", "no-cache");
       res.setHeader("Connection", "keep-alive");
-
+//TODO rajouter la range de date
       // Envoi d'un événement initial au client
-      const aggregate = eventUtils().getOsAggregate(id);
+      const { start, end } =
+        eventUtils().getRangeDates(startDate, endDate);
+      const aggregate = eventUtils().getOsAggregate(id, start, end);
       const result = await EventService.findAllAggregate(aggregate);
 
       res.write(`data: ${JSON.stringify(result)}\n\n`);
@@ -388,13 +391,18 @@ module.exports = function Controller(EventService, TagService, SessionService, V
       });
     },
     getLocalization: async function(req, res, next) {
+      //TODO rajouter la range de date
       const { id } = req.params;
+      const { startDate, endDate } = req.query;
       res.setHeader("Content-Type", "text/event-stream");
       res.setHeader("Cache-Control", "no-cache");
       res.setHeader("Connection", "keep-alive");
 
+      const { start, end } =
+        eventUtils().getRangeDates(startDate, endDate);
+
       // Envoi d'un événement initial au client
-      const aggregate = eventUtils().getLocalizationDatas(id);
+      const aggregate = eventUtils().getLocalizationDatas(id, start, end);
       const result = await EventService.findAllAggregate(aggregate);
 
       res.write(`data: ${JSON.stringify(result)}\n\n`);

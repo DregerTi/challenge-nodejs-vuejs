@@ -92,11 +92,12 @@ module.exports = function eventUtil() {
         }
       ];
     },
-    getOsAggregate: (id) => {
+    getOsAggregate: (id, start, end) => {
       return [
         {
           $match: {
             siteId: id,
+            createdAt: { $gte: start, $lte: end }
           }
         },
         {
@@ -133,11 +134,12 @@ module.exports = function eventUtil() {
         }
       ]
     },
-    getLocalizationDatas: (id) => {
+    getLocalizationDatas: (id, start, end) => {
       return [
         {
           $match: {
             siteId: id,
+            createdAt: { $gte: start, $lte: end }
           }
         },
         {
@@ -155,17 +157,17 @@ module.exports = function eventUtil() {
         {
           $group: {
             _id: null,
-            viewersBycountry: { $push: { country: "$_id", nbViewers: "$nbViewers" } }
+            viewersByCountry: { $push: { country: "$_id", nbViewers: "$nbViewers" } }
           }
         },
         {
-          $unwind: "$viewersBycountry"
+          $unwind: "$viewersByCountry"
         },
         {
           $project: {
             _id: 0,
-            country: "$viewersBycountry.country",
-            nbViewers: "$viewersBycountry.nbViewers",
+            country: "$viewersByCountry.country",
+            nbViewers: "$viewersByCountry.nbViewers",
 
           }
         },
