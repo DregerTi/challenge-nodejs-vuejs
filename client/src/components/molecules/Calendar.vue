@@ -32,9 +32,17 @@ const onClickSomething = (dateValue) => {
 </script>
 
 <template>
-    <vue-tailwind-datepicker placeholder="Select a date" separator=" - " :formatter="formatter" as-single use-range
-        :disable-date="dDate" input-classes="pl-3 pr-3 py-2.5 rounded-lg overflow-hidden border-solid text-sm calendar"
-        v-model="dateValue" @click="onClickSomething(dateValue)" />
+    <vue-tailwind-datepicker
+        placeholder="Select a date"
+        separator=" - "
+        :formatter="formatter"
+        as-single
+        use-range
+        :disable-date="dDate"
+        input-classes="pl-3 pr-3 py-2.5 rounded-lg overflow-hidden border-solid text-sm calendar"
+        v-model="dateValue"
+        @click="onClickSomething(dateValue)"
+    />
 </template>
 
 <style scoped lang="scss">
@@ -44,7 +52,7 @@ const onClickSomething = (dateValue) => {
     color: var(--color-white);
 }
 
-::v-deep .calendar~div {
+::v-deep .calendar ~ div {
     display: none !important;
 }
 </style>

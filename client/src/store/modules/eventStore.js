@@ -19,7 +19,7 @@ const actions = {
         } catch (error) {
             //commit('setUntrackedPagesErrors', error)
         }
-    },
+    }
 }
 
 const mutations = {
