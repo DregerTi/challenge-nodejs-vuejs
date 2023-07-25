@@ -100,9 +100,9 @@ module.exports = function Controller(EventService, TagService, SessionService, V
         const end = new Date(endDate);
         const difference = end.getTime() - start.getTime();
         const differenceInDays = Math.round(difference / (1000 * 3600 * 24));
-        const previousPeriodStart = start;
+        const previousPeriodStart = new Date(start);
         previousPeriodStart.setDate(previousPeriodStart.getDate() - differenceInDays);
-        const previousPeriodEnd = end;
+        const previousPeriodEnd = new Date(end);
         previousPeriodEnd.setDate(previousPeriodEnd.getDate() - differenceInDays);
 
         const aggregate = [
