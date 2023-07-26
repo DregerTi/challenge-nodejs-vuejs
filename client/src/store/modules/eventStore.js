@@ -66,7 +66,22 @@ const actions = {
                     this.close()
                     return
                 }
-                commit('setSessionBrute', JSON.parse(event.data))
+
+                let eventBrute = JSON.parse(event.data)
+                const { totalSessionsCurrent, totalSessionsPrevious } = eventBrute
+                const trend = totalSessionsCurrent > totalSessionsPrevious ? 'up' : 'down'
+                const differencePercentage =
+                    ((totalSessionsCurrent - totalSessionsPrevious) / totalSessionsPrevious) * 100
+                const description = trend === 'up' ? `more than last time` : `less than last time`
+                const sessionsBrute = {
+                    trend: trend,
+                    value: totalSessionsCurrent,
+                    lastPeriode: differencePercentage.toFixed(2),
+                    description: differencePercentage.toFixed(2) + ' ' + description
+                }
+
+                commit('setSessionsBrute', sessionsBrute)
+
                 const dayList = state.dayList
                 const totalList = dayList.map((date) => {
                     const foundDay = JSON.parse(event.data).dailySessions.find(
@@ -93,6 +108,56 @@ const actions = {
             //eventSourceSession.addEventListener('open', listener)
             eventSourceSession.addEventListener('message', listener)
             eventSourceSession.addEventListener('error', listener)
+        } catch (error) {}
+    },
+    async getSessionsDuration({ commit }) {
+        try {
+            const url = new URL(
+                apiBaseUrl + ROUTES.EVENT_SESSION_DURATION(router.currentRoute.value.params.site)
+            )
+
+            Object.keys(state.rangeDate).forEach((key) =>
+                url.searchParams.append(key, state.rangeDate[key])
+            )
+
+            const eventSourceSessionDuration = new EventSourcePolyfill(url, {
+                headers: {
+                    Authorization: `Bearer ${await tokenStorage.getToken()}`
+                }
+            })
+
+            const listener = function (event) {
+                if (event.type === 'error') {
+                    this.close()
+                    return
+                }
+                commit('setSessionsDurationBrute', JSON.parse(event.data))
+                const dayList = state.dayList
+                const totalList = dayList.map((date) => {
+                    const foundDay = JSON.parse(event.data).dailySessions.find(
+                        (item) => item.date === date
+                    )
+                    return foundDay ? parseInt(foundDay.totalSessions) : 0
+                })
+
+                const chartData = {
+                    labels: dayList,
+                    datasets: [
+                        {
+                            label: 'Sessions',
+                            data: totalList,
+                            backgroundColor: '#a8dae3',
+                            borderColor: '#a8dae3',
+                            borderWidth: 1
+                        }
+                    ]
+                }
+
+                commit('setSessionsDuration', chartData)
+            }
+            //eventSourceSessionDuration.addEventListener('open', listener)
+            eventSourceSessionDuration.addEventListener('message', listener)
+            eventSourceSessionDuration.addEventListener('error', listener)
         } catch (error) {}
     },
     async getDevices({ commit }) {
@@ -158,13 +223,81 @@ const actions = {
                     ]
                 }
 
-                console.log(chartData)
-
                 commit('setDevices', chartData)
             }
             //eventSourceDevice.addEventListener('open', listener)
             eventSourceDevice.addEventListener('message', listener)
             eventSourceDevice.addEventListener('error', listener)
+        } catch (error) {}
+    },
+    async getCountries({ commit }) {
+        try {
+            const url = new URL(
+                apiBaseUrl + ROUTES.EVENT_COUNTRY(router.currentRoute.value.params.site)
+            )
+
+            Object.keys(state.rangeDate).forEach((key) =>
+                url.searchParams.append(key, state.rangeDate[key])
+            )
+
+            const eventSourceCountry = new EventSourcePolyfill(url, {
+                headers: {
+                    Authorization: `Bearer ${await tokenStorage.getToken()}`
+                }
+            })
+
+            const listener = function (event) {
+                if (event.type === 'error') {
+                    this.close()
+                    return
+                }
+
+                let eventBrute = JSON.parse(event.data)
+                const totalViewers = eventBrute.reduce((total, item) => total + item.nbViewers, 0)
+                const countriesBrute = eventBrute.map((item) => ({
+                    title: item.system,
+                    value: item.nbViewers,
+                    ratio: ((item.nbViewers / totalViewers) * 100).toFixed(2)
+                }))
+                commit('setCountriesBrute', countriesBrute)
+
+                const countryList = JSON.parse(event.data)
+                const labels = countryList.map((item) => item.country)
+                const data = countryList.map((item) => item.nbViewers)
+
+                const chartData = {
+                    labels: labels,
+                    datasets: [
+                        {
+                            data: data,
+                            backgroundColor: [
+                                '#a8dae3',
+                                '#3a93a6',
+                                '#216b88',
+                                '#0f4e5b',
+                                '#37737e',
+                                '#4c8f96',
+                                '#0c5665'
+                            ],
+                            borderColor: [
+                                '#a8dae3',
+                                '#3a93a6',
+                                '#216b88',
+                                '#0f4e5b',
+                                '#37737e',
+                                '#4c8f96',
+                                '#0c5665'
+                            ],
+                            borderWidth: 1
+                        }
+                    ]
+                }
+
+                commit('setCountries', chartData)
+            }
+            //eventSourceCountry.addEventListener('open', listener)
+            eventSourceCountry.addEventListener('message', listener)
+            eventSourceCountry.addEventListener('error', listener)
         } catch (error) {}
     },
     async getActiveUsers({ commit }) {}

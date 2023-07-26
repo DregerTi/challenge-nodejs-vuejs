@@ -12,6 +12,7 @@ import {
     CategoryScale,
     LinearScale
 } from 'chart.js'
+import PinCard from '@/components/molecules/PinCard.vue'
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
 const emit = defineEmits(['update:setDateButton', 'update:dashboardEditButton'])
@@ -20,6 +21,7 @@ emit('update:dashboardEditButton', false)
 
 const store = useStore()
 const sessions = computed(() => store.state.eventStore.sessions)
+const sessionsBrute = computed(() => store.state.eventStore.sessionsBrute)
 
 onMounted(() => {
     store.dispatch('getSessions')
@@ -40,8 +42,29 @@ onMounted(() => {
 
 <template>
     <EventStat title="Sessions">
-        <Bar id="my-chart-id" :data="sessions" />
+        <section class="chart-card--sessions">
+            <div>
+                <Bar id="chart-session" :data="sessions" />
+            </div>
+            <PinCard
+                :value="sessionsBrute?.value"
+                title="Total session"
+                :trend="sessionsBrute?.trend"
+            />
+        </section>
     </EventStat>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.chart-card--sessions {
+    width: 100%;
+    display: flex;
+    gap: 4rem;
+    > div {
+        width: 70%;
+    }
+    & > .pin-container {
+        width: 30%;
+    }
+}
+</style>
