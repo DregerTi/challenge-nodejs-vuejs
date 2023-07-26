@@ -81,6 +81,22 @@ const actions = {
           id: 'sessions',
           name: 'Sessions'
         },
+        {
+          id: 'avgTimeBySession',
+          name: 'Average Time By Session'
+        },
+        {
+          id: 'activeUsers',
+          name: 'Active Users'
+        },
+        {
+          id: 'viewerByCountry',
+          name: 'Viewer By Country'
+        },
+        {
+          id: 'viewerByOs',
+          name: 'Viewer By OS'
+        }
       ]
       const tags = await getTags();
       const tagKpis = tags.map(tag => {

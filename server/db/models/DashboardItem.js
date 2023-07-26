@@ -22,8 +22,12 @@ module.exports = (connection) => {
               "totalUsers",
               "newUsers",
               "sessions",
-              "oneTag", "conversionTunnel"]],
-            msg: "kpi must be one of the following: pageView, totalUsers, newUsers, sessions, oneTag, conversionTunnel"
+              "oneTag", "conversionTunnel", "avgTimeBySession",
+              "activeUsers",
+              "viewerByCountry",
+              "viewerByOs",]],
+            msg: "kpi must be one of the following: pageView, totalUsers, newUsers, sessions, oneTag, " +
+              "conversionTunnel, avgTimeBySession activeUsers viewerByCountry viewerByOs"
           }
         }
       },
