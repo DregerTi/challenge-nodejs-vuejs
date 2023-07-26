@@ -20,20 +20,32 @@ const { title, path, buttonType, editMode } = defineProps({
     editMode: {
         type: Boolean,
         default: false
-    }
+    },
+    selectValues: {
+        type: Array,
+        default: null
+    },
 })
+
+const emit = defineEmits(['update:modelValue', 'click:editButton'])
 </script>
 
 <template>
     <section class="card">
         <header>
             <h5 v-if="!editMode">{{ title }}</h5>
-            <Listbox v-if="editMode" :selected="title" variant="md" />
+            <Listbox
+                @update:selected="(value) => $emit('update:modelValue', value)"
+                v-if="editMode"
+                :selected="title"
+                :values="selectValues"
+                variant="md"
+            />
             <RouterLink v-if="buttonType != null && path" :to="path">
-                <RoundedButton v-if="buttonType == 'rounded' && !editMode" icon="ArrowUpward" />
-                <span v-if="buttonType == 'text' && !editMode">See more</span>
+                <RoundedButton v-if="buttonType === 'rounded' && !editMode" icon="ArrowUpward" />
+                <span v-if="buttonType === 'text' && !editMode">See more</span>
             </RouterLink>
-            <RoundedButton v-if="editMode" icon="Add" />
+            <RoundedButton v-if="editMode" icon="Add" @click="$emit('click:editButton')" />
         </header>
         <slot></slot>
         <slot name="chart"></slot>
@@ -57,6 +69,7 @@ const { title, path, buttonType, editMode } = defineProps({
         justify-content: space-between;
         width: 100%;
         gap: 1.25rem;
+
         > h5 {
             font-size: 1.25rem;
             font-weight: 600;

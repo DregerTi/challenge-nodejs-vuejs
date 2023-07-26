@@ -4,6 +4,7 @@ import tag from '@/store/modules/tag'
 import conversionTunnel from '@/store/modules/conversionTunnel'
 import eventStore from '@/store/modules/eventStore'
 import siteStore from '@/store/modules/siteStore'
+import dashboardItemStore from '@/store/modules/dashboardItemStore'
 
 export default createStore({
     modules: {
@@ -11,6 +12,7 @@ export default createStore({
         tag,
         conversionTunnel,
         eventStore,
-        siteStore
+        siteStore,
+        dashboardItemStore
     }
 })

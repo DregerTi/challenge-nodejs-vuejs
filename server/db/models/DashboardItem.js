@@ -1,4 +1,5 @@
 const { Model, DataTypes } = require("sequelize");
+const dashboardUtil = require("../../utils/dashboard-utils");
 module.exports = (connection) => {
   const { DataTypes, Model } = require("sequelize");
 
@@ -17,18 +18,22 @@ module.exports = (connection) => {
         allowNull: false,
         validate: {
           isIn: {
-            args: [["bounceRate", "conversionRate", "pageViews", "sessions", "users"]],
-            msg: "kpi must be one of the following: bounceRate, conversionRate, pageViews, sessions, users"
-          },
+            args: [["pageView",
+              "totalUsers",
+              "newUsers",
+              "sessions",
+              "oneTag", "conversionTunnel"]],
+            msg: "kpi must be one of the following: pageView, totalUsers, newUsers, sessions, oneTag, conversionTunnel"
+          }
         }
       },
+      name: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+      }
     },
     {
-      sequelize: connection, tableName: "dashboardItem",
-      indexes: [{
-        unique: true, fields: ["kpi", "siteId"],
-        msg: "This kpi already exists for this site"
-      }]
+      sequelize: connection, tableName: "dashboardItem"
     }
   );
 

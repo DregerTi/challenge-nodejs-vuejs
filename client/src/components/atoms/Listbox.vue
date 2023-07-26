@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from "vue";
 import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from '@headlessui/vue'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
 import { RouterLink } from 'vue-router'
@@ -22,7 +22,13 @@ const { title, variant, values, selected } = defineProps({
     }
 })
 
+const emit = defineEmits(['update:selected'])
+
+
 const selectedValue = ref(selected)
+watch(selectedValue, (newValue) => {
+  emit('update:selected', newValue);
+});
 </script>
 
 <template>
@@ -50,7 +56,7 @@ const selectedValue = ref(selected)
                             v-slot="{ active, selected }"
                             v-for="value in values"
                             :key="value.name"
-                            :value="value.name"
+                            :value=" value.name"
                             as="template"
                         >
                             <RouterLink
@@ -68,7 +74,7 @@ const selectedValue = ref(selected)
                                             selected ? 'font-medium' : 'font-normal',
                                             'block truncate'
                                         ]"
-                                        >{{ value.name }}</span
+                                        >{{value.name }}</span
                                     >
                                     <span
                                         v-if="selected"

@@ -1,7 +1,7 @@
 <script setup>
 import PinCard from '@/components/molecules/PinCard.vue'
 import Card from '@/components/molecules/Card.vue'
-import { defineProps, defineEmits, onBeforeMount, computed, onUpdated } from 'vue'
+import { defineProps, defineEmits, onBeforeMount, computed, watch, ref } from "vue";
 import RoundedButton from '@/components/atoms/RoundedButton.vue'
 import { useStore } from 'vuex'
 
@@ -12,15 +12,42 @@ const { dashboardEditMode } = defineProps({
     }
 })
 
+const count = ref(0)
+
+function addComponent() {
+  count.value += 1;
+}
+function deleteItemMethod(id) {
+  console.log('test', id);
+  store.dispatch('deleteDashboardItem', id);
+  store.dispatch('getDashboardItems');
+}
+
 const emit = defineEmits(['update:setDateButton', 'update:dashboardEditButton'])
 emit('update:setDateButton', true)
 emit('update:dashboardEditButton', true)
 
+
 const store = useStore()
 const activeUsers = computed(() => store.state.eventStore.activeUsers)
+const possibleKpis = computed(() => store.state.dashboardItemStore.possibleKpis)
+const dashboardItems = computed(() => store.state.dashboardItemStore.dashboardItems)
 
+function updateItem(value, item) {
+  item.kpi = value;
+  item.name = value;
+  if (item.id) {
+    store.dispatch('updateDashboardItem', item);
+
+  } else {
+    store.dispatch('createDashboardItem', item);
+    count.value = 0;
+  }
+}
 onBeforeMount(() => {
     store.dispatch('getActiveUsers')
+    store.dispatch('getPossibleKpis')
+    store.dispatch('getDashboardItems')
 })
 </script>
 
@@ -55,91 +82,33 @@ onBeforeMount(() => {
         </section>
         <div class="dashboard-grid">
             <Card
-                title="Bounce trade"
-                buttonType="text"
+                v-for="item in dashboardItems"
+                :key="item.id"
+                @update:model-value="value => updateItem(value, item)"
+                :select-values="possibleKpis"
+                :title="item.name"
                 :editMode="dashboardEditMode"
-                :path="'/analytics/' + $route.params.site + '/audience/total-users'"
-            />
-            <Card
-                title="Bounce trade"
-                buttonType="rounded"
-                :editMode="dashboardEditMode"
+                @click:edit-button="deleteItemMethod(item.id)"
                 path="/"
             />
-            <Card
-                title="Bounce trade"
-                buttonType="rounded"
-                :editMode="dashboardEditMode"
-                path="/"
-            />
-            <Card
-                title="Bounce trade"
-                buttonType="rounded"
-                :editMode="dashboardEditMode"
-                path="/"
-            />
-            <Card
-                title="Bounce trade"
-                buttonType="rounded"
-                :editMode="dashboardEditMode"
-                path="/"
-            />
-            <Card
-                title="Bounce trade"
-                buttonType="rounded"
-                :editMode="dashboardEditMode"
-                path="/"
-            />
-            <Card
-                title="Bounce trade"
-                buttonType="rounded"
-                :editMode="dashboardEditMode"
-                path="/"
-            />
-            <Card
-                title="Bounce trade"
-                buttonType="rounded"
-                :editMode="dashboardEditMode"
-                path="/"
-            />
-            <Card
-                title="Bounce trade"
-                buttonType="rounded"
-                :editMode="dashboardEditMode"
-                path="/"
-            />
-            <Card
-                title="Bounce trade"
-                buttonType="rounded"
-                :editMode="dashboardEditMode"
-                path="/"
-            />
-            <Card
-                title="Bounce trade"
-                buttonType="rounded"
-                :editMode="dashboardEditMode"
-                path="/"
-            />
-            <Card
-                title="Bounce trade"
-                buttonType="rounded"
-                :editMode="dashboardEditMode"
-                path="/"
-            />
-            <Card
-                title="Bounce trade"
-                buttonType="rounded"
-                :editMode="dashboardEditMode"
-                path="/"
-            />
-            <Card class="cta-add-card" v-if="dashboardEditMode">
-                <RoundedButton
-                    icon="Close"
-                    variant="primary"
-                    size="md"
-                    :editMode="dashboardEditMode"
-                />
-            </Card>
+          <Card
+            v-for="component in count"
+            :key="component"
+            @update:model-value="value => updateItem(value, {})"
+            :select-values="possibleKpis"
+            title="Page View"
+            :editMode="dashboardEditMode"
+            path="/"
+          />
+
+
+          <RoundedButton
+            v-if="dashboardEditMode"
+            icon="Close"
+            variant="primary"
+            size="md"
+            @click="addComponent"
+          />
         </div>
     </div>
 </template>

@@ -137,7 +137,11 @@ const routesList = [
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
     },
     {
-        path: "/:id/dashboard-items", method: "delete", action: "removeDashboardItem",
+        path: "/:id/dashboard-items/:dashboardItemId", method: "patch", action: "updateDashboardItem",
+        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
+    },
+    {
+        path: "/:id/dashboard-items/:dashboardItemId", method: "delete", action: "removeDashboardItem",
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
     }
 

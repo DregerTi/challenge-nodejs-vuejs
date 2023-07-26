@@ -8,6 +8,8 @@ const tokenGenerator = require("../utils/token-generator");
 const ConversionTunnelTagService = require("../services/conversionTunnelTags");
 const UntrackPathService = require("../services/untrackPath");
 const DashboardItemService = require("../services/dashboardItem");
+const dashboardUtil = require("../utils/dashboard-utils");
+const { parse } = require("dotenv");
 
 const service = new SiteService();
 const userSiteService = new SiteUserService();
@@ -431,18 +433,32 @@ controller.getDashboardItems = async function(req, res, next) {
   }
 }
 controller.addDashboardItem = async function(req, res, next) {
-  const { kpi, tagId, conversionTunnelId } = req.body;
+  const { kpi, tagId, conversionTunnelId, name } = req.body;
   try {
-    const dashboardItem = await dashboardItemService.addByKpi(kpi, parseInt(req.params.id, 10), tagId, conversionTunnelId);
+    console.log('naejzaeijazeza', name);
+    const newKpi = await dashboardUtil().formateKpi(kpi);
+    const dashboardItem = await dashboardItemService.addByKpi(newKpi, parseInt(req.params.id, 10), tagId, conversionTunnelId, name);
     res.status(201).json(dashboardItem);
   } catch (err) {
     next(err);
   }
 }
-controller.removeDashboardItem = async function(req, res, next) {
-  const { kpi } = req.body;
+controller.updateDashboardItem = async function(req, res, next) {
+const { dashboardItemId } = req.params;
+  const { kpi, tagId, conversionTunnelId, name } = req.body;
   try {
-    const result = await dashboardItemService.removeByKpi(kpi, parseInt(req.params.id, 10));
+    const newKpi = await dashboardUtil().formateKpi(kpi);
+    const [result] = await dashboardItemService.update({ id: parseInt(dashboardItemId, 10) }, { newKpi, tagId, conversionTunnelId, name});
+    if (result) res.json(result);
+    else res.sendStatus(404);
+  } catch (err) {
+    next(err);
+  }
+}
+controller.removeDashboardItem = async function(req, res, next) {
+  const { dashboardItemId } = req.params;
+  try {
+    const result = await dashboardItemService.removeById(parseInt(dashboardItemId, 10));
     if (result) res.sendStatus(204);
     else res.sendStatus(404);
   } catch (err) {
