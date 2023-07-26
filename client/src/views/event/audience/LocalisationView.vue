@@ -1,66 +1,36 @@
 <script setup>
-import { defineEmits } from 'vue'
+import { computed, defineEmits, onMounted, onUnmounted, watch } from 'vue'
 import EventStat from '@/components/templates/EventStat.vue'
+import { useStore } from 'vuex'
+import GoogleChart from '@/components/molecules/GChart.vue'
 
 const emit = defineEmits(['update:setDateButton', 'update:dashboardEditButton'])
 emit('update:setDateButton', true)
 emit('update:dashboardEditButton', false)
 
-let labels = ['page', 'views']
-let rows = [
-    {
-        title: 'Home',
-        value: '3255',
-        trend: 'up',
-        ratio: '23'
-    },
-    {
-        title: 'dsk 1',
-        value: '32898',
-        trend: 'down',
-        ratio: '23'
-    },
-    {
-        title: 'df dffdf d',
-        value: '322',
-        trend: 'down',
-        ratio: '23'
-    },
-    {
-        title: 'df dfdfdgh d',
-        value: '32',
-        trend: 'up',
-        ratio: '2'
-    },
-    {
-        title: 'sdf fddf dffd',
-        value: '32',
-        trend: 'up',
-        ratio: '33'
-    },
-    {
-        title: 'fsd',
-        value: '3',
-        trend: 'down',
-        ratio: '23'
-    },
-    {
-        title: 'sdfdsf',
-        value: '2',
-        trend: 'same',
-        ratio: '21'
-    },
-    {
-        title: 'sd ges d',
-        value: '1',
-        trend: 'up',
-        ratio: '3'
-    }
-]
+const store = useStore()
+const countriesBrute = computed(() => store.state.eventStore.countriesBrute)
+const rangeDate = computed(() => store.state.eventStore.rangeDate)
+
+onMounted(() => {
+    store.dispatch('getCountries')
+})
+watch(rangeDate, () => {
+    store.dispatch('closeEventSourceCountry')
+    store.dispatch('getCountries')
+})
+
+onUnmounted(() => {
+    store.dispatch('closeEventSourceCountry')
+})
+
+const labels = ['Count', 'Total']
 </script>
 
 <template>
-    <EventStat title="Localisation" :rows="rows" :labels="labels" />
+    <EventStat title="Localisation" :rows="countriesBrute" :labels="labels">
+        <GoogleChart />
+    </EventStat>
 </template>
 
 <style lang="scss"></style>

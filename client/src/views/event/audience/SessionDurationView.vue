@@ -1,66 +1,71 @@
 <script setup>
-import { defineEmits } from 'vue'
+import { computed, defineEmits, onMounted, onUnmounted, watch } from 'vue'
 import EventStat from '@/components/templates/EventStat.vue'
+import { useStore } from 'vuex'
+import PinCard from '@/components/molecules/PinCard.vue'
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+} from 'chart.js'
+import { Line } from 'vue-chartjs'
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
 const emit = defineEmits(['update:setDateButton', 'update:dashboardEditButton'])
 emit('update:setDateButton', true)
 emit('update:dashboardEditButton', false)
 
-let labels = ['page', 'views']
-let rows = [
-    {
-        title: 'Home',
-        value: '3255',
-        trend: 'up',
-        ratio: '23'
-    },
-    {
-        title: 'dsk 1',
-        value: '32898',
-        trend: 'down',
-        ratio: '23'
-    },
-    {
-        title: 'df dffdf d',
-        value: '322',
-        trend: 'down',
-        ratio: '23'
-    },
-    {
-        title: 'df dfdfdgh d',
-        value: '32',
-        trend: 'up',
-        ratio: '2'
-    },
-    {
-        title: 'sdf fddf dffd',
-        value: '32',
-        trend: 'up',
-        ratio: '33'
-    },
-    {
-        title: 'fsd',
-        value: '3',
-        trend: 'down',
-        ratio: '23'
-    },
-    {
-        title: 'sdfdsf',
-        value: '2',
-        trend: 'same',
-        ratio: '21'
-    },
-    {
-        title: 'sd ges d',
-        value: '1',
-        trend: 'up',
-        ratio: '3'
-    }
-]
+const store = useStore()
+const sessionsDuration = computed(() => store.state.eventStore.sessions)
+const sessionsDurationBrute = computed(() => store.state.eventStore.sessionsBrute)
+const rangeDate = computed(() => store.state.eventStore.rangeDate)
+
+onMounted(() => {
+    store.dispatch('getSessionsDuration')
+})
+watch(rangeDate, () => {
+    store.dispatch('closeEventSourceSessionDuration')
+    store.dispatch('getSessionsDuration')
+})
+
+onUnmounted(() => {
+    store.dispatch('closeEventSourceSessionDuration')
+})
 </script>
 
 <template>
-    <EventStat title="Session duration" :rows="rows" :labels="labels" />
+    <EventStat title="Session duration">
+        <section class="chart-card--sessions">
+            <div>
+                <Line id="chart-session-duration" :data="sessionsDuration" />
+            </div>
+            <PinCard
+                :value="sessionsDurationBrute?.value"
+                title="Total session"
+                :trend="sessionsDurationBrute?.trend"
+            />
+        </section>
+    </EventStat>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.chart-card--sessions {
+    width: 100%;
+    display: flex;
+    gap: 4rem;
+
+    > div {
+        width: 70%;
+    }
+
+    & > .pin-container {
+        width: 30%;
+    }
+}
+</style>

@@ -1,5 +1,5 @@
 <script setup>
-import { computed, defineEmits, onMounted, onUnmounted, watch } from "vue";
+import { computed, defineEmits, onMounted, onUnmounted, watch } from 'vue'
 import EventStat from '@/components/templates/EventStat.vue'
 import { useStore } from 'vuex'
 import { Bar } from 'vue-chartjs'
@@ -28,20 +28,19 @@ const rangeDate = computed(() => store.state.eventStore.rangeDate)
 onMounted(() => {
     store.dispatch('getSessions')
 })
-watch(rangeDate,  () => {
-  store.dispatch('closeEventSourceSession')
-  store.dispatch('getSessions')
+watch(rangeDate, () => {
+    store.dispatch('closeEventSourceSession')
+    store.dispatch('getSessions')
 })
 
 onUnmounted(() => {
     store.dispatch('closeEventSourceSession')
 })
-const tagKey = "nhy1t3720i"
 </script>
 
 <template>
     <EventStat title="Sessions">
-        <section class="chart-card--sessions" v-track="tagKey">
+        <section class="chart-card--sessions">
             <div>
                 <Bar id="chart-session" :data="sessions" />
             </div>

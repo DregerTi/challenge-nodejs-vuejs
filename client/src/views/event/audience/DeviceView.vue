@@ -1,5 +1,5 @@
 <script setup>
-import { computed, defineEmits, onMounted, onUnmounted } from "vue";
+import { computed, defineEmits, onMounted, onUnmounted, watch } from 'vue'
 import EventStat from '@/components/templates/EventStat.vue'
 import { useStore } from 'vuex'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
@@ -14,12 +14,19 @@ emit('update:dashboardEditButton', false)
 const store = useStore()
 const devices = computed(() => store.state.eventStore.devices)
 const devicesBrute = computed(() => store.state.eventStore.devicesBrute)
+const rangeDate = computed(() => store.state.eventStore.rangeDate)
 
 onMounted(() => {
     store.dispatch('getDevices')
 })
+
+watch(rangeDate, () => {
+    store.dispatch('closeEventSourceDevice')
+    store.dispatch('getDevices')
+})
+
 onUnmounted(() => {
-  store.dispatch('closeEventSourceDevice');
+    store.dispatch('closeEventSourceDevice')
 })
 </script>
 

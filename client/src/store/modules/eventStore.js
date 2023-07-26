@@ -28,7 +28,7 @@ const state = {
         ]
     },
     devicesBrute: null,
-    countries: {},
+    countries: [['Country', 'Popularity']],
     countriesBrute: null,
     activeUsers: null,
     rangeDate: [],
@@ -46,12 +46,22 @@ const getters = {
 let eventSourceSession = null
 let eventSourceDevice = null
 let eventSourceCountry = null
+let eventSourceSessionDuration = null
+let eventSourceViewPerPages = null
 
 const actions = {
     async getViewPerPages({ commit }) {},
     async closeEventSourceSession() {
         await eventSourceSession.close()
         eventSourceSession = null
+    },
+    async closeEventSourceSessionDuration() {
+        await eventSourceSessionDuration.close()
+        eventSourceSessionDuration = null
+    },
+    async closeEventSourceViewPerPages() {
+        await eventSourceViewPerPages.close()
+        eventSourceViewPerPages = null
     },
     async closeEventSourceDevice() {
         await eventSourceDevice.close()
@@ -78,7 +88,6 @@ const actions = {
             })
 
             const listener = function (event) {
-                
                 let eventBrute = JSON.parse(event.data)
                 const { totalSessionsCurrent, totalSessionsPrevious } = eventBrute
                 const trend = totalSessionsCurrent > totalSessionsPrevious ? 'up' : 'down'
@@ -121,7 +130,6 @@ const actions = {
             //eventSourceSession.addEventListener('open', listener)
             eventSourceSession.addEventListener('message', listener)
             eventSourceSession.addEventListener('error', listener)
-
         } catch (error) {}
     },
     async getSessionsDuration({ commit }) {
@@ -145,7 +153,21 @@ const actions = {
                     this.close()
                     return
                 }
-                commit('setSessionsDurationBrute', JSON.parse(event.data))
+
+                console.log(event.data)
+                let eventBrute = JSON.parse(event.data)
+                const { totalSessionsCurrent, totalSessionsPrevious } = eventBrute
+                const trend = totalSessionsCurrent > totalSessionsPrevious ? 'up' : 'down'
+                const differencePercentage =
+                    ((totalSessionsCurrent - totalSessionsPrevious) / totalSessionsPrevious) * 100
+                const description = trend === 'up' ? `more than last time` : `less than last time`
+                const sessionsDurationBrute = {
+                    trend: trend,
+                    value: totalSessionsCurrent,
+                    lastPeriode: differencePercentage.toFixed(2),
+                    description: differencePercentage.toFixed(2) + ' ' + description
+                }
+                commit('setSessionsDurationBrute', sessionsDurationBrute)
                 const dayList = state.dayList
                 const totalList = dayList.map((date) => {
                     const foundDay = JSON.parse(event.data).dailySessions.find(
@@ -269,47 +291,18 @@ const actions = {
                 let eventBrute = JSON.parse(event.data)
                 const totalViewers = eventBrute.reduce((total, item) => total + item.nbViewers, 0)
                 const countriesBrute = eventBrute.map((item) => ({
-                    title: item.system,
+                    title: item.country,
                     value: item.nbViewers,
                     ratio: ((item.nbViewers / totalViewers) * 100).toFixed(2)
                 }))
                 commit('setCountriesBrute', countriesBrute)
 
-                const countryList = JSON.parse(event.data)
-                const labels = countryList.map((item) => item.country)
-                const data = countryList.map((item) => item.nbViewers)
+                const filteredData = JSON.parse(event.data).filter((item) => item.country !== null)
+                const values = filteredData.map((item) => [item.country, item.nbViewers])
+                values.unshift(['Country', 'Popularity'])
 
-                const chartData = {
-                    labels: labels,
-                    datasets: [
-                        {
-                            data: data,
-                            backgroundColor: [
-                                '#a8dae3',
-                                '#3a93a6',
-                                '#216b88',
-                                '#0f4e5b',
-                                '#37737e',
-                                '#4c8f96',
-                                '#0c5665'
-                            ],
-                            borderColor: [
-                                '#a8dae3',
-                                '#3a93a6',
-                                '#216b88',
-                                '#0f4e5b',
-                                '#37737e',
-                                '#4c8f96',
-                                '#0c5665'
-                            ],
-                            borderWidth: 1
-                        }
-                    ]
-                }
-
-                commit('setCountries', chartData)
+                commit('setCountries', values)
             }
-            //eventSourceCountry.addEventListener('open', listener)
             eventSourceCountry.addEventListener('message', listener)
             eventSourceCountry.addEventListener('error', listener)
         } catch (error) {}

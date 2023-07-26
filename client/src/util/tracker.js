@@ -63,25 +63,25 @@ export default {
                         return JSON.parse(key)
                     }
                     const viewerKey =
-                      Math.random().toString(36).substring(2, 15) +
-                      Math.random().toString(36).substring(2, 15)
+                        Math.random().toString(36).substring(2, 15) +
+                        Math.random().toString(36).substring(2, 15)
                     localStorage.setItem('viewerKey', JSON.stringify(viewerKey))
                     return viewerKey
-                };
+                }
                 const device = () => {
                     const ua = navigator.userAgent
                     if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
                         return 'tablet'
                     }
                     if (
-                      /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
-                        ua
-                      )
+                        /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
+                            ua
+                        )
                     ) {
                         return 'mobile'
                     }
                     return 'desktop'
-                };
+                }
                 const system = () => {
                     const userAgent = window.navigator.userAgent
                     const platform = window.navigator.platform
@@ -101,7 +101,7 @@ export default {
                         os = 'Linux'
                     }
                     return os
-                };
+                }
 
                 eventListeners[binding.arg] = () => {
                     sendEvent({
@@ -139,18 +139,19 @@ export default {
         })
 
         const handleClick = (event) => {
-        const { clientX, clientY } = event
-        sendEvent({
-            ...configData,
-            viewerKey: this.getViewerKey(),
-            device: this.getDeviceType(),
-            system: this.getUserOs(),
-            user_agent: navigator.userAgent,
-            path: window.location.href,
-            type: 'click',
-            coordinates: { x: clientX, y: clientY }
-        })
-    }
+            const { clientX, clientY } = event
+            sendEvent({
+                ...configData,
+                viewerKey: this.getViewerKey(),
+                device: this.getDeviceType(),
+                system: this.getUserOs(),
+                user_agent: navigator.userAgent,
+                path: window.location.href,
+                type: 'click',
+                viewPort: { width: window.innerWidth, height: window.innerHeight },
+                coordinates: { x: clientX, y: clientY }
+            })
+        }
 
         const sendPageLoadEvent = () => {
             sendEvent({

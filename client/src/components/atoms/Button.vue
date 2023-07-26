@@ -43,7 +43,9 @@ const { title, variant, icon, type } = defineProps({
                 'TrendingUp',
                 'Edit',
                 'Check',
-                'Delete'
+                'Delete',
+                'ScreenshotMonitor',
+                'Autorenew'
             ].includes(value)
         }
     },

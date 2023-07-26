@@ -20,35 +20,35 @@ emit('update:screenShotBtn', false)
 
 let items = [
     {
-        title: 'Heatmap 1',
+        name: 'Heatmap 1',
         id: '3255'
     },
     {
-        title: 'Heatmap 2',
+        name: 'Heatmap 2',
         id: '32898'
     },
     {
-        title: 'Heatmap 3',
+        name: 'Heatmap 3',
         id: '322'
     },
     {
-        title: 'Heatmap 4',
+        name: 'Heatmap 4',
         id: '32'
     },
     {
-        title: 'Heatmap 5',
+        name: 'Heatmap 5',
         id: '3002'
     },
     {
-        title: 'Heatmap 6',
+        name: 'Heatmap 6',
         id: '3'
     },
     {
-        title: 'Heatmap 7',
+        name: 'Heatmap 7',
         id: '2'
     },
     {
-        title: 'Heatmap 8',
+        name: 'Heatmap 8',
         value: '1'
     }
 ]
