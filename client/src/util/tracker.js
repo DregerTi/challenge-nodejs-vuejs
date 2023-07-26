@@ -160,7 +160,7 @@ export default {
                 user_agent: navigator.userAgent,
                 path: window.location.href,
                 type: 'click',
-                viewPort: size,
+                size: size,
                 coordinates: { x: clientX, y: clientY }
             })
         }

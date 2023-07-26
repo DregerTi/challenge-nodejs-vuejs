@@ -162,6 +162,7 @@ module.exports = function Controller(EventService, TagService, SessionService, V
       }
     },
     getAvgTimeBySession: async function(req, res, next) {
+      //TODO le jour de chaque daily est manquant
       const { id } = req.params;
       let { startDate, endDate } = req.query;
       res.setHeader("Content-Type", "text/event-stream");
@@ -327,10 +328,90 @@ module.exports = function Controller(EventService, TagService, SessionService, V
         res.end();
       });
     },
-    getHeatmap: async function(req, res, next) {
+    getHeatmapPaths: async function(req, res, next) {
+      const { id } = req.params;
+      const { startDate, endDate, searchString } = req.query;
+      res.setHeader("Content-Type", "text/event-stream");
+      res.setHeader("Cache-Control", "no-cache");
+      res.setHeader("Connection", "keep-alive");
 
+      const { start, end } =
+        eventUtils().getRangeDates(startDate, endDate);
+
+      if (start === undefined || end === undefined || start > end) {
+        res.status(400).json({ message: "Invalid date" });
+        return;
+      }
+
+      const aggregate = eventUtils().getHeatmapPathsAggregate(id, start, end, searchString);
+      const result = await EventService.findAllAggregate(aggregate);
+
+      res.write(`data: ${JSON.stringify(result)}\n\n`);
+
+      const changeStream = Event.watch();
+      changeStream.on("change", async () => {
+        try {
+          const result = await EventService.findAllAggregate(aggregate);
+
+          res.write(`data: ${JSON.stringify(result)}\n\n`);
+        } catch (err) {
+          next(err);
+        }
+
+      });
+
+      req.on("close", () => {
+        changeStream.close();
+        res.end();
+      });
+    },
+    getHeatmapForPath: async function(req, res, next) {
+      const { id } = req.params;
+      const { startDate, endDate, size, path } = req.query;
+      if (!["sm", "md", "lg"].includes(size)) {
+        res.status(400).json({ message: "Invalid size" });
+        return;
+      }
+      if (!path) {
+        res.status(400).json({ message: "Invalid path" });
+        return;
+      }
+      res.setHeader("Content-Type", "text/event-stream");
+      res.setHeader("Cache-Control", "no-cache");
+      res.setHeader("Connection", "keep-alive");
+
+      const { start, end } =
+        eventUtils().getRangeDates(startDate, endDate);
+
+      if (start === undefined || end === undefined || start > end) {
+        res.status(400).json({ message: "Invalid date" });
+        return;
+      }
+
+      const aggregate = eventUtils().getHeatmapForPathAggregate(id, start, end, path, size);
+      const result = await EventService.findAllAggregate(aggregate);
+
+      res.write(`data: ${JSON.stringify(result)}\n\n`);
+
+      const changeStream = Event.watch();
+      changeStream.on("change", async () => {
+        try {
+          const result = await EventService.findAllAggregate(aggregate);
+
+          res.write(`data: ${JSON.stringify(result)}\n\n`);
+        } catch (err) {
+          next(err);
+        }
+
+      });
+
+      req.on("close", () => {
+        changeStream.close();
+        res.end();
+      });
     },
     getNewUsers: async function(req, res, next) {
+      //TODO marche pas :(
       const { id } = req.params;
       let { startDate, endDate } = req.query;
       try {
@@ -489,9 +570,7 @@ module.exports = function Controller(EventService, TagService, SessionService, V
     } catch (err) {
       next(err);
     }
-  }
-
-,
+  },
   getConversionTunnels: async function(req, res, next) {
     //TODO renvoyer le nb de sessions qui ont eu un event de chaque tag dans l'ordre chronologique + le nb de sessions qui ont eu l'event 1 au minimum + le nb de sessions qui ont eu l'event 1 au minimum sur la période précédente + range par dates
   }

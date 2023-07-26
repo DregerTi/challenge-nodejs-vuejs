@@ -656,6 +656,71 @@ module.exports = function eventUtil() {
           }
         }
       ];
+    },
+    getHeatmapPathsAggregate(id, start, end, searchString) {
+      return [
+        {
+          $match: {
+            siteId: id,
+            type: "click",
+            size: { $ne: null },
+            path: {
+              $regex: searchString ? searchString : "", // Si searchString est présent, on filtre selon cette chaîne de caractères, sinon on filtre sur tout
+              $options: "i", // Options pour la recherche insensible à la casse
+            },
+          },
+        },
+        {
+          $group: {
+            _id: "$path",// Compteur du nombre d'événements pour chaque path
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            path: "$_id",
+          },
+        },
+      ]
+    },
+    getHeatmapForPathAggregate(id, start, end, path, size) {
+      return [
+        {
+          $match: {
+            siteId: id,
+            path: path,
+            size: size,
+            type: "click",
+            createdAt: { $gte: start, $lte: end },
+          },
+        },
+        {
+          $group: {
+            _id: { x: "$coordinates.x", y: "$coordinates.y" },
+            value: { $sum: 1 }, // Compteur du nombre de fois que chaque paire de coordonnées est présente
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            x: "$_id.x",
+            y: "$_id.y",
+            value: 1,
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            results: { $push: "$$ROOT" }, // Accumuler toutes les coordonnées dans un tableau "results"
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            results: 1,
+          },
+        },
+      ]
     }
   }
 }

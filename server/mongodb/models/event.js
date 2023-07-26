@@ -44,6 +44,9 @@ const Event = new Schema({
       type: Number,
     }
   },
+  size: {
+    type: String,
+  },
   system: {
     type: String,
     required: true,

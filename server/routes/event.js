@@ -47,6 +47,14 @@ const routesList = [
     middlewares: [checkAuth.requireAuthentication, sitePermission.canAccessSite(["ADMIN", "USER"])]
   },
   {
+    path: "/:id/heatmap-paths", method: "get", action: "getHeatmapPaths",
+    middlewares: [checkAuth.requireAuthentication, sitePermission.canAccessSite(["ADMIN", "USER"])]
+  },
+  {
+    path: "/:id/heatmap", method: "get", action: "getHeatmapForPath",
+    middlewares: [checkAuth.requireAuthentication, sitePermission.canAccessSite(["ADMIN", "USER"])]
+  },
+  {
     path: "/:id/tag/:tagId", method: "get", action: "getOneTag",
     middlewares: [
       checkAuth.requireAuthentication,
