@@ -36,11 +36,12 @@ watch(rangeDate,  () => {
 onUnmounted(() => {
     store.dispatch('closeEventSourceSession')
 })
+const tagKey = "nhy1t3720i"
 </script>
 
 <template>
     <EventStat title="Sessions">
-        <section class="chart-card--sessions">
+        <section class="chart-card--sessions" v-track="tagKey">
             <div>
                 <Bar id="chart-session" :data="sessions" />
             </div>

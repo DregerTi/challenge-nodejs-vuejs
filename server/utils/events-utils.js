@@ -126,7 +126,6 @@ module.exports = function eventUtil() {
             _id: 0,
             system: "$viewersBySystem.system",
             nbViewers: "$viewersBySystem.nbViewers",
-
           }
         },
         {
@@ -197,6 +196,72 @@ module.exports = function eventUtil() {
           }
         }
       ];
+    },
+    getOneTagAggregate(id, tagId, start, end, previousPeriodStart, previousPeriodEnd) {
+      return [
+        {
+          $facet: {
+            currentPeriod: [
+              // Période actuelle
+              {
+                $match: {
+                  siteId: id,
+                  tagId: tagId,
+                  createdAt: {
+                    $gte: start,
+                    $lte: end
+                  }
+                }
+              },
+              {
+                $group: {
+                  _id: null,
+                  currentPeriodCount: { $sum: 1 },
+                  currentPeriodEvents: { $push: "$$ROOT" }
+                }
+              },
+              {
+                $project: {
+                  _id: 0,
+                  currentPeriodCount: 1,
+                  currentPeriodEvents: 1
+                }
+              }
+            ],
+            previousPeriod: [
+              // Période précédente
+              {
+                $match: {
+                  siteId: id,
+                  tagId: tagId,
+                  createdAt: {
+                    $gte: previousPeriodStart,
+                    $lte: previousPeriodEnd
+                  }
+                }
+              },
+              {
+                $group: {
+                  _id: null,
+                  previousPeriodCount: { $sum: 1 }
+                }
+              },
+              {
+                $project: {
+                  _id: 0,
+                  previousPeriodCount: 1
+                }
+              }
+            ]
+          }
+        },
+        {
+          $project: {
+            currentPeriod: { $arrayElemAt: ["$currentPeriod", 0] },
+            previousPeriod: { $arrayElemAt: ["$previousPeriod", 0] }
+          }
+        }
+      ]
     }
   }
 }

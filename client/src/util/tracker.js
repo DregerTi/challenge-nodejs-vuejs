@@ -1,4 +1,15 @@
 export default {
+    getViewerKey() {
+        const key = localStorage.getItem('viewerKey')
+        if (key !== null) {
+            return JSON.parse(key)
+        }
+        const viewerKey =
+            Math.random().toString(36).substring(2, 15) +
+            Math.random().toString(36).substring(2, 15)
+        localStorage.setItem('viewerKey', JSON.stringify(viewerKey))
+        return viewerKey
+    },
     getUserOs() {
         const userAgent = window.navigator.userAgent
         const platform = window.navigator.platform
@@ -14,7 +25,7 @@ export default {
             os = 'Windows'
         } else if (/Android/.test(userAgent)) {
             os = 'Android'
-        } else if ( /Linux/.test(platform)) {
+        } else if (/Linux/.test(platform)) {
             os = 'Linux'
         }
         return os
@@ -33,17 +44,7 @@ export default {
         }
         return 'desktop'
     },
-    getViewerKey() {
-        const key = localStorage.getItem('viewerKey')
-        if (key !== null) {
-            return JSON.parse(key)
-        }
-        const viewerKey =
-            Math.random().toString(36).substring(2, 15) +
-            Math.random().toString(36).substring(2, 15)
-        localStorage.setItem('viewerKey', JSON.stringify(viewerKey))
-        return viewerKey
-    },
+
     install(Vue, option) {
         if (!option.APP_ID) {
             throw new Error('APP_ID is required')
@@ -56,16 +57,62 @@ export default {
 
         Vue.directive('track', {
             mounted(el, binding) {
+                const viewerKey = () => {
+                    const key = localStorage.getItem('viewerKey')
+                    if (key !== null) {
+                        return JSON.parse(key)
+                    }
+                    const viewerKey =
+                      Math.random().toString(36).substring(2, 15) +
+                      Math.random().toString(36).substring(2, 15)
+                    localStorage.setItem('viewerKey', JSON.stringify(viewerKey))
+                    return viewerKey
+                };
+                const device = () => {
+                    const ua = navigator.userAgent
+                    if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+                        return 'tablet'
+                    }
+                    if (
+                      /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
+                        ua
+                      )
+                    ) {
+                        return 'mobile'
+                    }
+                    return 'desktop'
+                };
+                const system = () => {
+                    const userAgent = window.navigator.userAgent
+                    const platform = window.navigator.platform
+                    const macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K']
+                    const windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE']
+                    const iosPlatforms = ['iPhone', 'iPad', 'iPod']
+                    let os = null
+                    if (macosPlatforms.indexOf(platform) !== -1) {
+                        os = 'Mac OS'
+                    } else if (iosPlatforms.indexOf(platform) !== -1) {
+                        os = 'iOS'
+                    } else if (windowsPlatforms.indexOf(platform) !== -1) {
+                        os = 'Windows'
+                    } else if (/Android/.test(userAgent)) {
+                        os = 'Android'
+                    } else if (/Linux/.test(platform)) {
+                        os = 'Linux'
+                    }
+                    return os
+                };
+
                 eventListeners[binding.arg] = () => {
                     sendEvent({
                         ...configData,
-                        viewerKey: this.getViewerKey(),
-                        device: this.getDeviceType(),
-                        system: this.getUserOs(),
+                        viewerKey: viewerKey(),
+                        device: device(),
+                        system: system(),
                         user_agent: navigator.userAgent,
                         path: window.location.href,
                         type: 'tag',
-                        tagKey: binding.arg
+                        tagKey: binding.value
                     })
                 }
                 el.addEventListener('click', eventListeners[binding.arg])
@@ -92,18 +139,18 @@ export default {
         })
 
         const handleClick = (event) => {
-            const { clientX, clientY } = event
-            sendEvent({
-                ...configData,
-                viewerKey: this.getViewerKey(),
-                device: this.getDeviceType(),
-                system: this.getUserOs(),
-                user_agent: navigator.userAgent,
-                path: window.location.href,
-                type: 'click',
-                coordinates: { x: clientX, y: clientY }
-            })
-        }
+        const { clientX, clientY } = event
+        sendEvent({
+            ...configData,
+            viewerKey: this.getViewerKey(),
+            device: this.getDeviceType(),
+            system: this.getUserOs(),
+            user_agent: navigator.userAgent,
+            path: window.location.href,
+            type: 'click',
+            coordinates: { x: clientX, y: clientY }
+        })
+    }
 
         const sendPageLoadEvent = () => {
             sendEvent({

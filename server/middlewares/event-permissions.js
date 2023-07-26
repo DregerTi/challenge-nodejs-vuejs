@@ -1,5 +1,6 @@
 const ForbiddenError = require("../errors/ForbiddenError");
 const SiteService = require("../services/site");
+const TagService = require("../services/tag");
 const UnauthorizedError = require("../errors/UnauthorizedError");
 require('dotenv').config();
 
@@ -26,6 +27,12 @@ module.exports = {
       return next(new UnauthorizedError());
     }
     next();
+  },
+  canAccessTag: async function(req, res, next) {
+
+    const tagService = new TagService();
+    const tag = await tagService.findOne({ id: req.params.tagId });
+    return parseInt(tag?.siteId, 10) === parseInt(req.params.id, 10) ? next() : next(new ForbiddenError());
   }
 
 };

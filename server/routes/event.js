@@ -47,13 +47,21 @@ const routesList = [
     middlewares: [checkAuth.requireAuthentication, sitePermission.canAccessSite(["ADMIN", "USER"])]
   },
   {
+    path: "/:id/tag/:tagId", method: "get", action: "getOneTag",
+    middlewares: [
+      checkAuth.requireAuthentication,
+      sitePermission.canAccessSite(["ADMIN", "USER"]),
+      eventPermission.canAccessTag
+    ]
+  },
+  {
     path: "/", method: "post", action: "create",
     middlewares: [eventPermission.canAccessEvent]
   }
 ];
 
 const eventController =
-  new controller(new EventService(), new TagService(), new SessionService(), new ViewerService(), new UntrackPathService(),{});
+  new controller(new EventService(), new TagService(), new SessionService(), new ViewerService(), new UntrackPathService(), {});
 
 module.exports = new specificRouter(
   eventController,
