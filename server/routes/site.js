@@ -124,6 +124,18 @@ const routesList = [
         path: "/:id/untrack-paths/", method: "get", action: "getUntrackPaths",
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
     },
+    {
+        path: "/:id/dashboard-items", method: "get", action: "getDashboardItems",
+        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN', 'USER'])]
+    },
+    {
+        path: "/:id/dashboard-items", method: "post", action: "addDashboardItem",
+        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
+    },
+    {
+        path: "/:id/dashboard-items", method: "delete", action: "removeDashboardItem",
+        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
+    }
 
 ]
 

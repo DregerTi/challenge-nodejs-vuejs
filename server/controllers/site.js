@@ -7,6 +7,7 @@ const ConversionTunnelService = require("../services/conversionTunnel");
 const tokenGenerator = require("../utils/token-generator");
 const ConversionTunnelTagService = require("../services/conversionTunnelTags");
 const UntrackPathService = require("../services/untrackPath");
+const DashboardItemService = require("../services/dashboardItem");
 
 const service = new SiteService();
 const userSiteService = new SiteUserService();
@@ -16,6 +17,7 @@ const tagService = new TagService();
 const conversionTunnelService = new ConversionTunnelService();
 const conversionTunnelTagService = new ConversionTunnelTagService();
 const untrackPathService = new UntrackPathService();
+const dashboardItemService = new DashboardItemService();
 
 controller.create = async function create(req, res, next) {
   const { body } = req;
@@ -406,6 +408,36 @@ controller.getOneUntrackPath = async function(req, res, next) {
       siteId: parseInt(id, 10)
     });
     if (untrackPath) res.json(untrackPath);
+    else res.sendStatus(404);
+  } catch (err) {
+    next(err);
+  }
+}
+
+// Dashboard Items
+
+controller.getDashboardItems = async function(req, res, next) {
+  try {
+    const dashboardItems = await dashboardItemService.findAll({siteId: parseInt(req.params.id, 10)});
+    res.json(dashboardItems);
+  } catch (err) {
+    next(err);
+  }
+}
+controller.addDashboardItem = async function(req, res, next) {
+  const { kpi, tagId, conversionTunnelId } = req.body;
+  try {
+    const dashboardItem = await dashboardItemService.addByKpi(kpi, parseInt(req.params.id, 10), tagId, conversionTunnelId);
+    res.status(201).json(dashboardItem);
+  } catch (err) {
+    next(err);
+  }
+}
+controller.removeDashboardItem = async function(req, res, next) {
+  const { kpi } = req.body;
+  try {
+    const result = await dashboardItemService.removeByKpi(kpi, parseInt(req.params.id, 10));
+    if (result) res.sendStatus(204);
     else res.sendStatus(404);
   } catch (err) {
     next(err);
