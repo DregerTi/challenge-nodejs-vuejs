@@ -1,9 +1,16 @@
 <script setup>
 import PinCard from '@/components/molecules/PinCard.vue'
 import Card from '@/components/molecules/Card.vue'
-import { defineProps, defineEmits, onBeforeMount, computed, watch, ref } from "vue";
+import { defineProps, defineEmits, onBeforeMount, computed, ref } from 'vue'
 import RoundedButton from '@/components/atoms/RoundedButton.vue'
 import { useStore } from 'vuex'
+import SessionWidget from '@/components/organisms/SessionWidget.vue'
+import PageViewWidget from '@/components/organisms/PageViewsWidget.vue'
+import TotalUsersWidget from '@/components/organisms/TotalUsersWidget.vue'
+import ActiveUsersWidget from '@/components/organisms/ActiveUsersWidget.vue'
+import NewUsersWidget from '@/components/organisms/NewUsersWidget.vue'
+import TagWidget from '@/components/organisms/TagWidget.vue'
+import ConversionTunnelWidget from '@/components/organisms/ConversionTunnelWidget.vue'
 
 const { dashboardEditMode } = defineProps({
     dashboardEditMode: {
@@ -15,18 +22,17 @@ const { dashboardEditMode } = defineProps({
 const count = ref(0)
 
 function addComponent() {
-  count.value += 1;
+    count.value += 1
 }
+
 function deleteItemMethod(id) {
-  console.log('test', id);
-  store.dispatch('deleteDashboardItem', id);
-  store.dispatch('getDashboardItems');
+    store.dispatch('deleteDashboardItem', id)
+    store.dispatch('getDashboardItems')
 }
 
 const emit = defineEmits(['update:setDateButton', 'update:dashboardEditButton'])
 emit('update:setDateButton', true)
 emit('update:dashboardEditButton', true)
-
 
 const store = useStore()
 const activeUsers = computed(() => store.state.eventStore.activeUsers)
@@ -34,16 +40,16 @@ const possibleKpis = computed(() => store.state.dashboardItemStore.possibleKpis)
 const dashboardItems = computed(() => store.state.dashboardItemStore.dashboardItems)
 
 function updateItem(value, item) {
-  item.kpi = value;
-  item.name = value;
-  if (item.id) {
-    store.dispatch('updateDashboardItem', item);
-
-  } else {
-    store.dispatch('createDashboardItem', item);
-    count.value = 0;
-  }
+    item.kpi = value
+    item.name = value
+    if (item.id) {
+        store.dispatch('updateDashboardItem', item)
+    } else {
+        store.dispatch('createDashboardItem', item)
+        count.value = 0
+    }
 }
+
 onBeforeMount(() => {
     store.dispatch('getActiveUsers')
     store.dispatch('getPossibleKpis')
@@ -84,31 +90,38 @@ onBeforeMount(() => {
             <Card
                 v-for="item in dashboardItems"
                 :key="item.id"
-                @update:model-value="value => updateItem(value, item)"
+                @update:model-value="(value) => updateItem(value, item)"
                 :select-values="possibleKpis"
                 :title="item.name"
                 :editMode="dashboardEditMode"
                 @click:edit-button="deleteItemMethod(item.id)"
                 path="/"
+            >
+                <SessionWidget v-if="item.name === 'Sessions'" />
+                <PageViewWidget v-if="item.name === 'Page Views'" />
+                <TotalUsersWidget v-if="item.name === 'Total Users'" />
+                <ActiveUsersWidget v-if="item.name === 'Active Users'" />
+                <NewUsersWidget v-if="item.name === 'New Users'" />
+                <TagWidget v-if="item.name.startsWith('Tag ')" />
+                <ConversionTunnelWidget v-if="item.name.startsWith('Conversion Tunnel ')" />
+            </Card>
+            <Card
+                v-for="component in count"
+                :key="component"
+                @update:model-value="(value) => updateItem(value, {})"
+                :select-values="possibleKpis"
+                title="Page View"
+                :editMode="dashboardEditMode"
+                path="/"
             />
-          <Card
-            v-for="component in count"
-            :key="component"
-            @update:model-value="value => updateItem(value, {})"
-            :select-values="possibleKpis"
-            title="Page View"
-            :editMode="dashboardEditMode"
-            path="/"
-          />
 
-
-          <RoundedButton
-            v-if="dashboardEditMode"
-            icon="Close"
-            variant="primary"
-            size="md"
-            @click="addComponent"
-          />
+            <RoundedButton
+                v-if="dashboardEditMode"
+                icon="Close"
+                variant="primary"
+                size="md"
+                @click="addComponent"
+            />
         </div>
     </div>
 </template>

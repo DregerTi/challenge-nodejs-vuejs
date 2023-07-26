@@ -1,5 +1,6 @@
 import * as dashboardItemService from '@/services/dashboardItemService'
 import { getTags } from '@/services/tagService'
+import { getConversionTunnels } from '@/services/conversionTunnelService'
 
 
 const state = {
@@ -88,7 +89,16 @@ const actions = {
             name: `Tag ${tag.name}`,
         }
       });
-      commit('setPossibleKpis', [...kpis, ...tagKpis]);
+      const conversionTunnels = await getConversionTunnels();
+      const conversionTunnelKpis = conversionTunnels.map(conversionTunnel => {
+        return {
+          id: `conversionTunnel,${conversionTunnel.id}`,
+          name: `Conversion Tunnel ${conversionTunnel.name}`,
+        }
+      });
+
+
+      commit('setPossibleKpis', [...kpis, ...conversionTunnelKpis, ...tagKpis]);
     } catch (error) {
       commit('setDashboardItemsErrors', error)
     }

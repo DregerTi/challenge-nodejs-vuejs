@@ -435,7 +435,6 @@ controller.getDashboardItems = async function(req, res, next) {
 controller.addDashboardItem = async function(req, res, next) {
   const { kpi, tagId, conversionTunnelId, name } = req.body;
   try {
-    console.log('naejzaeijazeza', name);
     const newKpi = await dashboardUtil().formateKpi(kpi);
     const dashboardItem = await dashboardItemService.addByKpi(newKpi, parseInt(req.params.id, 10), tagId, conversionTunnelId, name);
     res.status(201).json(dashboardItem);
