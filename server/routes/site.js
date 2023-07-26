@@ -38,7 +38,11 @@ const routesList = [
     },
     {
         path: "/:id/users", method: "get", action: "getUsers",
-        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['USER', 'ADMIN'])]
+        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
+    },
+    {
+        path: "/:id/users/:id", method: "get", action: "getOneUser",
+        middlewares: [checkAuth.requireAuthentication]
     },
     {
         path: "/:id/users/:email", method: "patch", action: "updateUserRoleForSite",

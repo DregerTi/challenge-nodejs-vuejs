@@ -92,14 +92,20 @@ controller.getUsers = async function getUsers(req, res, next) {
     next(err);
   }
 };
+controller.getOneUser = async function getOneUser(req, res, next) {
+  const { id } = req.params;
+  try {
+    const user = await userService.findOne({ id });
+    if (user) res.json(user);
+    else res.sendStatus(404);
+  } catch (err) {
+    next(err);
+  }
+};
 controller.updateUserRoleForSite = async function updateUserRoleForSite(req, res, next) {
   const { id, email } = req.params;
   const { role } = req.body;
   try {
-    if (!["ADMIN", "USER"].includes(role)) {
-      res.sendStatus(400);
-      return;
-    }
     const user = await userService.findOne({ email });
     if (!user) {
       res.sendStatus(404);
