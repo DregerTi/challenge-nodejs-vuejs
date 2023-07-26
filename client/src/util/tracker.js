@@ -139,7 +139,19 @@ export default {
         })
 
         const handleClick = (event) => {
-            const { clientX, clientY } = event
+            let { clientX, clientY } = event
+            const width = window.innerWidth
+            let size = 'other'
+            if (width < 700) {
+                size = 'sm'
+                clientX = ((clientX / 100) * 600).toFixed(0)
+            } else if (width < 868) {
+                size = 'md'
+                clientX = ((clientX / 100) * 768).toFixed(0)
+            } else {
+                clientX = ((clientX / 100) * 992).toFixed(0)
+                size = 'lg'
+            }
             sendEvent({
                 ...configData,
                 viewerKey: this.getViewerKey(),
@@ -148,7 +160,7 @@ export default {
                 user_agent: navigator.userAgent,
                 path: window.location.href,
                 type: 'click',
-                viewPort: { width: window.innerWidth, height: window.innerHeight },
+                viewPort: size,
                 coordinates: { x: clientX, y: clientY }
             })
         }

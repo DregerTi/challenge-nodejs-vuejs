@@ -21,14 +21,11 @@ const heatmapCanvas = ref(null)
 const canvasWidth = ref(0)
 const canvasHeight = ref(0)
 
-// Fonction pour mettre à l'échelle les coordonnées en fonction de la taille du canvas
 function scaleCoordinates(data) {
     const scaledData = data.map((point) => {
-        // Mise à l'échelle des coordonnées x et y en fonction de la taille du canvas
         const scaledX = ((point.x / 100) * canvasWidth.value).toFixed(0)
         const scaledY = ((point.y / 100) * canvasHeight.value).toFixed(0)
 
-        // Vérification pour s'assurer que les coordonnées ne dépassent pas les limites valides du canvas
         const x = Math.max(0, Math.min(scaledX, canvasWidth.value))
         const y = Math.max(0, Math.min(scaledY, canvasHeight.value))
 
@@ -43,7 +40,6 @@ function scaleCoordinates(data) {
 }
 
 onMounted(() => {
-    // Obtenez la largeur et la hauteur du canvas après le rendu
     canvasWidth.value = heatmapCanvas.value.offsetWidth
     canvasHeight.value = heatmapCanvas.value.offsetHeight
 
@@ -105,6 +101,6 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .heatmap-canvas {
-    width: 100%; /* Ajustez la largeur selon vos besoins */
+    width: 100%;
 }
 </style>
