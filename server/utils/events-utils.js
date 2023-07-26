@@ -262,6 +262,400 @@ module.exports = function eventUtil() {
           }
         }
       ]
+    },
+    getViewPerPageAggregate(id, start, end, previousPeriodStart, previousPeriodEnd) {
+      return [
+        {
+          $facet: {
+            topFive: [
+              {
+                $match: {
+                  type: "view",
+                  siteId: id,
+                  createdAt: { $gte: start, $lte: end }
+                }
+              },
+              {
+                $group: {
+                  _id: "$path",
+                  count: { $sum: 1 }
+                }
+              },
+
+              {
+                $sort: { count: -1 }
+              },
+              {
+                $limit: 5
+              },
+              {
+                $lookup: {
+                  from: "events",
+                  localField: "_id",
+                  foreignField: "path",
+                  as: "events"
+                }
+              },
+              {
+                $project: {
+                  _id: 1,
+                  count: 1,
+                  events: 1
+                }
+              }
+            ],
+            currentPeriod: [
+              {
+                $match: {
+                  type: "view",
+                  siteId: id,
+                  createdAt: { $gte: start, $lte: end }
+                }
+              },
+              {
+                $group: {
+                  _id: "$path",
+                  count: { $sum: 1 }
+                }
+              },
+
+              {
+                $sort: { count: -1 }
+              }
+            ],
+            previousPeriod: [
+              {
+                $match: {
+                  type: "view",
+                  siteId: id,
+                  createdAt: { $gte: previousPeriodStart, $lte: previousPeriodEnd }
+                }
+              },
+              {
+                $group: {
+                  _id: "$path",
+                  count: { $sum: 1 }
+                }
+              },
+              {
+                $sort: { count: -1 }
+              }
+            ]
+          }
+        },
+        {
+          $project: {
+            topFive: 1,
+            currentPeriod: 1,
+            previousPeriod: 1
+          }
+        }
+      ]
+    },
+    getAvgTimeBySessionAggregate(id, start, end, previousPeriodStart, previousPeriodEnd) {
+      return [
+        {
+          $facet: {
+            avgTimeCurrentPeriod: [
+              {
+                $match: {
+                  siteId: id,
+                  createdAt: { $gte: start, $lte: end }
+                }
+              },
+              {
+                $group: {
+                  _id: "$sessionId",
+                  firstCreatedAt: { $min: "$createdAt" },
+                  lastCreatedAt: { $max: "$createdAt" }
+                }
+              },
+              {
+                $project: {
+                  _id: 0,
+                  sessionId: "$_id",
+                  duration: { $subtract: ["$lastCreatedAt", "$firstCreatedAt"] }
+                }
+              },
+              {
+                $group: {
+                  _id: null,
+                  totalDuration: { $sum: "$duration" },
+                  totalSessions: { $sum: 1 }
+                }
+              },
+              {
+                $project: {
+                  _id: 0,
+                  averageDuration: { $divide: ["$totalDuration", "$totalSessions"] },
+                  count: "$totalSessions"
+                }
+              }
+            ],
+            avgTimePreviousPeriod: [
+              {
+                $match: {
+                  siteId: id,
+                  createdAt: { $gte: previousPeriodStart, $lte: previousPeriodEnd }
+                }
+              },
+              {
+                $group: {
+                  _id: "$sessionId",
+                  firstCreatedAt: { $min: "$createdAt" },
+                  lastCreatedAt: { $max: "$createdAt" }
+                }
+              },
+              {
+                $project: {
+                  _id: 0,
+                  sessionId: "$_id",
+                  duration: { $subtract: ["$lastCreatedAt", "$firstCreatedAt"] }
+                }
+              },
+              {
+                $group: {
+                  _id: null,
+                  totalDuration: { $sum: "$duration" },
+                  totalSessions: { $sum: 1 }
+                }
+              },
+              {
+                $project: {
+                  _id: 0,
+                  averageDuration: { $divide: ["$totalDuration", "$totalSessions"] }
+                }
+              }
+            ],
+            dailyAvgTime: [
+              {
+                $match: {
+                  siteId: id,
+                  createdAt: { $gte: start, $lte: end }
+                }
+              },
+              {
+                $group: {
+                  _id: "$sessionId",
+                  firstCreatedAt: { $min: "$createdAt" },
+                  lastCreatedAt: { $max: "$createdAt" }
+                }
+              },
+              {
+                $project: {
+                  _id: 0,
+                  sessionId: "$_id",
+                  duration: { $subtract: ["$lastCreatedAt", "$firstCreatedAt"] }
+                }
+              },
+              {
+                $group: {
+                  _id: null,
+                  totalDuration: { $sum: "$duration" },
+                  totalSessions: { $sum: 1 }
+                }
+              },
+              {
+                $project: {
+                  _id: 0,
+                  averageDuration: { $divide: ["$totalDuration", "$totalSessions"] },
+                  count: "$totalSessions"
+                }
+              },
+              {
+                $sort: { date: 1 }
+              },
+            ]
+          }
+        }
+      ];
+    },
+    getTotalUsersAggregate(id, start, end, previousPeriodStart, previousPeriodEnd) {
+      return [
+        {
+          $facet: {
+            totalUsersCurrentPeriod: [
+              {
+                $match: {
+                  createdAt: { $gte: start, $lte: end }
+                }
+              },
+              {
+                $group: {
+                  _id: "$viewerId"
+                }
+              },
+              {
+                $group: {
+                  _id: null,
+                  totalUsersCurrentPeriod: { $sum: 1 }
+                }
+              },
+              {
+                $project: {
+                  _id: 0,
+                  totalUsersCurrentPeriod: 1
+                }
+              }
+            ],
+            totalUsersPreviousPeriod: [
+              {
+                $match: {
+                  createdAt: { $gte: previousPeriodStart, $lte: previousPeriodEnd }
+                }
+              },
+              {
+                $group: {
+                  _id: "$viewerId"
+                }
+              },
+              {
+                $group: {
+                  _id: null,
+                  totalUsersPreviousPeriod: { $sum: 1 }
+                }
+              },
+              {
+                $project: {
+                  _id: 0,
+                  totalUsersPreviousPeriod: 1
+                }
+              }
+            ],
+            dailyUsers: [
+              {
+                $match: {
+                  createdAt: { $gte: start, $lte: end }
+                }
+              },
+              {
+                $group: {
+                  _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                  users: { $addToSet: "$viewerId" }
+                }
+              },
+              {
+                $project: {
+                  date: "$_id",
+                  _id: 0,
+                  usersCount: { $size: "$users" }
+                }
+              },
+              {
+                $sort: { date: 1 }
+              }
+            ]
+          }
+        },
+        {
+          $project: {
+            totalUsersCurrentPeriod: { $arrayElemAt: ["$totalUsersCurrentPeriod.totalUsersCurrentPeriod", 0] },
+            totalUsersPreviousPeriod: { $arrayElemAt: ["$totalUsersPreviousPeriod.totalUsersPreviousPeriod", 0] },
+            dailyUsers: 1
+          }
+        }
+      ]
+    },
+    getNewUsersAggregate(id, start, end, previousPeriodStart, previousPeriodEnd) {
+      return [
+        {
+          $facet: {
+            totalNewUsersCurrentPeriod: [
+              {
+                $match: {
+                  siteId: id,
+                  createdAt: { $gte: start, $lte: end }
+                }
+              },
+              {
+                $group: {
+                  _id: "$viewerId",
+                  firstEventDate: { $min: "$createdAt" }
+                }
+              },
+              {
+                $match: {
+                  firstEventDate: { $gte: start }
+                }
+              },
+              {
+                $group: {
+                  _id: null,
+                  totalNewUsersCurrentPeriod: { $sum: 1 }
+                }
+              },
+              {
+                $project: {
+                  _id: 0,
+                  totalNewUsersCurrentPeriod: 1
+                }
+              }
+            ],
+            totalNewUsersPreviousPeriod: [
+              {
+                $match: {
+                  siteId: id,
+                  createdAt: { $gte: previousPeriodStart, $lte: previousPeriodEnd }
+                }
+              },
+              {
+                $group: {
+                  _id: "$viewerId",
+                  firstEventDate: { $min: "$createdAt" }
+                }
+              },
+              {
+                $match: {
+                  firstEventDate: { $gte: previousPeriodStart }
+                }
+              },
+              {
+                $group: {
+                  _id: null,
+                  totalNewUsersPreviousPeriod: { $sum: 1 }
+                }
+              },
+              {
+                $project: {
+                  _id: 0,
+                  totalNewUsersPreviousPeriod: 1
+                }
+              }
+            ],
+            dailyNewUsers: [
+              {
+                $match: {
+                  siteId: id,
+                  createdAt: { $gte: start, $lte: end }
+                }
+              },
+              {
+                $group: {
+                  _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                  newUsers: { $addToSet: "$viewerId" }
+                }
+              },
+              {
+                $project: {
+                  date: "$_id",
+                  _id: 0,
+                  newUsersCount: { $size: "$newUsers" }
+                }
+              },
+              {
+                $sort: { date: 1 }
+              }
+            ]
+          }
+        },
+        {
+          $project: {
+            totalNewUsersCurrentPeriod: { $arrayElemAt: ["$totalNewUsersCurrentPeriod.totalNewUsersCurrentPeriod", 0] },
+            totalNewUsersPreviousPeriod: { $arrayElemAt: ["$totalNewUsersPreviousPeriod.totalNewUsersPreviousPeriod", 0] },
+            dailyNewUsers: 1
+          }
+        }
+      ];
     }
   }
 }
