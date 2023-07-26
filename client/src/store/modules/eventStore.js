@@ -78,11 +78,7 @@ const actions = {
             })
 
             const listener = function (event) {
-                if (event.type === 'error') {
-                    this.close()
-                    return
-                }
-
+                
                 let eventBrute = JSON.parse(event.data)
                 const { totalSessionsCurrent, totalSessionsPrevious } = eventBrute
                 const trend = totalSessionsCurrent > totalSessionsPrevious ? 'up' : 'down'
