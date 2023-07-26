@@ -1,5 +1,5 @@
 <script setup>
-import { computed, defineEmits, onBeforeMount, onMounted, onUnmounted, ref } from 'vue'
+import { computed, defineEmits, onMounted, onUnmounted, watch } from "vue";
 import EventStat from '@/components/templates/EventStat.vue'
 import { useStore } from 'vuex'
 import { Bar } from 'vue-chartjs'
@@ -13,6 +13,7 @@ import {
     LinearScale
 } from 'chart.js'
 import PinCard from '@/components/molecules/PinCard.vue'
+
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
 const emit = defineEmits(['update:setDateButton', 'update:dashboardEditButton'])
@@ -22,21 +23,18 @@ emit('update:dashboardEditButton', false)
 const store = useStore()
 const sessions = computed(() => store.state.eventStore.sessions)
 const sessionsBrute = computed(() => store.state.eventStore.sessionsBrute)
+const rangeDate = computed(() => store.state.eventStore.rangeDate)
 
 onMounted(() => {
     store.dispatch('getSessions')
 })
+watch(rangeDate,  () => {
+  store.dispatch('closeEventSourceSession')
+  store.dispatch('getSessions')
+})
 
-onMounted(() => {
-    setTimeout(() => {
-        const inputElement = document.getElementsByClassName('date-picoeur')[0]
-        if (inputElement) {
-            inputElement[0].addEventListener('change', () => {
-                console.log('change')
-                store.dispatch('getSessions')
-            })
-        }
-    }, 8)
+onUnmounted(() => {
+    store.dispatch('closeEventSourceSession')
 })
 </script>
 
@@ -60,9 +58,11 @@ onMounted(() => {
     width: 100%;
     display: flex;
     gap: 4rem;
+
     > div {
         width: 70%;
     }
+
     & > .pin-container {
         width: 30%;
     }

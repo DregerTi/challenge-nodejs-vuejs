@@ -10,8 +10,8 @@ const store = useStore()
 const rangeDate = computed(() => store.state.eventStore.rangeDate)
 
 const dateValue = {
-    startDate: dayjs().add(-29, 'day').format('YYYY-MM-DD'),
-    endDate: dayjs().format('YYYY-MM-DD')
+    startDate: rangeDate.value.startDate ?? dayjs().add(-29, 'day').format('YYYY-MM-DD'),
+    endDate: rangeDate.value.endDate ?? dayjs().format('YYYY-MM-DD')
 }
 
 const formatter = {

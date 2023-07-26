@@ -1,5 +1,8 @@
 <script setup>
 import { RouterView } from 'vue-router'
+document.addEventListener('locationchange', () => {
+  console.log('badzbdaz');
+});
 </script>
 
 <template>

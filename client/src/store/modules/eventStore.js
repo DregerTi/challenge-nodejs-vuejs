@@ -43,8 +43,24 @@ const getters = {
     activeUsers: (state) => state.activeUsers
 }
 
+let eventSourceSession = null
+let eventSourceDevice = null
+let eventSourceCountry = null
+
 const actions = {
     async getViewPerPages({ commit }) {},
+    async closeEventSourceSession() {
+        await eventSourceSession.close()
+        eventSourceSession = null
+    },
+    async closeEventSourceDevice() {
+        await eventSourceDevice.close()
+        eventSourceDevice = null
+    },
+    async closeEventSourceCountry() {
+        await eventSourceCountry.close()
+        eventSourceCountry = null
+    },
     async getSessions({ commit }) {
         try {
             const url = new URL(
@@ -55,7 +71,7 @@ const actions = {
                 url.searchParams.append(key, state.rangeDate[key])
             )
 
-            const eventSourceSession = new EventSourcePolyfill(url, {
+            eventSourceSession = new EventSourcePolyfill(url, {
                 headers: {
                     Authorization: `Bearer ${await tokenStorage.getToken()}`
                 }
@@ -105,9 +121,11 @@ const actions = {
 
                 commit('setSessions', chartData)
             }
+
             //eventSourceSession.addEventListener('open', listener)
             eventSourceSession.addEventListener('message', listener)
             eventSourceSession.addEventListener('error', listener)
+
         } catch (error) {}
     },
     async getSessionsDuration({ commit }) {
@@ -170,7 +188,7 @@ const actions = {
                 url.searchParams.append(key, state.rangeDate[key])
             )
 
-            const eventSourceDevice = new EventSourcePolyfill(url, {
+            eventSourceDevice = new EventSourcePolyfill(url, {
                 headers: {
                     Authorization: `Bearer ${await tokenStorage.getToken()}`
                 }
@@ -240,7 +258,7 @@ const actions = {
                 url.searchParams.append(key, state.rangeDate[key])
             )
 
-            const eventSourceCountry = new EventSourcePolyfill(url, {
+            eventSourceCountry = new EventSourcePolyfill(url, {
                 headers: {
                     Authorization: `Bearer ${await tokenStorage.getToken()}`
                 }

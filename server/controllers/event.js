@@ -320,7 +320,6 @@ module.exports = function Controller(EventService, TagService, SessionService, V
       const changeStream = Event.watch();
       changeStream.on("change", async () => {
         try {
-          console.log('test');
           const aggregate = eventUtils().getSessionsDataAggregate(id, start, end, previousPeriodStart, previousPeriodEnd);
           const result = (await EventService.findAllAggregate(aggregate))[0];
           if (result?.totalSessionsPrevious === undefined) {
@@ -336,7 +335,14 @@ module.exports = function Controller(EventService, TagService, SessionService, V
 
       });
 
+      req.on("error", (err) => {
+console.log('errorrrrr', err);
+        changeStream.close();
+        res.end();
+      });
+
       req.on("close", () => {
+        console.log('closeeeee');
         changeStream.close();
         res.end();
       });
