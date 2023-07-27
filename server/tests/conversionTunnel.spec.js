@@ -6,7 +6,7 @@ const clearDatabase = require("./dropDatabase");
 const generalFixtures = require("./fixtures");
 
 
-describe("Conversion tunnel API", function() {
+describe("As a user using conversion tunnel", function() {
   before(async () => {
     await clearDatabase();
     await generalFixtures();
@@ -17,7 +17,7 @@ describe("Conversion tunnel API", function() {
   });
 
 
-  it("should return 200", (done) => {
+  it("I should create a site", (done) => {
     chai.request(index)
       .post("/login")
       .send({ email: "t@toto.com", password: "test123456" })
@@ -25,6 +25,28 @@ describe("Conversion tunnel API", function() {
         chai.expect(res).to.have.status(200);
         chai.expect(res.body).to.have.property("token");
         const adminToken = res.body.token;
+
+        chai.request(index)
+          .post("/sites")
+          .auth(adminToken, { type: "bearer" })
+          .send({ name: "test site", url: "http://site.test" })
+          .end((err, res) => {
+            chai.expect(res).to.have.status(201);
+            chai.expect(res.body).to.have.property("id");
+            done();
+          });
+      });
+  });
+
+  it("I should access my sites", (done) => {
+    chai.request(index)
+      .post("/login")
+      .send({ email: "t@toto.com", password: "test123456" })
+      .end((err, res) => {
+        chai.expect(res).to.have.status(200);
+        chai.expect(res.body).to.have.property("token");
+        const adminToken = res.body.token;
+
         chai.request(index)
           .get("/sites/my-sites")
           .auth(adminToken, { type: "bearer" })
