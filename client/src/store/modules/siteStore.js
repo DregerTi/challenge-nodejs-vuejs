@@ -106,11 +106,10 @@ const actions = {
     },
     async createSite({ commit }, _site) {
         try {
-            await siteService.createSite(_site)
-            const site = await siteService.getSiteUsers()
+            const site = await siteService.createSite(_site)
             commit('setSite', site)
             commit('setSiteErrors', null)
-            await router.push({
+            router.push({
                 name: 'dashboard',
                 params: {
                     site: site.id

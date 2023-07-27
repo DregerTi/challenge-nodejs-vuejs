@@ -15,7 +15,7 @@ const state = {
     totalUser: {
         preview: {
             value: 0,
-            trend: 0
+            trend: 'down'
         },
         chartData: {
             labels: [],
@@ -100,37 +100,37 @@ let eventSourceActiveUsers = null
 
 const actions = {
     async closeEventSourceTotalUser() {
-        if(eventSourceTotalUser) {
+        if (eventSourceTotalUser) {
             await eventSourceTotalUser.close()
             eventSourceTotalUser = null
         }
     },
     async closeEventSourceNewUser() {
-        if(eventSourceNewUser) {
+        if (eventSourceNewUser) {
             await eventSourceNewUser.close()
             eventSourceNewUser = null
         }
     },
     async closeEventSourceSession() {
-        if(eventSourceSession) {
+        if (eventSourceSession) {
             await eventSourceSession.close()
             eventSourceSession = null
         }
     },
     async closeEventSourceSessionDuration() {
-        if(eventSourceSessionDuration) {
+        if (eventSourceSessionDuration) {
             await eventSourceSessionDuration.close()
             eventSourceSessionDuration = null
         }
     },
     async closeEventSourceViewPerPages() {
-        if(eventSourceViewPerPages) {
+        if (eventSourceViewPerPages) {
             await eventSourceViewPerPages.close()
             eventSourceViewPerPages = null
         }
     },
     async closeEventSourceDevice() {
-        if(eventSourceDevice) {
+        if (eventSourceDevice) {
             await eventSourceDevice.close()
             eventSourceDevice = null
         }
@@ -170,6 +170,9 @@ const actions = {
             })
 
             const listener = function (event) {
+                if (event.type === 'error') {
+                    return
+                }
                 let eventBrute = JSON.parse(event.data)
                 const { totalSessionsCurrent, totalSessionsPrevious } = eventBrute
                 const trend = totalSessionsCurrent > totalSessionsPrevious ? 'up' : 'down'
@@ -264,7 +267,6 @@ const actions = {
                     return foundDay ? parseInt(foundDay.averageDuration) : 0
                 })
 
-
                 const labels = dayList.map((date) => date.replace(/^\d{4}-/, ''))
                 const chartData = {
                     labels: labels,
@@ -278,7 +280,6 @@ const actions = {
                         }
                     ]
                 }
-
 
                 commit('setSessionsDuration', chartData)
             }
@@ -484,7 +485,6 @@ const actions = {
                     return
                 }
 
-
                 let eventBrute = JSON.parse(event.data)
                 const site = siteStore.state.site
                 const transformedData = eventBrute.currentPeriod.map((item) => {
@@ -500,37 +500,26 @@ const actions = {
                     return foundDay ? parseInt(foundDay.totalSessions) : 0
                 })
 
-
                 let datasets = []
-                const backgroundColor = [
-                    '#a8dae3',
-                    '#3a93a6',
-                    '#216b88',
-                    '#0f4e5b',
-                    '#37737e',
-                ];
-                const  borderColor = [
-                    '#a8dae3',
-                    '#3a93a6',
-                    '#216b88',
-                    '#0f4e5b',
-                    '#37737e',
-                ];
+                const backgroundColor = ['#a8dae3', '#3a93a6', '#216b88', '#0f4e5b', '#37737e']
+                const borderColor = ['#a8dae3', '#3a93a6', '#216b88', '#0f4e5b', '#37737e']
 
                 eventBrute.dailyCounts.forEach((item, index) => {
-                    const label = item.path.replace(site.url, '');
-                    let data = [];
+                    const label = item.path.replace(site.url, '')
+                    let data = []
                     dayList.map((date) => {
                         const foundDay = item.dailyCounts.find((item) => item.date === date)
                         data.push(foundDay ? parseInt(foundDay.count) : 0)
-                    });
+                    })
 
-                    datasets.push({ label, data, backgroundColor: backgroundColor[index],
+                    datasets.push({
+                        label,
+                        data,
+                        backgroundColor: backgroundColor[index],
                         borderColor: borderColor[index],
-                        borderWidth: 1 })
-
+                        borderWidth: 1
+                    })
                 })
-
 
                 const labels = dayList.map((date) => date.replace(/^\d{4}-/, ''))
                 const chartData = {
@@ -633,7 +622,8 @@ const actions = {
                 if (totalNewUsersPreviousPeriod === undefined) {
                     totalNewUsersPreviousPeriod = 0
                 }
-                const trend = totalNewUsersCurrentPeriod > totalNewUsersPreviousPeriod  ? 'up' : 'down'
+                const trend =
+                    totalNewUsersCurrentPeriod > totalNewUsersPreviousPeriod ? 'up' : 'down'
                 const description = trend === 'up' ? `more than last time` : `less than last time`
                 const preview = {
                     trend: trend,
@@ -690,7 +680,6 @@ const actions = {
                     this.close()
                     return
                 }
-
 
                 commit('setActiveUsers', JSON.parse(event.data)[0])
             }

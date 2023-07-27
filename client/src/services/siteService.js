@@ -72,10 +72,12 @@ export const getUserSites = async function getUserSites() {
     }
 }
 
-export const getSiteUsers = async function getSiteUsers() {
+export const getSiteUsers = async function getSiteUsers(id = null) {
     try {
         const response = await requester(
-            ROUTES.SITE_USERS(router.currentRoute.value.params.site),
+            ROUTES.SITE_USERS(
+                router.currentRoute.value.params.site ? router.currentRoute.value.params.site : id
+            ),
             'GET',
             {},
             true

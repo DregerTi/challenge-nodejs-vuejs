@@ -5,10 +5,7 @@ import IconClose from '@/components/icons/IconClose.vue'
 
 const { icon } = defineProps({
     icon: {
-        type: String,
-        validator: (value) => {
-            return ['ArrowUpward'].includes(value)
-        }
+        type: String
     }
 })
 </script>

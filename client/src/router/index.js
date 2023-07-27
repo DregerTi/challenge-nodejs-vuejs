@@ -16,26 +16,17 @@ const router = createRouter({
         {
             path: '/invitation/:id',
             name: 'Website-users-invitation-show',
-            component: () =>
-                import(
-                    '../views/setting/websiteUser/WebsiteUserInvitationView.vue'
-                )
+            component: () => import('../views/setting/websiteUser/WebsiteUserInvitationView.vue')
         },
         {
             path: '/invitation/success',
             name: 'Website-users-invitation-success',
-            component: () =>
-                import(
-                    '../views/setting/websiteUser/WebsiteUserSuccessView.vue'
-                )
+            component: () => import('../views/setting/websiteUser/WebsiteUserSuccessView.vue')
         },
         {
             path: '/invitation/error',
             name: 'Website-users-invitation-error',
-            component: () =>
-                import(
-                    '../views/setting/websiteUser/WebsiteUserErrorView.vue'
-                )
+            component: () => import('../views/setting/websiteUser/WebsiteUserErrorView.vue')
         },
         {
             path: '/auth/',
@@ -80,7 +71,7 @@ const router = createRouter({
             component: () => import('../components/templates/AnalyticsLayout.vue'),
             children: [
                 {
-                    path: ':site?/dashboard',
+                    path: ':site/dashboard',
                     name: 'dashboard',
                     component: () => import('../views/DashboardView.vue')
                 },
@@ -326,7 +317,7 @@ const router = createRouter({
                                         import(
                                             '../views/setting/websiteUser/WebsiteUserCreateView.vue'
                                         )
-                                },
+                                }
                             ]
                         },
                         {

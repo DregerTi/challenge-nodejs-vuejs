@@ -19,41 +19,6 @@ emit('update:mdMenuExplore', false)
 emit('update:descriptionHidden', true)
 emit('update:screenShotBtn', false)
 
-let items = [
-    {
-        name: 'Heatmap 1',
-        id: '3255'
-    },
-    {
-        name: 'Heatmap 2',
-        id: '32898'
-    },
-    {
-        name: 'Heatmap 3',
-        id: '322'
-    },
-    {
-        name: 'Heatmap 4',
-        id: '32'
-    },
-    {
-        name: 'Heatmap 5',
-        id: '3002'
-    },
-    {
-        name: 'Heatmap 6',
-        id: '3'
-    },
-    {
-        name: 'Heatmap 7',
-        id: '2'
-    },
-    {
-        name: 'Heatmap 8',
-        value: '1'
-    }
-]
-
 const store = useStore()
 const heatmapPaths = computed(() => store.state.eventStore.heatmapPaths)
 const rangeDate = computed(() => store.state.eventStore.rangeDate)

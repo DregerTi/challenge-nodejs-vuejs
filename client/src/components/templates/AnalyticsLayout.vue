@@ -25,16 +25,11 @@ const dateValue = {
 }
 const site = computed(() => store.state.siteStore.site)
 const sites = computed(() => store.state.siteStore.sites)
-const siteName = ref(null)
 
 onBeforeMount(async () => {
-    siteName.value = 'Choose site'
     await store.dispatch('getSites')
     if (router.currentRoute.value.params.site) {
         await store.dispatch('getSite', router.currentRoute.value.params.site)
-        if (site.name != null) {
-            siteName.value = site.name
-        }
     }
     store.commit('setRangeDate', dateValue)
 })
@@ -46,7 +41,7 @@ onBeforeMount(async () => {
         <div>
             <div class="container">
                 <header v-if="sites">
-                    <Listbox variant="lg" :values="sites" :selected="siteName" path="dashboard" />
+                    <Listbox variant="lg" :values="sites" path="dashboard" />
                     <div class="actions">
                         <Calendar class="dateButton" v-if="setDateButton" />
                         <Button

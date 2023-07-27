@@ -18,7 +18,7 @@ emit('update:updateBtn', false)
 emit('update:mdMenuExplore', true)
 emit('update:calendarBtn', true)
 emit('update:descriptionHidden', false)
-emit('update:screenShotBtn', true)
+emit('update:screenShotBtn', false)
 
 const heatmapCanvas = ref(null)
 const canvasWidth = ref(0)
@@ -112,6 +112,7 @@ onUnmounted(() => {
 
 <template>
     <div>
+        {{ router.currentRoute.value.params.size }}
         <nav class="heatmap-nav">
             <RouterLink
                 :to="{ name: 'heatmap', params: { id: $route.params.id, size: 'sm' } }"
@@ -122,9 +123,9 @@ onUnmounted(() => {
                     icon="Smartphone"
                     class="w-full"
                     :variant="
-                        router.currentRoute.value.params.size == 'sm'
-                            ? 'light-grey'
-                            : 'button--dark-grey'
+                        router.currentRoute.value.params.size === 'sm'
+                            ? 'button--dark-grey'
+                            : 'light-grey'
                     "
                 />
             </RouterLink>
@@ -138,8 +139,8 @@ onUnmounted(() => {
                     class="w-full"
                     :variant="
                         router.currentRoute.value.params.size == 'md'
-                            ? 'light-grey'
-                            : 'button--dark-grey'
+                            ? 'button--dark-grey'
+                            : 'light-grey'
                     "
                 />
             </RouterLink>
@@ -153,14 +154,19 @@ onUnmounted(() => {
                     class="w-full"
                     :variant="
                         router.currentRoute.value.params.size == 'lg'
-                            ? 'light-grey'
-                            : 'button--dark-grey'
+                            ? 'button--dark-grey'
+                            : 'light-grey'
                     "
                 />
             </RouterLink>
         </nav>
         <div>
             <div class="heatmap-canvas" ref="heatmapCanvas"></div>
+            <iframe
+                src="https://www.laroutedutrone.fr/presentation"
+                frameborder="0"
+                style="width: 100%; height: 3000px"
+            ></iframe>
         </div>
     </div>
 </template>
@@ -168,7 +174,7 @@ onUnmounted(() => {
 <style scoped lang="scss">
 .heatmap-canvas {
     width: 100%;
-    height: 400px;
+    height: 3000px;
 }
 .heatmap-nav {
     display: flex;
