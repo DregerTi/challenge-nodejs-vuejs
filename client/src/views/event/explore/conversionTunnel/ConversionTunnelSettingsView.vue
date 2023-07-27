@@ -11,10 +11,6 @@ const emit = defineEmits([
     'update:updateBtn',
     'update:mdMenuExplore'
 ])
-emit('update:deleteBtn', true)
-emit('update:updateBtn', true)
-emit('update:mdMenuExplore', true)
-emit('update:calendarBtn', true)
 emit('update:descriptionHidden', false)
 
 const store = useStore()
@@ -76,10 +72,10 @@ const onClick = (tag) => {
 }
 
 const saveTags = async () => {
-    const tags = selectedTag.value.map((tag) => {
+    const tags = selectedTag.value.map((tag, index) => {
         return {
             id: tag.id,
-            order: tag.order
+            order: tag.order ?? index + 1
         }
     })
 
@@ -89,17 +85,23 @@ const saveTags = async () => {
 
 <template>
     <div>
-        <form @submit.prevent="saveTags()">
-            <div v-for="tag in tags" :key="tag.id">
+        <h2 class="mb-10">
+            {{ conversionTunnel?.name }}
+        </h2>
+        <div v-if="tags.length === 0">
+            No tag added yet... Don't wait to add some ! 🏷
+        </div>
+        <form v-else @submit.prevent="saveTags()">
+            <div v-for="tag in tags" :key="tag.id" class="flex items-center w-full mb-2">
                 <Switch :class="[isSelected(tag) ? 'bg-blue-600' : 'bg-gray-200']"
-                    class="relative inline-flex h-6 w-11 items-center rounded-full" @change="toggleTag(tag)"
-                    @click="onClick(tag)">
+                    class="inline-flex h-6 w-11 items-center rounded-full" @change="toggleTag(tag)" @click="onClick(tag)">
                     <span class="sr-only">{{ tag.name }}</span>
                     <span :class="isSelected(tag) ? 'translate-x-6' : 'translate-x-1'"
                         class="inline-block h-4 w-4 transform rounded-full bg-white transition" />
                 </Switch>
                 <span class="ml-2">{{ tag.name }}</span>
-                <input v-model="tag.order" type="number" min="1" :disabled="!isSelected(tag)" class="ml-2 p-2 rounded-md" />
+                <input v-model="tag.order" :placeholder="isSelected(tag) ? 'Order' : ''" type="number" min="1"
+                    :disabled="!isSelected(tag)" class="ml-2 p-2 rounded-md" />
             </div>
             <Button type="submit" title="Save" />
         </form>

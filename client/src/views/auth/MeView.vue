@@ -21,9 +21,6 @@ onBeforeMount(async () => {
     <div>
         <header class="flex justify-between items-base">
             <h2>My account</h2>
-            <RouterLink :to="{ name: 'me-update' }">
-                <Button icon="Edit" />
-            </RouterLink>
         </header>
         <div class="mt-12 mb-12 flex flex-col gap-4">
             <div class="info">
