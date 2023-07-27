@@ -23,6 +23,7 @@ const tag = computed(() => store.state.tag.tag)
     <h2>
         {{ tag?.name }}
     </h2>
+  <p>{{tag?.tagKey}}</p>
 </template>
 
 <style scoped lang="scss"></style>

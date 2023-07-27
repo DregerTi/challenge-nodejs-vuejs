@@ -8,6 +8,7 @@ const ViewerService = require("../services/viewer");
 const UntrackPathService = require("../services/untrackPath");
 const checkAuth = require("../middlewares/check-auth");
 const sitePermission = require("../middlewares/site-permissions");
+const ConversionTunnelTagService = require("../services/conversionTunnelTags");
 
 const routesList = [
   {
@@ -63,13 +64,20 @@ const routesList = [
     ]
   },
   {
+    path: "/:id/conversion-tunnel/:conversionTunnelId", method: "get", action: "getOneConversionTunnel",
+    middlewares: [
+      checkAuth.requireAuthentication,
+      sitePermission.canAccessSite(["ADMIN", "USER"]),
+    ]
+  },
+  {
     path: "/", method: "post", action: "create",
     middlewares: [eventPermission.canAccessEvent]
   }
 ];
 
 const eventController =
-  new controller(new EventService(), new TagService(), new SessionService(), new ViewerService(), new UntrackPathService(), {});
+  new controller(new EventService(), new TagService(), new SessionService(), new ViewerService(), new UntrackPathService(), new ConversionTunnelTagService(),{});
 
 module.exports = new specificRouter(
   eventController,

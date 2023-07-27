@@ -3,7 +3,7 @@ module.exports = function eventUtil() {
     getRangeDates: (startDate, endDate) => {
       startDate += "T00:00:00.001Z";
       endDate += "T23:59:59.999Z";
-      const start = new Date(startDate); // Date il y a 30 jours
+      const start = new Date(startDate);
       const end = new Date(endDate);
       const difference = end.getTime() - start.getTime();
       const differenceInDays = Math.round(difference / (1000 * 3600 * 24));
@@ -129,7 +129,7 @@ module.exports = function eventUtil() {
           }
         },
         {
-          $sort: { system: 1 } // Tri par ordre alphabétique du système (facultatif)
+          $sort: { system: 1 }
         }
       ];
     },
@@ -171,7 +171,7 @@ module.exports = function eventUtil() {
           }
         },
         {
-          $sort: { country: 1 } // Tri par ordre alphabétique du système (facultatif)
+          $sort: { country: 1 }
         }
       ];
     },
@@ -202,7 +202,6 @@ module.exports = function eventUtil() {
         {
           $facet: {
             currentPeriod: [
-              // Période actuelle
               {
                 $match: {
                   siteId: id,
@@ -229,7 +228,6 @@ module.exports = function eventUtil() {
               }
             ],
             previousPeriod: [
-              // Période précédente
               {
                 $match: {
                   siteId: id,
@@ -287,6 +285,9 @@ module.exports = function eventUtil() {
                   path: "$_id.path",
                   currentPeriodCount: "$count"
                 }
+              },
+              {
+                $sort: { currentPeriodCount: -1 }
               }
             ],
             previousPeriod: [
@@ -316,35 +317,37 @@ module.exports = function eventUtil() {
                 $match: {
                   siteId: id,
                   type: "view",
-                  createdAt: { $gte: start, $lte: end }
-                }
-              },
-              {
-                $group: {
-                  _id: {
-                    path: "$path",
-                    date: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } }
-                  },
-                  count: { $sum: 1 }
-                }
-              },
-              {
-                $group: {
-                  _id: "$_id.path",
-                  dailyCounts: {
-                    $push: {
-                      date: "$_id.date",
-                      count: "$count"
-                    }
+                  createdAt: {
+                    $gte: start,
+                    $lte: end
                   }
                 }
               },
               {
-                $project: {
-                  _id: 0,
-                  path: "$_id",
-                  dailyCounts: 1
+                $group: {
+                  _id: { date: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } }, path: "$path" },
+                  count: { $sum: 1 }
                 }
+              },
+              {
+                $project: {
+                  date: "$_id.date",
+                  _id: 0,
+                  path: "$_id.path",
+                  dailyCounts: { $sum: "$count" }
+                }
+              },
+              {
+                $group: {
+                  _id: "$path",
+                  dailyCounts: { $push: { date: "$date", count: "$dailyCounts" } }
+                }
+              },
+              {
+                $sort: { dailyCounts: -1 }
+              },
+              {
+                $limit: 5
               }
             ]
           }
@@ -464,7 +467,7 @@ module.exports = function eventUtil() {
                   date: "$_id",
                   averageDuration: { $divide: ["$totalDuration", "$totalSessions"] }
                 }
-              },
+              }
             ]
           }
         }
@@ -563,8 +566,7 @@ module.exports = function eventUtil() {
             totalNewUsersCurrentPeriod: [
               {
                 $match: {
-                  siteId: id,
-                  createdAt: { $gte: start, $lte: end }
+                  siteId: id
                 }
               },
               {
@@ -575,7 +577,7 @@ module.exports = function eventUtil() {
               },
               {
                 $match: {
-                  firstEventDate: { $gte: start }
+                  firstEventDate: { $gte: start, $lte: end }
                 }
               },
               {
@@ -594,8 +596,7 @@ module.exports = function eventUtil() {
             totalNewUsersPreviousPeriod: [
               {
                 $match: {
-                  siteId: id,
-                  createdAt: { $gte: previousPeriodStart, $lte: previousPeriodEnd }
+                  siteId: id
                 }
               },
               {
@@ -606,7 +607,7 @@ module.exports = function eventUtil() {
               },
               {
                 $match: {
-                  firstEventDate: { $gte: previousPeriodStart }
+                  firstEventDate: { $gte: previousPeriodStart, $lte: previousPeriodEnd }
                 }
               },
               {
@@ -625,14 +626,19 @@ module.exports = function eventUtil() {
             dailyNewUsers: [
               {
                 $match: {
-                  siteId: id,
-                  createdAt: { $gte: start, $lte: end }
+                  siteId: id
                 }
               },
               {
                 $group: {
                   _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
-                  newUsers: { $addToSet: "$viewerId" }
+                  newUsers: { $addToSet: "$viewerId" },
+                  firstEventDate: { $min: "$createdAt" }
+                }
+              },
+              {
+                $match: {
+                  firstEventDate: { $gte: start, $lte: end }
                 }
               },
               {
@@ -665,14 +671,14 @@ module.exports = function eventUtil() {
             type: "click",
             size: { $ne: null },
             path: {
-              $regex: searchString ? searchString : "", // Si searchString est présent, on filtre selon cette chaîne de caractères, sinon on filtre sur tout
-              $options: "i" // Options pour la recherche insensible à la casse
+              $regex: searchString ? searchString : "",
+              $options: "i"
             }
           }
         },
         {
           $group: {
-            _id: "$path"// Compteur du nombre d'événements pour chaque path
+            _id: "$path"
           }
         },
         {
@@ -697,7 +703,7 @@ module.exports = function eventUtil() {
         {
           $group: {
             _id: { x: "$coordinates.x", y: "$coordinates.y" },
-            value: { $sum: 1 } // Compteur du nombre de fois que chaque paire de coordonnées est présente
+            value: { $sum: 1 }
           }
         },
         {
@@ -711,13 +717,43 @@ module.exports = function eventUtil() {
         {
           $group: {
             _id: null,
-            results: { $push: "$$ROOT" } // Accumuler toutes les coordonnées dans un tableau "results"
+            results: { $push: "$$ROOT" }
           }
         },
         {
           $project: {
             _id: 0,
             results: 1
+          }
+        }
+      ];
+    },
+    getConversionTunnelAggregate(id, tagIdList, start, end, previousPeriodStart, previousPeriodEnd) {
+      return [
+        {
+          $match: {
+            siteId: id,
+            type: "tag",
+            createdAt: {
+              $gte: start,
+              $lte: end
+            }
+          }
+        },
+        {
+          $sort: { createdAt: 1 }
+        },
+        {
+          $group: {
+            _id: "$sessionId",
+            events: { $push: "$$ROOT" }
+          }
+        },
+        {
+          $project: {
+            session: "$_id",
+            events: 1,
+            _id: 0
           }
         }
       ];

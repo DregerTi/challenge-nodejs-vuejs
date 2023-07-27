@@ -4,7 +4,7 @@ const eventUtils = require("../utils/events-utils");
 const Event = require("../mongodb/models/event");
 
 
-module.exports = function Controller(EventService, TagService, SessionService, ViewerService, UntrackPathService, options) {
+module.exports = function Controller(EventService, TagService, SessionService, ViewerService, UntrackPathService, ConversionTunnelTagService, options) {
   return {
     getAllEventsForSite: async function(req, res, next) {
       const { id } = req.params;
@@ -108,21 +108,21 @@ module.exports = function Controller(EventService, TagService, SessionService, V
 
         const result = (await EventService.findAllAggregate(aggregate))[0];
 
-        result.pages = result.currentPeriod.map((item) => {
+        result.currentPeriod.map((item) => {
           item.previousPeriodCount = result.previousPeriod.find((previousItem) => previousItem.path === item.path)?.count ?? 0;
-        })
+        });
         result.previousPeriod = undefined;
 
         res.write(`data: ${JSON.stringify(result)}\n\n`);
         const changeStream = Event.watch();
 
         changeStream.on("change", async (change) => {
-          if (change.fullDocument.type === 'view') {
+          if (change.fullDocument.type === "view") {
             try {
               const result = (await EventService.findAllAggregate(aggregate))[0];
-              result.pages = result.currentPeriod.map((item) => {
+              result.currentPeriod.map((item) => {
                 item.previousPeriodCount = result.previousPeriod.find((previousItem) => previousItem.path === item.path)?.count ?? 0;
-              })
+              });
               result.previousPeriod = undefined;
               res.write(`data: ${JSON.stringify(result)}\n\n`);
             } catch (err) {
@@ -131,7 +131,6 @@ module.exports = function Controller(EventService, TagService, SessionService, V
           }
 
         });
-        console.log("test3");
         req.on("close", () => {
           changeStream.close();
           res.end();
@@ -422,7 +421,6 @@ module.exports = function Controller(EventService, TagService, SessionService, V
       });
     },
     getNewUsers: async function(req, res, next) {
-      //TODO marche pas :(
       const { id } = req.params;
       let { startDate, endDate } = req.query;
       try {
@@ -582,10 +580,54 @@ module.exports = function Controller(EventService, TagService, SessionService, V
         next(err);
       }
     },
-    getConversionTunnels: async function(req, res, next) {
-      //TODO renvoyer le nb de sessions qui ont eu un event de chaque tag dans l'ordre chronologique + le nb de sessions qui ont eu l'event 1 au minimum + le nb de sessions qui ont eu l'event 1 au minimum sur la période précédente + range par dates
-    }
+    getOneConversionTunnel: async function(req, res, next) {
+      const { id, conversionTunnelId } = req.params;
+      let { startDate, endDate } = req.query;
+      res.setHeader("Content-Type", "text/event-stream");
+      res.setHeader("Cache-Control", "no-cache");
+      res.setHeader("Connection", "keep-alive");
 
+      const { start, end, previousPeriodStart, previousPeriodEnd } =
+        eventUtils().getRangeDates(startDate, endDate);
+      const tagIds = await ConversionTunnelTagService.findAll({conversionTunnelId: parseInt(conversionTunnelId, 10)})
+      if (tagIds.length === 0) {
+        res.status(404).json({ message: "Conversion tunnel not found" });
+        return;
+      }
+
+      if (start === undefined || end === undefined || start > end) {
+        res.status(400).json({ message: "Invalid date" });
+        return;
+      }
+
+      const aggregate = eventUtils().getConversionTunnelAggregate(id, tagIds.map(tag => tag.tagId), start, end, previousPeriodStart, previousPeriodEnd);
+      const result = (await EventService.findAllAggregate(aggregate))[0];
+      console.log(result);
+
+      res.write(`data: ${JSON.stringify(result)}\n\n`);
+
+      const changeStream = Event.watch();
+      changeStream.on("change", async (change) => {
+        if (change.fullDocument.type === "tag") {
+          try {
+            const result = (await EventService.findAllAggregate(aggregate))[0];
+
+            res.write(`data: ${JSON.stringify(result)}\n\n`);
+          } catch (err) {
+            next(err);
+          }
+        }
+      });
+
+      req.on("error", (err) => {
+        changeStream.close();
+        res.end();
+      });
+
+      req.on("close", () => {
+        changeStream.close();
+        res.end();
+      });
+    }
   };
-}
-;
+};

@@ -31,6 +31,7 @@ emit('update:dashboardEditButton', false)
                     v-if="site?.id"
                     icon="VpnKey"
                     title="API key"
+                    v-track="'muewmhpjdr'"
                     description="Manage website API key"
                     :path="'/analytics/' + site?.id + '/setting/api-key'"
                 />
