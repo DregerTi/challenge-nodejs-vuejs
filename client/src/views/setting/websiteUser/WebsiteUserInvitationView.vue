@@ -6,37 +6,11 @@ import { useStore } from 'vuex'
 
 const { id } = router.currentRoute.value.params
 
-let url = ref('')
 
 const store = useStore()
 
-onBeforeMount(() => {
-  console.log(router)
-  url = `${import.meta.env.VITE_API_BASE_URL}invitations/${id}/accept`
-  console.log(url)
-})
-
 const acceptInvitation = async () => {
   await store.dispatch('validateInvitation', id)
-
-  // fetch(url, {
-  //   method: 'GET',
-  //   body: null,
-  //   headers: {
-  //     Authorization: `Bearer ${await tokenStorage.getToken()}`,
-  //     'Content-Type': 'application/json',
-  //   },
-  // })
-  //   .then((response) => {
-  //     if (response.ok) {
-  //       router.push({ name: 'Website-users-invitation-success' })
-  //     } else {
-  //       router.push({ name: 'Website-users-invitation-error' })
-  //     }
-  //   })
-  //   .catch(() => {
-  //     router.push({ name: 'Website-users-invitation-error' })
-  //   })
 }
 
 </script>

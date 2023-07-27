@@ -10,7 +10,6 @@ module.exports = function Controller(Service, options = {}) {
           return;
         }
         const result = await Service.create(body);
-        console.log("result", result);
         await EmailService.sendConfirmationEmail(result.email);
         res.status(201).json(result);
       } catch (err) {

@@ -1,10 +1,20 @@
 <script setup>
 import Button from '@/components/atoms/Button.vue'
-import { defineEmits, onMounted } from 'vue'
+import { defineEmits, onMounted, onBeforeMount, computed } from 'vue'
+import { useStore } from 'vuex'
+import router from '@/router'
 
 const emit = defineEmits(['update:setDateButton', 'update:dashboardEditButton'])
 emit('update:setDateButton', false)
 emit('update:dashboardEditButton', false)
+
+const store = useStore()
+
+const user = computed(() => store.state.userStore.user)
+
+onBeforeMount(async () => {
+    await store.dispatch('getMe')
+})
 </script>
 
 <template>
@@ -17,12 +27,16 @@ emit('update:dashboardEditButton', false)
         </header>
         <div class="mt-12 mb-12 flex flex-col gap-4">
             <div class="info">
-                <span>Username</span>
-                <p>Username value</p>
+                <span>Firstname</span>
+                <p>{{ user.firstname }}</p>
+            </div>
+            <div class="info">
+                <span>Lastname</span>
+                <p>{{ user.lastname }}</p>
             </div>
             <div class="info">
                 <span>Email</span>
-                <p>example@email.com</p>
+                <p>{{ user.email }}</p>
             </div>
         </div>
     </div>
@@ -35,14 +49,14 @@ emit('update:dashboardEditButton', false)
     gap: 0.8rem;
     margin-bottom: 2rem;
 
-    > span {
+    >span {
         color: var(--color-text-secondary);
         font-size: 1.2rem !important;
         line-height: 1.2rem !important;
         font-weight: 500;
     }
 
-    > p {
+    >p {
         color: var(--color-text);
         font-size: 1rem !important;
         line-height: 1rem !important;

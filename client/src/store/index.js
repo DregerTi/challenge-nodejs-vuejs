@@ -5,6 +5,7 @@ import conversionTunnel from '@/store/modules/conversionTunnel'
 import eventStore from '@/store/modules/eventStore'
 import siteStore from '@/store/modules/siteStore'
 import dashboardItemStore from '@/store/modules/dashboardItemStore'
+import userStore from '@/store/modules/userStore'
 
 export default createStore({
     modules: {
@@ -13,6 +14,7 @@ export default createStore({
         conversionTunnel,
         eventStore,
         siteStore,
-        dashboardItemStore
+        dashboardItemStore,
+        userStore
     }
 })
