@@ -1,5 +1,5 @@
 <script setup>
-import { computed, defineEmits } from 'vue'
+import { computed, defineEmits, onBeforeMount } from 'vue'
 import { useStore } from 'vuex'
 import Button from '@/components/atoms/Button.vue'
 import router from '@/router'
@@ -19,6 +19,20 @@ emit('update:descriptionHidden', false)
 
 const store = useStore()
 const conversionTunnel = computed(() => store.state.conversionTunnel.conversionTunnel)
+const users = computed(() => store.state.siteStore.role)
+
+let userRole = ''
+
+onBeforeMount(async () => {
+    await store.dispatch('getConversionTunnel', router.currentRoute.value.params.id)
+    await store.dispatch('getRole')
+
+    users.value.forEach((user) => {
+        if (user.siteId.toString() === router.currentRoute.value.params.site.toString()) {
+            return (userRole = user.role)
+        }
+    })
+})
 </script>
 
 <template>
@@ -28,7 +42,8 @@ const conversionTunnel = computed(() => store.state.conversionTunnel.conversionT
         </h2>
 
         <Button
-            title="Voir les tags"
+            v-if="userRole === 'ADMIN'"
+            title="Manage tags"
             class="w-full p-5"
             variant="light-grey"
             @click="router.push(router.currentRoute.value.path + '/settings')"

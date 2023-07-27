@@ -6,7 +6,7 @@ import { EventSourcePolyfill } from 'event-source-polyfill'
 import * as tokenStorage from '@/services/tokenStorage'
 import { useStore } from 'vuex'
 import { computed, onBeforeMount } from 'vue'
-import MenuButton from "@/components/molecules/MenuButton.vue";
+import MenuButton from '@/components/molecules/MenuButton.vue'
 
 const store = useStore()
 const site = computed(() => store.state.siteStore.site)
@@ -33,8 +33,11 @@ onBeforeMount(async () => {
                 name="name"
                 :value="site?.apiKey"
             />
-            <Button icon="Autorenew" class="h-fit mb-2.5" @click="refreshApiKey"
-                    v-track="'0fwwt9gyg8'"
+            <Button
+                icon="Autorenew"
+                class="h-fit mb-2.5"
+                @click="refreshApiKey"
+                v-track="'0fwwt9gyg8'"
             />
         </div>
     </div>

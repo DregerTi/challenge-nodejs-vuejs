@@ -78,7 +78,7 @@ const routesList = [
     },
     {
         path: "/:id/conversion-tunnels/:conversionTunnelId", method: "get", action: "getOneConversionTunnel",
-        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
+        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['USER', 'ADMIN'])]
     },
     {
         path: "/:id/conversion-tunnels", method: "post", action: "createConversionTunnel",

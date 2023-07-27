@@ -33,7 +33,7 @@ module.exports = function UserService() {
                 subQuery: false,
                 include: [{
                     model: SiteUser,
-                    attributes: ["role"],
+                    attributes: ["role", "siteId"],
                 }],
             };
             if (!showSiteUsers) {
@@ -144,6 +144,19 @@ module.exports = function UserService() {
                 });
             }
             return user.update({status: "valid"});
-        }
+        },
+        getRole: async (userId) => {
+            const sites = await SiteUser.findAll({where: {userId: userId}});
+
+            if (sites.length === 0) {
+                return "user";
+            }
+
+            return sites.map(site => ({ 
+                siteId: site.siteId,
+                role: site.role
+            }));
+        },
+
     };
 };

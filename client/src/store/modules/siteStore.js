@@ -11,7 +11,8 @@ const state = {
         url: null
     },
     siteErrors: null,
-    apiKey: '*****************'
+    apiKey: '*****************',
+    role: null
 }
 
 const getters = {
@@ -20,7 +21,8 @@ const getters = {
     sites: (state) => state.sites,
     site: (state) => state.site,
     siteErrors: (state) => state.siteErrors,
-    apiKey: (state) => state.apiKey
+    apiKey: (state) => state.apiKey,
+    role: (state) => state.role
 }
 
 const actions = {
@@ -127,6 +129,14 @@ const actions = {
         } catch (error) {
             commit('setSiteErrors', error)
         }
+    },
+    async getRole({ commit }) {
+        try {
+            const role = await siteService.getRole()
+            commit('setRole', role)
+        } catch (error) {
+            //commit('setUntrackedPagesErrors', error)
+        }
     }
 }
 
@@ -148,6 +158,9 @@ const mutations = {
     },
     setApiKey(state, apiKey) {
         state.apiKey = apiKey
+    },
+    setRole(state, role) {
+        state.role = role
     }
 }
 

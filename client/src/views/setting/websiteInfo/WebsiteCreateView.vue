@@ -52,12 +52,14 @@ const createSite = async (formData) => {
     flex-direction: column;
     gap: 0.8rem;
     margin-bottom: 2rem;
+
     > span {
         color: var(--color-text-secondary);
         font-size: 1.2rem !important;
         line-height: 1.2rem !important;
         font-weight: 500;
     }
+
     > p {
         color: var(--color-text);
         font-size: 1rem !important;

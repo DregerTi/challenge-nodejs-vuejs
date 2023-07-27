@@ -2,7 +2,8 @@
 import { RouterView } from 'vue-router'
 import Button from '@/components/atoms/Button.vue'
 import Header from '@/components/organisms/Header.vue'
-import { defineEmits, ref } from 'vue'
+import { computed, defineEmits, onBeforeMount, ref } from 'vue'
+import { useStore } from 'vuex'
 import Input from '@/components/atoms/Input.vue'
 import Calendar from '../molecules/Calendar.vue'
 import router from '@/router'
@@ -17,6 +18,22 @@ const screenShotBtn = ref(false)
 const emit = defineEmits(['update:setDateButton', 'update:dashboardEditButton'])
 emit('update:setDateButton', false)
 emit('update:dashboardEditButton', false)
+
+const store = useStore()
+const users = computed(() => store.state.siteStore.role)
+
+let userRole = ''
+
+onBeforeMount(async () => {
+    await store.dispatch('getConversionTunnel', router.currentRoute.value.params.id)
+    await store.dispatch('getRole')
+
+    users.value.forEach((user) => {
+        if (user.siteId.toString() === router.currentRoute.value.params.site.toString()) {
+            return (userRole = user.role)
+        }
+    })
+})
 
 const { title, items, description, createNewPath, path } = defineProps({
     title: {
@@ -46,7 +63,7 @@ const { title, items, description, createNewPath, path } = defineProps({
     <div class="container-explore">
         <header :class="[mdMenuExplore ? 'md-menu-explore' : '']">
             <Input type="text" placeholder="Search" name="search" variant="search" />
-            <RouterLink v-if="createNewPath" :to="createNewPath">
+            <RouterLink v-if="createNewPath && userRole === 'ADMIN'" :to="createNewPath">
                 <Button title="Create new" />
             </RouterLink>
             <nav>

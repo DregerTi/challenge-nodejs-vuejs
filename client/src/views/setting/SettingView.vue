@@ -1,7 +1,7 @@
 <script setup>
 import Header from '@/components/organisms/Header.vue'
 import MenuButton from '@/components/molecules/MenuButton.vue'
-import { computed, defineEmits, onMounted } from 'vue'
+import { computed, defineEmits, onMounted, onBeforeMount } from 'vue'
 import AuthProvider from '@/contexts/AuthProvider.vue'
 import { useStore } from 'vuex'
 
@@ -10,6 +10,21 @@ const site = computed(() => store.state.siteStore.site)
 const emit = defineEmits(['update:setDateButton', 'update:dashboardEditButton'])
 emit('update:setDateButton', false)
 emit('update:dashboardEditButton', false)
+
+const users = computed(() => store.state.siteStore.role)
+
+let userRole = ''
+
+onBeforeMount(async () => {
+    await store.dispatch('getConversionTunnel', router.currentRoute.value.params.id)
+    await store.dispatch('getRole')
+
+    users.value.forEach((user) => {
+        if (user.siteId.toString() === router.currentRoute.value.params.site.toString()) {
+            return (userRole = user.role)
+        }
+    })
+})
 </script>
 
 <template>
@@ -20,41 +35,19 @@ emit('update:dashboardEditButton', false)
                 <p>Manage settings</p>
             </header>
             <section>
-                <MenuButton
-                    v-if="site?.id"
-                    icon="Badge"
-                    title="Web site"
+                <MenuButton v-if="site?.id && userRole === 'ADMIN'" icon="Badge" title="Web site"
                     description="Manage your website informations"
-                    :path="'/analytics/' + site?.id + '/setting/website-info'"
-                />
-                <MenuButton
-                    v-if="site?.id"
-                    icon="VpnKey"
-                    title="API key"
-                    v-track="'muewmhpjdr'"
-                    description="Manage website API key"
-                    :path="'/analytics/' + site?.id + '/setting/api-key'"
-                />
-                <MenuButton
-                    v-if="site?.id"
-                    icon="LinkOff"
-                    title="Untracked pages"
+                    :path="'/analytics/' + site?.id + '/setting/website-info'" />
+                <MenuButton v-if="site?.id && userRole === 'ADMIN'" icon="VpnKey" title="API key" v-track="'muewmhpjdr'"
+                    description="Manage website API key" :path="'/analytics/' + site?.id + '/setting/api-key'" />
+                <MenuButton v-if="site?.id && userRole === 'ADMIN'" icon="LinkOff" title="Untracked pages"
                     description="Manage your untracked pages"
-                    :path="'/analytics/' + site?.id + '/setting/untracked-page'"
-                />
-                <MenuButton
-                    v-if="site?.id"
-                    icon="Group"
-                    title="Website users"
+                    :path="'/analytics/' + site?.id + '/setting/untracked-page'" />
+                <MenuButton v-if="site?.id && userRole === 'ADMIN'" icon="Group" title="Website users"
                     description="Manage website users & permissions"
-                    :path="'/analytics/' + site?.id + '/setting/website-users'"
-                />
-                <MenuButton
-                    icon="Add"
-                    title="Add website"
-                    description="Start to track your website"
-                    path="/analytics/setting/create"
-                />
+                    :path="'/analytics/' + site?.id + '/setting/website-users'" />
+                <MenuButton icon="Add" title="Add website" description="Start to track your website"
+                    path="/analytics/setting/create" />
                 <MenuButton icon="Logout" title="Logout" @click="logout" :path="'/auth/login'" />
             </section>
         </Auth-provider>
@@ -64,22 +57,26 @@ emit('update:dashboardEditButton', false)
 <style lang="scss">
 .container-menu {
     margin-top: 5rem;
-    > section {
+
+    >section {
         display: flex;
         flex-wrap: wrap;
         gap: 2rem;
         margin: 5rem 0;
     }
-    > header {
+
+    >header {
         display: flex;
         flex-direction: column;
         align-items: baseline !important;
-        > h2 {
+
+        >h2 {
             font-size: 1.5rem;
             font-weight: 500;
             color: var(--color-grey);
         }
-        > p {
+
+        >p {
             font-size: 1.2rem;
             font-weight: 400;
             color: var(--color-grey);
@@ -90,21 +87,25 @@ emit('update:dashboardEditButton', false)
 @media (max-width: 1024px) {
     .container-menu {
         margin-top: 0rem;
-        > section {
+
+        >section {
             display: grid;
             margin: 2rem 0;
             gap: 1.4rem;
             width: calc(100% - 1.4rem);
             grid-template-columns: 50% 50%;
-            > .menu-button {
+
+            >.menu-button {
                 width: 100%;
             }
         }
-        > header {
-            > h2 {
+
+        >header {
+            >h2 {
                 font-size: 1.2rem;
             }
-            > p {
+
+            >p {
                 font-size: 1rem;
             }
         }

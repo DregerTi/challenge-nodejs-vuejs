@@ -1,8 +1,7 @@
 <script setup>
-import { defineEmits, reactive } from 'vue'
+import { defineEmits, reactive, computed, onBeforeMount } from 'vue'
 import Button from '@/components/atoms/Button.vue'
 import { useStore } from 'vuex'
-import { computed, onBeforeMount } from 'vue'
 import router from '@/router'
 
 const emit = defineEmits([

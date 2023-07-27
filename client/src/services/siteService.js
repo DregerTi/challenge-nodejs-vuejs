@@ -177,3 +177,19 @@ export const deleteSiteUser = async function deleteSiteUser(email) {
         throw error
     }
 }
+
+export const getRole = async function getRole() {
+    try {
+        const response = await requester(ROUTES.GET_ME(), 'GET', {}, true)
+
+        if (response.status === 422) {
+            throw await response.json()
+        }
+
+        const user = await response.json()
+
+        return user.SiteUsers
+    } catch (error) {
+        throw error
+    }
+}
