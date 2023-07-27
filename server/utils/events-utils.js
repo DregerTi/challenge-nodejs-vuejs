@@ -396,7 +396,7 @@ module.exports = function eventUtil() {
               {
                 $project: {
                   _id: 0,
-                  averageDuration: { $divide: ["$totalDuration", "$totalSessions"] },
+                  averageDuration: { $divide: [{ $divide: ["$totalDuration", "$totalSessions"] }, 60000] },
                   count: "$totalSessions"
                 }
               }
@@ -432,7 +432,7 @@ module.exports = function eventUtil() {
               {
                 $project: {
                   _id: 0,
-                  averageDuration: { $divide: ["$totalDuration", "$totalSessions"] }
+                  averageDuration: { $divide: [{ $divide: ["$totalDuration", "$totalSessions"] }, 60000] }
                 }
               }
             ],
@@ -472,7 +472,7 @@ module.exports = function eventUtil() {
                 $project: {
                   _id: 0,
                   date: "$_id",
-                  averageDuration: { $divide: ["$totalDuration", "$totalSessions"] }
+                  averageDuration: { $divide: [{ $divide: ["$totalDuration", "$totalSessions"] }, 60000] }
                 }
               }
             ]
