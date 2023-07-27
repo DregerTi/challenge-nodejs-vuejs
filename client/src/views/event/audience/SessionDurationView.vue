@@ -47,7 +47,8 @@ onUnmounted(() => {
             </div>
             <PinCard
                 :value="sessionsDurationBrute?.value"
-                title="Total session"
+                title="Average session"
+                :description="sessionsDurationBrute?.description"
                 :trend="sessionsDurationBrute?.trend"
             />
         </section>

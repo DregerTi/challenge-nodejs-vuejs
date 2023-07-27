@@ -23,20 +23,20 @@ const { variant } = defineProps({
 })
 
 const store = useStore()
-const sessions = computed(() => store.state.eventStore.sessions)
-const sessionsBrute = computed(() => store.state.eventStore.sessionsBrute)
+const sessionsDuration = computed(() => store.state.eventStore.sessionsDuration)
+const sessionsDurationBrute = computed(() => store.state.eventStore.sessionsDurationBrute)
 const rangeDate = computed(() => store.state.eventStore.rangeDate)
 
 onMounted(() => {
-    store.dispatch('getSessions')
+    store.dispatch('getSessionsDuration')
 })
 watch(rangeDate, () => {
-    store.dispatch('closeEventSourceSession')
-    store.dispatch('getSessions')
+    store.dispatch('closeEventSourceSessionDuration')
+    store.dispatch('getSessionsDuration')
 })
 
 onUnmounted(() => {
-    store.dispatch('closeEventSourceSession')
+    store.dispatch('closeEventSourceSessionDuration')
 })
 </script>
 
@@ -46,13 +46,12 @@ onUnmounted(() => {
         :class="[variant ? 'chart-card--sessions--' + variant : '']"
     >
         <div>
-            <Bar id="chart-session" :data="sessions" />
+            <Bar id="chart-session" :data="sessionsDuration" />
         </div>
         <PinCard
-            :value="sessionsBrute?.value"
-            title="Total sessions"
-            :description="sessionsBrute?.description"
-            :trend="sessionsBrute?.trend"
+            :value="sessionsDurationBrute?.value"
+            title="Total session"
+            :trend="sessionsDurationBrute?.trend"
         />
     </section>
 </template>

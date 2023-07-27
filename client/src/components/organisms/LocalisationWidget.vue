@@ -1,19 +1,7 @@
 <script setup>
 import { useStore } from 'vuex'
 import { computed, onMounted, onUnmounted, watch } from 'vue'
-import { Bar } from 'vue-chartjs'
-import {
-    Chart as ChartJS,
-    Title,
-    Tooltip,
-    Legend,
-    BarElement,
-    CategoryScale,
-    LinearScale
-} from 'chart.js'
-import PinCard from '@/components/molecules/PinCard.vue'
-
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
+import GoogleChart from '@/components/molecules/GChart.vue'
 
 const { variant } = defineProps({
     variant: {
@@ -23,20 +11,19 @@ const { variant } = defineProps({
 })
 
 const store = useStore()
-const sessions = computed(() => store.state.eventStore.sessions)
-const sessionsBrute = computed(() => store.state.eventStore.sessionsBrute)
+const countriesBrute = computed(() => store.state.eventStore.countriesBrute)
 const rangeDate = computed(() => store.state.eventStore.rangeDate)
 
 onMounted(() => {
-    store.dispatch('getSessions')
+    store.dispatch('getCountries')
 })
 watch(rangeDate, () => {
-    store.dispatch('closeEventSourceSession')
-    store.dispatch('getSessions')
+    store.dispatch('closeEventSourceCountry')
+    store.dispatch('getCountries')
 })
 
 onUnmounted(() => {
-    store.dispatch('closeEventSourceSession')
+    store.dispatch('closeEventSourceCountry')
 })
 </script>
 
@@ -46,14 +33,8 @@ onUnmounted(() => {
         :class="[variant ? 'chart-card--sessions--' + variant : '']"
     >
         <div>
-            <Bar id="chart-session" :data="sessions" />
+            <GoogleChart />
         </div>
-        <PinCard
-            :value="sessionsBrute?.value"
-            title="Total sessions"
-            :description="sessionsBrute?.description"
-            :trend="sessionsBrute?.trend"
-        />
     </section>
 </template>
 

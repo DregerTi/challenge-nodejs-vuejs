@@ -3,9 +3,7 @@ import * as tokenStorage from '@/services/tokenStorage'
 import ROUTES from '@/router/routes'
 import router from '@/router'
 import siteStore from '@/store/modules/siteStore'
-import { useStore } from 'vuex'
 
-const store = useStore()
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL
 
 const state = {
@@ -14,6 +12,34 @@ const state = {
     sessionsBrute: null,
     heatmapPaths: null,
     heatmap: null,
+    totalUser: {
+        preview: {
+            value: 0,
+            trend: 0
+        },
+        chartData: {
+            labels: [],
+            datasets: [
+                {
+                    data: []
+                }
+            ]
+        }
+    },
+    newUser: {
+        preview: {
+            value: 0,
+            trend: 0
+        },
+        chartData: {
+            labels: [],
+            datasets: [
+                {
+                    data: []
+                }
+            ]
+        }
+    },
     sessions: {
         labels: [],
         datasets: [
@@ -35,13 +61,14 @@ const state = {
     devicesBrute: null,
     countries: [['Country', 'Popularity']],
     countriesBrute: null,
-    activeUsers: null,
+    activeUsers: 0,
     rangeDate: [],
     dayList: null
 }
 
 const getters = {
     viewPerPages: (state) => state.viewPerPages,
+    viewPerPagesBrute: (state) => state.viewPerPagesBrute,
     rangeDate: (state) => state.rangeDate,
     sessions: (state) => state.sessions,
     sessionsDuration: (state) => state.sessionsDuration,
@@ -49,7 +76,9 @@ const getters = {
     devices: (state) => state.devices,
     countries: (state) => state.countries,
     heatmapPaths: (state) => state.heatmapPaths,
-    heatmap: (state) => state.heatmap
+    heatmap: (state) => state.heatmap,
+    totalUser: (state) => state.totalUser,
+    newUser: (state) => state.newUser
 }
 
 let eventSourceSession = null
@@ -59,9 +88,19 @@ let eventSourceSessionDuration = null
 let eventSourceViewPerPages = null
 let eventSourceHeatmapPaths = null
 let eventSourceHeatmap = null
+let eventSourceTotalUser = null
+let eventSourceNewUser = null
+let eventSourceActiveUsers = null
 
 const actions = {
-    async getViewPerPages({ commit }) {},
+    async closeEventSourceTotalUser() {
+        await eventSourceTotalUser.close()
+        eventSourceTotalUser = null
+    },
+    async closeEventSourceNewUser() {
+        await eventSourceNewUser.close()
+        eventSourceNewUser = null
+    },
     async closeEventSourceSession() {
         await eventSourceSession.close()
         eventSourceSession = null
@@ -117,7 +156,7 @@ const actions = {
                     trend: trend,
                     value: totalSessionsCurrent,
                     lastPeriode: differencePercentage.toFixed(2),
-                    description: differencePercentage.toFixed(2) + ' ' + description
+                    description: description
                 }
 
                 commit('setSessionsBrute', sessionsBrute)
@@ -173,7 +212,6 @@ const actions = {
                     return
                 }
 
-                console.log(event.data)
                 let eventBrute = JSON.parse(event.data)
                 const { totalSessionsCurrent, totalSessionsPrevious } = eventBrute
                 const trend = totalSessionsCurrent > totalSessionsPrevious ? 'up' : 'down'
@@ -390,12 +428,203 @@ const actions = {
             eventSourceHeatmap.addEventListener('error', listener)
         } catch (error) {}
     },
-    async getActiveUsers({ commit }) {}
+    async getViewPerPages({ commit }) {
+        try {
+            const url = new URL(
+                apiBaseUrl + ROUTES.EVENT_VIEW_PER_PAGE(router.currentRoute.value.params.site)
+            )
+
+            Object.keys(state.rangeDate).forEach((key) =>
+                url.searchParams.append(key, state.rangeDate[key])
+            )
+
+            eventSourceViewPerPages = new EventSourcePolyfill(url, {
+                headers: {
+                    Authorization: `Bearer ${await tokenStorage.getToken()}`
+                }
+            })
+
+            const listener = function (event) {
+                if (event.type === 'error') {
+                    this.close()
+                    return
+                }
+
+                let eventBrute = JSON.parse(event.data)
+
+                const { currentPeriod, previousPeriod } = eventBrute
+                const trend = currentPeriod > previousPeriod ? 'up' : 'down'
+                const differencePercentage =
+                    ((totalSessionsCurrent - totalSessionsPrevious) / totalSessionsPrevious) * 100
+                const description = trend === 'up' ? `more than last time` : `less than last time`
+                const sessionsBrute = {
+                    trend: trend,
+                    value: totalSessionsCurrent,
+                    lastPeriode: differencePercentage.toFixed(2),
+                    description: differencePercentage.toFixed(2) + ' ' + description
+                }
+                commit('setViewPerPagesBrute', eventBrute)
+
+                commit('setViewPerPages', viewPerPages)
+            }
+            eventSourceViewPerPages.addEventListener('message', listener)
+            eventSourceViewPerPages.addEventListener('error', listener)
+        } catch (error) {}
+    },
+    async getTotalUser({ commit }) {
+        try {
+            const url = new URL(
+                apiBaseUrl + ROUTES.EVENT_TOTAL_USERS(router.currentRoute.value.params.site)
+            )
+            Object.keys(state.rangeDate).forEach((key) =>
+                url.searchParams.append(key, state.rangeDate[key])
+            )
+
+            eventSourceTotalUser = new EventSourcePolyfill(url, {
+                headers: {
+                    Authorization: `Bearer ${await tokenStorage.getToken()}`
+                }
+            })
+            const listener = function (event) {
+                if (event.type === 'error') {
+                    this.close()
+                    return
+                }
+
+                let eventBrute = JSON.parse(event.data)
+                const { totalUsersCurrentPeriod, totalUsersPreviousPeriod } = eventBrute
+                const trend = totalUsersCurrentPeriod > totalUsersPreviousPeriod ? 'up' : 'down'
+                const description = trend === 'up' ? `more than last time` : `less than last time`
+                const preview = {
+                    trend: trend,
+                    value: totalUsersCurrentPeriod,
+                    description: description
+                }
+
+                const dayList = state.dayList
+                let totalList = dayList.map((date) => {
+                    const foundDay = eventBrute.dailyUsers.find((item) => item.date === date)
+                    return foundDay ? parseInt(foundDay.usersCount) : 0
+                })
+                const labels = dayList.map((date) => date.replace(/^\d{4}-/, ''))
+                const totalUsers = {
+                    preview: preview,
+                    chartData: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Total Users',
+                                data: totalList,
+                                backgroundColor: '#a8dae3',
+                                borderColor: '#a8dae3',
+                                borderWidth: 6,
+                                pointBorderWidth: 0
+                            }
+                        ]
+                    }
+                }
+
+                commit('setTotalUser', totalUsers)
+            }
+            eventSourceTotalUser.addEventListener('message', listener)
+            eventSourceTotalUser.addEventListener('error', listener)
+        } catch (error) {}
+    },
+    async getNewUser({ commit }) {
+        try {
+            const url = new URL(
+                apiBaseUrl + ROUTES.EVENT_NEW_USERS(router.currentRoute.value.params.site)
+            )
+
+            Object.keys(state.rangeDate).forEach((key) =>
+                url.searchParams.append(key, state.rangeDate[key])
+            )
+
+            eventSourceNewUser = new EventSourcePolyfill(url, {
+                headers: {
+                    Authorization: `Bearer ${await tokenStorage.getToken()}`
+                }
+            })
+            const listener = function (event) {
+                if (event.type === 'error') {
+                    this.close()
+                    return
+                }
+                let eventBrute = JSON.parse(event.data)
+                const { newUsersCurrentPeriod, newUsersPreviousPeriod } = eventBrute
+                const trend = newUsersCurrentPeriod > newUsersPreviousPeriod ? 'up' : 'down'
+                const description = trend === 'up' ? `more than last time` : `less than last time`
+                const preview = {
+                    trend: trend,
+                    value: newUsersCurrentPeriod,
+                    description: description
+                }
+
+                const dayList = state.dayList
+                let totalList = dayList.map((date) => {
+                    const foundDay = eventBrute.dailyUsers.find((item) => item.date === date)
+                    return foundDay ? parseInt(foundDay.usersCount) : 0
+                })
+                const labels = dayList.map((date) => date.replace(/^\d{4}-/, ''))
+                const newUsers = {
+                    preview: preview,
+                    chartData: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'New Users',
+                                data: totalList,
+                                backgroundColor: '#a8dae3',
+                                borderColor: '#a8dae3',
+                                borderWidth: 6,
+                                pointBorderWidth: 0
+                            }
+                        ]
+                    }
+                }
+
+                commit('setNewUser', newUsers)
+            }
+            eventSourceNewUser.addEventListener('message', listener)
+            eventSourceNewUser.addEventListener('error', listener)
+        } catch (error) {}
+    },
+    async getActiveUsers({ commit }) {
+        try {
+            const url = new URL(
+                apiBaseUrl + ROUTES.EVENT_ACTIVE_USERS(router.currentRoute.value.params.site)
+            )
+
+            Object.keys(state.rangeDate).forEach((key) =>
+                url.searchParams.append(key, state.rangeDate[key])
+            )
+
+            eventSourceActiveUsers = new EventSourcePolyfill(url, {
+                headers: {
+                    Authorization: `Bearer ${await tokenStorage.getToken()}`
+                }
+            })
+            const listener = function (event) {
+                if (event.type === 'error') {
+                    this.close()
+                    return
+                }
+                console.log('event.data', event.data)
+
+                //commit('setActiveUsers', JSON.parse(event.data))
+            }
+            eventSourceActiveUsers.addEventListener('message', listener)
+            eventSourceActiveUsers.addEventListener('error', listener)
+        } catch (error) {}
+    }
 }
 
 const mutations = {
     setViewPerPages(state, viewPerPages) {
         state.viewPerPages = viewPerPages
+    },
+    setViewPerPagesBrute(state, viewPerPagesBrute) {
+        state.viewPerPagesBrute = viewPerPagesBrute
     },
     setSessions(state, sessions) {
         state.sessions = sessions
@@ -446,6 +675,12 @@ const mutations = {
     },
     setHeatmapPaths(state, heatmapPaths) {
         state.heatmapPaths = heatmapPaths
+    },
+    setTotalUser(state, totalUser) {
+        state.totalUser = totalUser
+    },
+    setNewUser(state, newUser) {
+        state.newUser = newUser
     }
 }
 

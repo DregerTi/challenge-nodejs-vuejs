@@ -18,7 +18,9 @@ const ROUTES = {
     EVENT_DEVICE: (siteId) => `events/${siteId}/viewer-by-os`,
     EVENT_COUNTRY: (siteId) => `events/${siteId}/viewer-by-country`,
     EVENT_HEATMAP_PATHS: (siteId) => `events/${siteId}/heatmap-paths`,
-    EVENT_HEATMAP: (siteId) => `events/${siteId}/heatmap`
+    EVENT_HEATMAP: (siteId) => `events/${siteId}/heatmap`,
+    EVENT_TOTAL_USERS: (siteId) => `events/${siteId}/total-users`,
+    EVENT_NEW_USERS: (siteId) => `events/${siteId}/total-new-users`
 }
 
 export default ROUTES

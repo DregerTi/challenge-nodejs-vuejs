@@ -1,7 +1,7 @@
 <script setup>
 import PinCard from '@/components/molecules/PinCard.vue'
 import Card from '@/components/molecules/Card.vue'
-import { defineProps, defineEmits, onBeforeMount, computed, ref } from 'vue'
+import { defineProps, defineEmits, onBeforeMount, computed, ref, watch, onUnmounted } from 'vue'
 import RoundedButton from '@/components/atoms/RoundedButton.vue'
 import { useStore } from 'vuex'
 import SessionWidget from '@/components/organisms/SessionWidget.vue'
@@ -11,6 +11,12 @@ import ActiveUsersWidget from '@/components/organisms/ActiveUsersWidget.vue'
 import NewUsersWidget from '@/components/organisms/NewUsersWidget.vue'
 import TagWidget from '@/components/organisms/TagWidget.vue'
 import ConversionTunnelWidget from '@/components/organisms/ConversionTunnelWidget.vue'
+import SessionDurationView from '@/views/event/audience/SessionDurationView.vue'
+import LocalisationView from '@/views/event/audience/LocalisationView.vue'
+import DeviceView from '@/views/event/audience/DeviceView.vue'
+import DeviceWidget from '@/components/organisms/DeviceWidget.vue'
+import SessionDurationWidget from '@/components/organisms/SessionDurationWidget.vue'
+import LocalisationWidget from '@/components/organisms/LocalisationWidget.vue'
 
 const { dashboardEditMode } = defineProps({
     dashboardEditMode: {
@@ -38,6 +44,9 @@ const store = useStore()
 const activeUsers = computed(() => store.state.eventStore.activeUsers)
 const possibleKpis = computed(() => store.state.dashboardItemStore.possibleKpis)
 const dashboardItems = computed(() => store.state.dashboardItemStore.dashboardItems)
+const sessionsBrute = computed(() => store.state.eventStore.sessionsBrute)
+const rangeDate = computed(() => store.state.eventStore.rangeDate)
+const newUser = computed(() => store.state.eventStore.newUser)
 
 function updateItem(value, item) {
     item.kpi = value
@@ -55,6 +64,15 @@ onBeforeMount(() => {
     store.dispatch('getPossibleKpis')
     store.dispatch('getDashboardItems')
 })
+
+watch(rangeDate, () => {
+    store.dispatch('closeEventSourceActiveUsers')
+    store.dispatch('getActiveUsers')
+})
+
+onUnmounted(() => {
+    store.dispatch('closeEventSourceActiveUsers')
+})
 </script>
 
 <template>
@@ -62,24 +80,24 @@ onBeforeMount(() => {
         <section class="pin-container">
             <PinCard title="Active users" :value="activeUsers" />
             <PinCard
-                title="Active users"
-                description="10% less from last month"
-                value="33"
-                trend="down"
+                title="Total sessions"
+                :description="sessionsBrute?.description"
+                :value="sessionsBrute?.value"
+                :trend="sessionsBrute?.trend"
                 variant="primary"
             />
             <PinCard
-                title="Active users"
-                description="10% less from last month"
-                value="33"
-                trend="down"
+                title="New users"
+                :description="newUser?.preview.description"
+                :value="newUser?.preview.value"
+                :trend="newUser?.preview.trend"
                 variant="primary"
             />
             <PinCard
-                title="Active users"
-                description="10% less from last month"
-                value="33"
-                trend="down"
+                :value="sessionsDurationBrute?.value"
+                title="Average session"
+                :description="sessionsDurationBrute?.description"
+                :trend="sessionsDurationBrute?.trend"
                 variant="primary"
             />
         </section>
@@ -95,10 +113,13 @@ onBeforeMount(() => {
                 path="/"
             >
                 <SessionWidget v-if="item.name === 'Sessions'" variant="sm" />
+                <SessionDurationWidget v-if="item.name === 'Average Time By Session'" />
+                <LocalisationWidget v-if="item.name === 'Viewer By Country'" />
+                <DeviceWidget v-if="item.name === 'Viewer By OS'" />
                 <PageViewWidget v-if="item.name === 'Page Views'" />
-                <TotalUsersWidget v-if="item.name === 'Total Users'" />
+                <TotalUsersWidget v-if="item.name === 'Total Users'" variant="sm" />
                 <ActiveUsersWidget v-if="item.name === 'Active Users'" />
-                <NewUsersWidget v-if="item.name === 'New Users'" />
+                <NewUsersWidget v-if="item.name === 'New Users'" variant="sm" />
                 <TagWidget v-if="item.name.startsWith('Tag ')" />
                 <ConversionTunnelWidget v-if="item.name.startsWith('Conversion Tunnel ')" />
             </Card>
