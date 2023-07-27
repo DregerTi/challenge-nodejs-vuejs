@@ -112,10 +112,22 @@ const actions = {
             eventSourceTotalUser = null
         }
     },
+    async closeEventSourceNewUsers() {
+        if (eventSourceNewUser) {
+            await eventSourceNewUser.close()
+            eventSourceNewUser = null
+        }
+    },
     async closeEventSourceNewUser() {
         if (eventSourceNewUser) {
             await eventSourceNewUser.close()
             eventSourceNewUser = null
+        }
+    },
+    async closeEventSourceSessions() {
+        if (eventSourceSession) {
+            await eventSourceSession.close()
+            eventSourceSession = null
         }
     },
     async closeEventSourceSession() {
