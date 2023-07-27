@@ -191,7 +191,8 @@ module.exports = function Controller(EventService, TagService, SessionService, V
       res.write(`data: ${JSON.stringify(result)}\n\n`);
 
       const changeStream = Event.watch();
-      changeStream.on("change", async () => {
+      changeStream.on("change", async (change) => {
+        console.log(change);
         try {
           const result = (await EventService.findAllAggregate(aggregate))[0];
 

@@ -45,6 +45,7 @@ const activeUsers = computed(() => store.state.eventStore.activeUsers)
 const possibleKpis = computed(() => store.state.dashboardItemStore.possibleKpis)
 const dashboardItems = computed(() => store.state.dashboardItemStore.dashboardItems)
 const sessionsBrute = computed(() => store.state.eventStore.sessionsBrute)
+console.log(sessionsBrute)
 const rangeDate = computed(() => store.state.eventStore.rangeDate)
 const newUser = computed(() => store.state.eventStore.newUser)
 const sessionsDurationBrute = computed(() => store.state.eventStore.sessionsDurationBrute)
@@ -62,9 +63,11 @@ function updateItem(value, item) {
 
 onBeforeMount(() => {
     store.dispatch('getActiveUsers')
+    store.dispatch('getNewUser')
     store.dispatch('getPossibleKpis')
     store.dispatch('getDashboardItems')
     store.dispatch('getSessionsDuration')
+    store.dispatch('getSessions')
 })
 
 watch(rangeDate, () => {
@@ -72,11 +75,15 @@ watch(rangeDate, () => {
     store.dispatch('closeEventSourceSessionDuration')
     store.dispatch('getActiveUsers')
     store.dispatch('getSessionsDuration')
+    store.dispatch('getSessions')
+    store.dispatch('getNewUser')
 })
 
 onUnmounted(() => {
     store.dispatch('closeEventSourceSessionDuration')
     store.dispatch('closeEventSourceActiveUsers')
+    store.dispatch('closeEventSourceSessions')
+    store.dispatch('closeEventSourceNewUsers')
 })
 </script>
 
@@ -112,6 +119,7 @@ onUnmounted(() => {
         </section>
         <div class="dashboard-grid">
             <Card
+                v-if="dashboardItems.length !== 0"
                 v-for="item in dashboardItems"
                 :key="item.id"
                 @update:model-value="(value) => updateItem(value, item)"
@@ -143,7 +151,7 @@ onUnmounted(() => {
             />
 
             <RoundedButton
-                v-if="dashboardEditMode"
+                v-if="dashboardEditMode && dashboardItems.length <= 3"
                 icon="Close"
                 variant="primary"
                 size="md"
@@ -205,6 +213,7 @@ onUnmounted(() => {
         grid-row-gap: 1.5rem;
     }
 }
+
 @media (max-width: 768px) {
     .dashboard-grid {
         grid-template-rows: unset;

@@ -12,10 +12,10 @@ const { title, description, value, trend, variant, editMode } = defineProps({
         type: String
     },
     value: {
-        type: String | Number
+        type: String
     },
     trend: {
-        type: String | Number,
+        type: String,
         default: null
     },
     variant: {

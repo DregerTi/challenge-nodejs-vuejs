@@ -85,10 +85,6 @@ const actions = {
                     name: 'Average Time By Session'
                 },
                 {
-                    id: 'activeUsers',
-                    name: 'Active Users'
-                },
-                {
                     id: 'viewerByCountry',
                     name: 'Viewer By Country'
                 },

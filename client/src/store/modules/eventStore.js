@@ -185,6 +185,7 @@ const actions = {
                     lastPeriode: differencePercentage.toFixed(2),
                     description: description
                 }
+                console.log(sessionsBrute);
 
                 commit('setSessionsBrute', sessionsBrute)
 
@@ -236,7 +237,6 @@ const actions = {
 
             const listener = function (event) {
                 if (event.type === 'error') {
-                    this.close()
                     return
                 }
 
@@ -306,7 +306,6 @@ const actions = {
 
             const listener = function (event) {
                 if (event.type === 'error') {
-                    this.close()
                     return
                 }
 
@@ -376,7 +375,6 @@ const actions = {
 
             const listener = function (event) {
                 if (event.type === 'error') {
-                    this.close()
                     return
                 }
 
@@ -416,7 +414,6 @@ const actions = {
             })
             const listener = async function (event) {
                 if (event.type === 'error') {
-                    this.close()
                     return
                 }
 
@@ -453,7 +450,6 @@ const actions = {
 
             const listener = function (event) {
                 if (event.type === 'error') {
-                    this.close()
                     return
                 }
                 const heatmap = JSON.parse(event.data)
@@ -481,7 +477,6 @@ const actions = {
 
             const listener = function (event) {
                 if (event.type === 'error') {
-                    this.close()
                     return
                 }
 
@@ -551,7 +546,6 @@ const actions = {
             })
             const listener = function (event) {
                 if (event.type === 'error') {
-                    this.close()
                     return
                 }
 
@@ -611,7 +605,6 @@ const actions = {
             })
             const listener = function (event) {
                 if (event.type === 'error') {
-                    this.close()
                     return
                 }
                 let eventBrute = JSON.parse(event.data)
@@ -677,7 +670,6 @@ const actions = {
             })
             const listener = function (event) {
                 if (event.type === 'error') {
-                    this.close()
                     return
                 }
 
