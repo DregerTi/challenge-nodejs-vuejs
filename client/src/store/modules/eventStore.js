@@ -8,7 +8,14 @@ const apiBaseUrl = import.meta.env.VITE_API_BASE_URL
 
 const state = {
     viewPerPages: null,
-    viewPerPagesBrute: null,
+    viewPerPagesBrute: {
+        labels: [''],
+        datasets: [
+            {
+                data: []
+            }
+        ]
+    },
     sessionsBrute: null,
     heatmapPaths: null,
     heatmap: null,
@@ -182,10 +189,9 @@ const actions = {
                 const sessionsBrute = {
                     trend: trend,
                     value: totalSessionsCurrent,
-                    lastPeriode: differencePercentage.toFixed(2),
+                    lastPeriode: differencePercentage ? differencePercentage.toFixed(2) : 0,
                     description: description
                 }
-                console.log(sessionsBrute);
 
                 commit('setSessionsBrute', sessionsBrute)
 

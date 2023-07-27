@@ -79,7 +79,7 @@ onUnmounted(() => {
         }
 
         & > .pin-card {
-            width: 23% !important;
+            width: 23%;
         }
     }
 }

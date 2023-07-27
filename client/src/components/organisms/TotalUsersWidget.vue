@@ -42,7 +42,7 @@ onUnmounted(() => {
 
 <template>
     <section
-        class="chart-card--sessions"
+        class="chart-card--sessions chart-card-view"
         :class="[variant ? 'chart-card--sessions--' + variant : '']"
     >
         <div>
@@ -57,6 +57,11 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss">
+.chart-card-view {
+    display: flex;
+    justify-content: center;
+}
+
 .chart-card--sessions {
     width: 100%;
     display: flex;

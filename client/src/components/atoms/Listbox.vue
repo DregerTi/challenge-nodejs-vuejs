@@ -35,7 +35,9 @@ watch(selectedValue, (newValue) => {
         <Listbox v-model="selectedValue">
             <div class="relative">
                 <ListboxButton class="pr-10 focus:outline-none sm:text-sm">
-                    <span class="block truncate listbox-label">{{ selectedValue }}</span>
+                    <span class="block truncate listbox-label">{{
+                        selectedValue ? selectedValue : values[0].name
+                    }}</span>
                     <span
                         class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
                     >

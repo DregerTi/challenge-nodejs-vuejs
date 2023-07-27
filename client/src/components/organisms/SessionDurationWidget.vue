@@ -54,7 +54,7 @@ onUnmounted(() => {
                     ? sessionsDurationBrute?.value
                     : 0 + ' min'
             "
-            :description="sessionsDurationBrute?.description"
+            :description="variant == 'sm' ? '' : sessionsDurationBrute?.description"
             title="Total session"
             :trend="sessionsDurationBrute?.trend"
         />
@@ -83,7 +83,7 @@ onUnmounted(() => {
         }
 
         & > .pin-card {
-            width: 23% !important;
+            width: 23%;
         }
     }
 }

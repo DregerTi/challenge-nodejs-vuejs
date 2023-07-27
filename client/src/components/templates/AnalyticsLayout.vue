@@ -2,10 +2,9 @@
 import { RouterView, useRoute } from 'vue-router'
 import Button from '@/components/atoms/Button.vue'
 import Header from '@/components/organisms/Header.vue'
-import { computed, onBeforeMount, onUpdated, ref } from 'vue'
+import { computed, onBeforeMount, onMounted, ref } from 'vue'
 import Listbox from '@/components/atoms/Listbox.vue'
 import Calendar from '../molecules/Calendar.vue'
-import SiteProvider from '@/contexts/SiteProvider.vue'
 import router from '@/router'
 import { useStore } from 'vuex'
 import dayjs from 'dayjs'
@@ -26,7 +25,7 @@ const dateValue = {
 const site = computed(() => store.state.siteStore.site)
 const sites = computed(() => store.state.siteStore.sites)
 
-onBeforeMount(async () => {
+onMounted(async () => {
     await store.dispatch('getSites')
     if (router.currentRoute.value.params.site) {
         await store.dispatch('getSite', router.currentRoute.value.params.site)

@@ -7,13 +7,9 @@ import { useStore } from 'vuex'
 import SessionWidget from '@/components/organisms/SessionWidget.vue'
 import PageViewWidget from '@/components/organisms/PageViewsWidget.vue'
 import TotalUsersWidget from '@/components/organisms/TotalUsersWidget.vue'
-import ActiveUsersWidget from '@/components/organisms/ActiveUsersWidget.vue'
 import NewUsersWidget from '@/components/organisms/NewUsersWidget.vue'
 import TagWidget from '@/components/organisms/TagWidget.vue'
 import ConversionTunnelWidget from '@/components/organisms/ConversionTunnelWidget.vue'
-import SessionDurationView from '@/views/event/audience/SessionDurationView.vue'
-import LocalisationView from '@/views/event/audience/LocalisationView.vue'
-import DeviceView from '@/views/event/audience/DeviceView.vue'
 import DeviceWidget from '@/components/organisms/DeviceWidget.vue'
 import SessionDurationWidget from '@/components/organisms/SessionDurationWidget.vue'
 import LocalisationWidget from '@/components/organisms/LocalisationWidget.vue'
@@ -45,7 +41,6 @@ const activeUsers = computed(() => store.state.eventStore.activeUsers)
 const possibleKpis = computed(() => store.state.dashboardItemStore.possibleKpis)
 const dashboardItems = computed(() => store.state.dashboardItemStore.dashboardItems)
 const sessionsBrute = computed(() => store.state.eventStore.sessionsBrute)
-console.log(sessionsBrute)
 const rangeDate = computed(() => store.state.eventStore.rangeDate)
 const newUser = computed(() => store.state.eventStore.newUser)
 const sessionsDurationBrute = computed(() => store.state.eventStore.sessionsDurationBrute)
@@ -90,7 +85,10 @@ onUnmounted(() => {
 <template>
     <div>
         <section class="pin-container">
-            <PinCard title="Active users" :value="activeUsers?.uniqueViewerCount" />
+            <PinCard
+                title="Active users"
+                :value="activeUsers?.uniqueViewerCount ? activeUsers?.uniqueViewerCount : 0"
+            />
             <PinCard
                 title="Total sessions"
                 :description="sessionsBrute?.description"
@@ -135,7 +133,6 @@ onUnmounted(() => {
                 <DeviceWidget v-if="item.name === 'Viewer By OS'" />
                 <PageViewWidget v-if="item.name === 'Page Views'" />
                 <TotalUsersWidget v-if="item.name === 'Total Users'" variant="sm" />
-                <ActiveUsersWidget v-if="item.name === 'Active Users'" />
                 <NewUsersWidget v-if="item.name === 'New Users'" variant="sm" />
                 <TagWidget v-if="item.name.startsWith('Tag ')" />
                 <ConversionTunnelWidget v-if="item.name.startsWith('Conversion Tunnel ')" />

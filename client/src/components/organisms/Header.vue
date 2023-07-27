@@ -2,10 +2,10 @@
 import Header from '@/App.vue'
 import { RouterLink } from 'vue-router'
 import Button from '@/components/atoms/Button.vue'
-import { computed, defineProps, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import Switch from '@/components/atoms/Switch.vue'
-import SiteProvider from '@/contexts/SiteProvider.vue'
 import { useStore } from 'vuex'
+import router from '@/router'
 
 const store = useStore()
 const site = computed(() => store.state.siteStore.site)
@@ -13,6 +13,12 @@ const site = computed(() => store.state.siteStore.site)
 const isOpen = ref(true)
 const isOpenBtn = 'xl-primary-bg-unset'
 const isCloseBtn = 'xl-bg-unset'
+
+onMounted(async () => {
+    if (router.currentRoute.value.params.site) {
+        await store.dispatch('getSite', router.currentRoute.value.params.site)
+    }
+})
 
 function mouseLeave() {
     isOpen.value = false

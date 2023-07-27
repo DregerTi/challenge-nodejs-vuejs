@@ -30,7 +30,7 @@ services:
       - 3000:3000
     environment:
       JWT_SECRET: ImAstrongSecret
-      URL_MONGO: mongodb+srv://stervinoug36:quxjELIaHIRwMBhd@cluster0.jru3gyx.mongodb.net/?retryWrites=true&w=majority
+      URL_MONGO: mongodb://mongo:27017/?replicaSet=analytics
     env_file:
       - .env
     working_dir: /usr/src/app

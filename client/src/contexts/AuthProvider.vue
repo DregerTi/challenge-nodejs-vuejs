@@ -23,12 +23,11 @@ async function login(email, password) {
         const response = await securityService.login(email, password)
         errors.value = {}
         await tokenStorage.saveToken(response.token)
-        //user.value = tokenStorage.getUser()
         await store.dispatch('getSites')
         if (sites.value.length > 0) {
-            router.push({ name: 'dashboard', params: { site: sites.value[0].id } })
+            await router.push({ name: 'dashboard', params: { site: sites.value[0].id } })
         } else {
-            router.push({ name: 'site-create' })
+            await router.push({ name: 'site-create' })
         }
     } catch (error) {
         errors.value = error
