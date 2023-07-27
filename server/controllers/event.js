@@ -105,21 +105,33 @@ module.exports = function Controller(EventService, TagService, SessionService, V
         }
 
         const aggregate = eventUtils().getViewPerPageAggregate(id, start, end, previousPeriodStart, previousPeriodEnd);
-        const result = await EventService.findAllAggregate(aggregate);
+
+        const result = (await EventService.findAllAggregate(aggregate))[0];
+
+        result.pages = result.currentPeriod.map((item) => {
+          item.previousPeriodCount = result.previousPeriod.find((previousItem) => previousItem.path === item.path)?.count ?? 0;
+        })
+        result.previousPeriod = undefined;
+
         res.write(`data: ${JSON.stringify(result)}\n\n`);
-
         const changeStream = Event.watch();
-        changeStream.on("change", async () => {
-          try {
-            const result = await EventService.findAllAggregate(aggregate);
 
-            res.write(`data: ${JSON.stringify(result)}\n\n`);
-          } catch (err) {
-            next(err);
+        changeStream.on("change", async (change) => {
+          if (change.fullDocument.type === 'view') {
+            try {
+              const result = (await EventService.findAllAggregate(aggregate))[0];
+              result.pages = result.currentPeriod.map((item) => {
+                item.previousPeriodCount = result.previousPeriod.find((previousItem) => previousItem.path === item.path)?.count ?? 0;
+              })
+              result.previousPeriod = undefined;
+              res.write(`data: ${JSON.stringify(result)}\n\n`);
+            } catch (err) {
+              next(err);
+            }
           }
 
         });
-
+        console.log("test3");
         req.on("close", () => {
           changeStream.close();
           res.end();
@@ -162,7 +174,6 @@ module.exports = function Controller(EventService, TagService, SessionService, V
       }
     },
     getAvgTimeBySession: async function(req, res, next) {
-      //TODO le jour de chaque daily est manquant
       const { id } = req.params;
       let { startDate, endDate } = req.query;
       res.setHeader("Content-Type", "text/event-stream");
@@ -449,132 +460,132 @@ module.exports = function Controller(EventService, TagService, SessionService, V
       res.setHeader("Connection", "keep-alive");
 
       try {
-      const { start, end, previousPeriodStart, previousPeriodEnd } =
-        eventUtils().getRangeDates(startDate, endDate);
+        const { start, end, previousPeriodStart, previousPeriodEnd } =
+          eventUtils().getRangeDates(startDate, endDate);
 
-      if (start === undefined || end === undefined || start > end) {
-        res.status(400).json({ message: "Invalid date" });
-        return;
-      }
-
-      const aggregate = eventUtils().getTotalUsersAggregate(id, start, end, previousPeriodStart, previousPeriodEnd);
-      const result = (await EventService.findAllAggregate(aggregate))[0];
-
-      if (result?.totalUsersPreviousPeriod === undefined) {
-        result.totalUsersPreviousPeriod = 0;
-      }
-      if (result?.totalUsersCurrentPeriod === undefined) {
-        result.totalUsersCurrentPeriod = 0;
-      }
-
-      res.write(`data: ${JSON.stringify(result)}\n\n`);
-
-      const changeStream = Event.watch();
-      changeStream.on("change", async (change) => {
-        try {
-          const result = (await EventService.findAllAggregate(aggregate))[0];
-          if (result?.totalUsersPreviousPeriod === undefined) {
-            result.totalUsersPreviousPeriod = 0;
-          }
-          if (result?.totalUsersCurrentPeriod === undefined) {
-            result.totalUsersCurrentPeriod = 0;
-          }
-          res.write(`data: ${JSON.stringify(result)}\n\n`);
-        } catch (err) {
-          next(err);
+        if (start === undefined || end === undefined || start > end) {
+          res.status(400).json({ message: "Invalid date" });
+          return;
         }
-      });
 
-      req.on("error", (err) => {
-        changeStream.close();
-        res.end();
-      });
+        const aggregate = eventUtils().getTotalUsersAggregate(id, start, end, previousPeriodStart, previousPeriodEnd);
+        const result = (await EventService.findAllAggregate(aggregate))[0];
 
-      req.on("close", () => {
-        changeStream.close();
-        res.end();
-      });
-    } catch(err) {
-      next(err);
-    }
+        if (result?.totalUsersPreviousPeriod === undefined) {
+          result.totalUsersPreviousPeriod = 0;
+        }
+        if (result?.totalUsersCurrentPeriod === undefined) {
+          result.totalUsersCurrentPeriod = 0;
+        }
 
-  },
-    getOneTag: async function(req, res, next) {
-    const { id, tagId } = req.params;
-    let { startDate, endDate } = req.query;
-    try {
-      res.setHeader("Content-Type", "text/event-stream");
-      res.setHeader("Cache-Control", "no-cache");
-      res.setHeader("Connection", "keep-alive");
+        res.write(`data: ${JSON.stringify(result)}\n\n`);
 
-      const { start, end, previousPeriodStart, previousPeriodEnd } =
-        eventUtils().getRangeDates(startDate, endDate);
-
-      if (start === undefined || end === undefined || start > end) {
-        res.status(400).json({ message: "Invalid date" });
-        return;
-      }
-
-      const aggregate =
-        eventUtils().getOneTagAggregate(id, tagId, start, end, previousPeriodStart, previousPeriodEnd);
-
-      const result = (await EventService.findAllAggregate(aggregate))[0];
-      if (result.currentPeriod === undefined) {
-        result.currentPeriod = {
-          currentPeriodCount: 0,
-          currentPeriodEvents: []
-        };
-      }
-      if (result.previousPeriod === undefined) {
-        result.previousPeriod = {
-          previousPeriodCount: 0
-        };
-      }
-      res.write(`data: ${JSON.stringify(result)}\n\n`);
-
-      const changeStream = Event.watch();
-      changeStream.on("change", async (change) => {
-        if (change.fullDocument.type === "tag") {
+        const changeStream = Event.watch();
+        changeStream.on("change", async (change) => {
           try {
-            const aggregate = eventUtils().getOneTagAggregate(id, tagId, start, end, previousPeriodStart, previousPeriodEnd);
             const result = (await EventService.findAllAggregate(aggregate))[0];
-            if (result.currentPeriod === undefined) {
-              result.currentPeriod = {
-                currentPeriodCount: 0,
-                currentPeriodEvents: []
-              };
+            if (result?.totalUsersPreviousPeriod === undefined) {
+              result.totalUsersPreviousPeriod = 0;
             }
-            if (result.previousPeriod === undefined) {
-              result.previousPeriod = {
-                previousPeriodCount: 0
-              };
+            if (result?.totalUsersCurrentPeriod === undefined) {
+              result.totalUsersCurrentPeriod = 0;
             }
             res.write(`data: ${JSON.stringify(result)}\n\n`);
           } catch (err) {
             next(err);
           }
+        });
+
+        req.on("error", (err) => {
+          changeStream.close();
+          res.end();
+        });
+
+        req.on("close", () => {
+          changeStream.close();
+          res.end();
+        });
+      } catch (err) {
+        next(err);
+      }
+
+    },
+    getOneTag: async function(req, res, next) {
+      const { id, tagId } = req.params;
+      let { startDate, endDate } = req.query;
+      try {
+        res.setHeader("Content-Type", "text/event-stream");
+        res.setHeader("Cache-Control", "no-cache");
+        res.setHeader("Connection", "keep-alive");
+
+        const { start, end, previousPeriodStart, previousPeriodEnd } =
+          eventUtils().getRangeDates(startDate, endDate);
+
+        if (start === undefined || end === undefined || start > end) {
+          res.status(400).json({ message: "Invalid date" });
+          return;
         }
 
+        const aggregate =
+          eventUtils().getOneTagAggregate(id, tagId, start, end, previousPeriodStart, previousPeriodEnd);
 
-      });
+        const result = (await EventService.findAllAggregate(aggregate))[0];
+        if (result.currentPeriod === undefined) {
+          result.currentPeriod = {
+            currentPeriodCount: 0,
+            currentPeriodEvents: []
+          };
+        }
+        if (result.previousPeriod === undefined) {
+          result.previousPeriod = {
+            previousPeriodCount: 0
+          };
+        }
+        res.write(`data: ${JSON.stringify(result)}\n\n`);
 
-      req.on("error", (err) => {
-        changeStream.close();
-        res.end();
-      });
+        const changeStream = Event.watch();
+        changeStream.on("change", async (change) => {
+          if (change.fullDocument.type === "tag") {
+            try {
+              const aggregate = eventUtils().getOneTagAggregate(id, tagId, start, end, previousPeriodStart, previousPeriodEnd);
+              const result = (await EventService.findAllAggregate(aggregate))[0];
+              if (result.currentPeriod === undefined) {
+                result.currentPeriod = {
+                  currentPeriodCount: 0,
+                  currentPeriodEvents: []
+                };
+              }
+              if (result.previousPeriod === undefined) {
+                result.previousPeriod = {
+                  previousPeriodCount: 0
+                };
+              }
+              res.write(`data: ${JSON.stringify(result)}\n\n`);
+            } catch (err) {
+              next(err);
+            }
+          }
 
-      req.on("close", () => {
-        changeStream.close();
-        res.end();
-      });
-    } catch (err) {
-      next(err);
+
+        });
+
+        req.on("error", (err) => {
+          changeStream.close();
+          res.end();
+        });
+
+        req.on("close", () => {
+          changeStream.close();
+          res.end();
+        });
+      } catch (err) {
+        next(err);
+      }
+    },
+    getConversionTunnels: async function(req, res, next) {
+      //TODO renvoyer le nb de sessions qui ont eu un event de chaque tag dans l'ordre chronologique + le nb de sessions qui ont eu l'event 1 au minimum + le nb de sessions qui ont eu l'event 1 au minimum sur la période précédente + range par dates
     }
-  },
-  getConversionTunnels: async function(req, res, next) {
-    //TODO renvoyer le nb de sessions qui ont eu un event de chaque tag dans l'ordre chronologique + le nb de sessions qui ont eu l'event 1 au minimum + le nb de sessions qui ont eu l'event 1 au minimum sur la période précédente + range par dates
-  }
 
-};
+  };
 }
 ;

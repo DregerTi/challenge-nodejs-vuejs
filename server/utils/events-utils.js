@@ -109,7 +109,7 @@ module.exports = function eventUtil() {
         {
           $group: {
             _id: "$_id.system",
-            nbViewers: { $sum: 1 },
+            nbViewers: { $sum: 1 }
           }
         },
         {
@@ -125,13 +125,13 @@ module.exports = function eventUtil() {
           $project: {
             _id: 0,
             system: "$viewersBySystem.system",
-            nbViewers: "$viewersBySystem.nbViewers",
+            nbViewers: "$viewersBySystem.nbViewers"
           }
         },
         {
           $sort: { system: 1 } // Tri par ordre alphabétique du système (facultatif)
         }
-      ]
+      ];
     },
     getLocalizationDatas: (id, start, end) => {
       return [
@@ -150,7 +150,7 @@ module.exports = function eventUtil() {
         {
           $group: {
             _id: "$_id.country",
-            nbViewers: { $sum: 1 },
+            nbViewers: { $sum: 1 }
           }
         },
         {
@@ -166,14 +166,14 @@ module.exports = function eventUtil() {
           $project: {
             _id: 0,
             country: "$viewersByCountry.country",
-            nbViewers: "$viewersByCountry.nbViewers",
+            nbViewers: "$viewersByCountry.nbViewers"
 
           }
         },
         {
           $sort: { country: 1 } // Tri par ordre alphabétique du système (facultatif)
         }
-      ]
+      ];
     },
     getActiveUsersAggregate: (id) => {
       return [
@@ -261,96 +261,95 @@ module.exports = function eventUtil() {
             previousPeriod: { $arrayElemAt: ["$previousPeriod", 0] }
           }
         }
-      ]
+      ];
     },
     getViewPerPageAggregate(id, start, end, previousPeriodStart, previousPeriodEnd) {
       return [
         {
           $facet: {
-            topFive: [
+            currentPeriod: [
               {
                 $match: {
-                  type: "view",
                   siteId: id,
+                  type: "view",
                   createdAt: { $gte: start, $lte: end }
                 }
               },
               {
                 $group: {
-                  _id: "$path",
+                  _id: { path: "$path" },
                   count: { $sum: 1 }
-                }
-              },
-
-              {
-                $sort: { count: -1 }
-              },
-              {
-                $limit: 5
-              },
-              {
-                $lookup: {
-                  from: "events",
-                  localField: "_id",
-                  foreignField: "path",
-                  as: "events"
                 }
               },
               {
                 $project: {
-                  _id: 1,
-                  count: 1,
-                  events: 1
+                  _id: 0,
+                  path: "$_id.path",
+                  currentPeriodCount: "$count"
                 }
-              }
-            ],
-            currentPeriod: [
-              {
-                $match: {
-                  type: "view",
-                  siteId: id,
-                  createdAt: { $gte: start, $lte: end }
-                }
-              },
-              {
-                $group: {
-                  _id: "$path",
-                  count: { $sum: 1 }
-                }
-              },
-
-              {
-                $sort: { count: -1 }
               }
             ],
             previousPeriod: [
               {
                 $match: {
-                  type: "view",
                   siteId: id,
+                  type: "view",
                   createdAt: { $gte: previousPeriodStart, $lte: previousPeriodEnd }
                 }
               },
               {
                 $group: {
-                  _id: "$path",
+                  _id: { path: "$path" },
                   count: { $sum: 1 }
                 }
               },
               {
-                $sort: { count: -1 }
+                $project: {
+                  _id: 0,
+                  path: "$_id.path",
+                  count: "$count"
+                }
+              }
+            ],
+            dailyCounts: [
+              {
+                $match: {
+                  siteId: id,
+                  type: "view",
+                  createdAt: { $gte: start, $lte: end }
+                }
+              },
+              {
+                $group: {
+                  _id: {
+                    path: "$path",
+                    date: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } }
+                  },
+                  count: { $sum: 1 }
+                }
+              },
+              {
+                $group: {
+                  _id: "$_id.path",
+                  dailyCounts: {
+                    $push: {
+                      date: "$_id.date",
+                      count: "$count"
+                    }
+                  }
+                }
+              },
+              {
+                $project: {
+                  _id: 0,
+                  path: "$_id",
+                  dailyCounts: 1
+                }
               }
             ]
           }
         },
-        {
-          $project: {
-            topFive: 1,
-            currentPeriod: 1,
-            previousPeriod: 1
-          }
-        }
-      ]
+      ];
     },
     getAvgTimeBySessionAggregate(id, start, end, previousPeriodStart, previousPeriodEnd) {
       return [
@@ -436,7 +435,10 @@ module.exports = function eventUtil() {
               },
               {
                 $group: {
-                  _id: "$sessionId",
+                  _id: {
+                    date: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                    sessionId: "$sessionId"
+                  },
                   firstCreatedAt: { $min: "$createdAt" },
                   lastCreatedAt: { $max: "$createdAt" }
                 }
@@ -444,26 +446,24 @@ module.exports = function eventUtil() {
               {
                 $project: {
                   _id: 0,
-                  sessionId: "$_id",
-                  duration: { $subtract: ["$lastCreatedAt", "$firstCreatedAt"] }
+                  date: "$_id.date",
+                  sessionId: "$_id.sessionId",
+                  sessionDuration: { $subtract: ["$lastCreatedAt", "$firstCreatedAt"] }
                 }
               },
               {
                 $group: {
-                  _id: null,
-                  totalDuration: { $sum: "$duration" },
+                  _id: "$date",
+                  totalDuration: { $sum: "$sessionDuration" },
                   totalSessions: { $sum: 1 }
                 }
               },
               {
                 $project: {
                   _id: 0,
-                  averageDuration: { $divide: ["$totalDuration", "$totalSessions"] },
-                  count: "$totalSessions"
+                  date: "$_id",
+                  averageDuration: { $divide: ["$totalDuration", "$totalSessions"] }
                 }
-              },
-              {
-                $sort: { date: 1 }
               },
             ]
           }
@@ -554,7 +554,7 @@ module.exports = function eventUtil() {
             dailyUsers: 1
           }
         }
-      ]
+      ];
     },
     getNewUsersAggregate(id, start, end, previousPeriodStart, previousPeriodEnd) {
       return [
@@ -666,22 +666,22 @@ module.exports = function eventUtil() {
             size: { $ne: null },
             path: {
               $regex: searchString ? searchString : "", // Si searchString est présent, on filtre selon cette chaîne de caractères, sinon on filtre sur tout
-              $options: "i", // Options pour la recherche insensible à la casse
-            },
-          },
+              $options: "i" // Options pour la recherche insensible à la casse
+            }
+          }
         },
         {
           $group: {
-            _id: "$path",// Compteur du nombre d'événements pour chaque path
-          },
+            _id: "$path"// Compteur du nombre d'événements pour chaque path
+          }
         },
         {
           $project: {
             _id: 0,
-            path: "$_id",
-          },
-        },
-      ]
+            path: "$_id"
+          }
+        }
+      ];
     },
     getHeatmapForPathAggregate(id, start, end, path, size) {
       return [
@@ -691,36 +691,36 @@ module.exports = function eventUtil() {
             path: path,
             size: size,
             type: "click",
-            createdAt: { $gte: start, $lte: end },
-          },
+            createdAt: { $gte: start, $lte: end }
+          }
         },
         {
           $group: {
             _id: { x: "$coordinates.x", y: "$coordinates.y" },
-            value: { $sum: 1 }, // Compteur du nombre de fois que chaque paire de coordonnées est présente
-          },
+            value: { $sum: 1 } // Compteur du nombre de fois que chaque paire de coordonnées est présente
+          }
         },
         {
           $project: {
             _id: 0,
             x: "$_id.x",
             y: "$_id.y",
-            value: 1,
-          },
+            value: 1
+          }
         },
         {
           $group: {
             _id: null,
-            results: { $push: "$$ROOT" }, // Accumuler toutes les coordonnées dans un tableau "results"
-          },
+            results: { $push: "$$ROOT" } // Accumuler toutes les coordonnées dans un tableau "results"
+          }
         },
         {
           $project: {
             _id: 0,
-            results: 1,
-          },
-        },
-      ]
+            results: 1
+          }
+        }
+      ];
     }
-  }
-}
+  };
+};
