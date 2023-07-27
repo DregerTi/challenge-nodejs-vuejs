@@ -2,8 +2,7 @@
 import { RouterView } from 'vue-router'
 import Button from '@/components/atoms/Button.vue'
 import Header from '@/components/organisms/Header.vue'
-import { computed, defineEmits, onBeforeMount, ref } from 'vue'
-import { useStore } from 'vuex'
+import { defineEmits, ref } from 'vue'
 import Input from '@/components/atoms/Input.vue'
 import Calendar from '../molecules/Calendar.vue'
 import router from '@/router'
@@ -18,22 +17,6 @@ const screenShotBtn = ref(false)
 const emit = defineEmits(['update:setDateButton', 'update:dashboardEditButton'])
 emit('update:setDateButton', false)
 emit('update:dashboardEditButton', false)
-
-const store = useStore()
-const users = computed(() => store.state.siteStore.role)
-
-let userRole = ''
-
-onBeforeMount(async () => {
-    await store.dispatch('getConversionTunnel', router.currentRoute.value.params.id)
-    await store.dispatch('getRole')
-
-    users.value.forEach((user) => {
-        if (user.siteId.toString() === router.currentRoute.value.params.site.toString()) {
-            return (userRole = user.role)
-        }
-    })
-})
 
 const { title, items, description, createNewPath, path } = defineProps({
     title: {
@@ -63,20 +46,16 @@ const { title, items, description, createNewPath, path } = defineProps({
     <div class="container-explore">
         <header :class="[mdMenuExplore ? 'md-menu-explore' : '']">
             <Input type="text" placeholder="Search" name="search" variant="search" />
-            <RouterLink v-if="createNewPath && userRole === 'ADMIN'" :to="createNewPath">
+            <RouterLink v-if="createNewPath" :to="createNewPath">
                 <Button title="Create new" />
             </RouterLink>
             <nav>
                 <RouterLink v-for="item in items" :key="item.id" :to="path + '/' + item.id">
-                    <Button
-                        :title="item.name ? item.name : item.url"
-                        :variant="
-                            router.currentRoute.value.params.id &&
+                    <Button :title="item.name ? item.name : item.url" :variant="router.currentRoute.value.params.id &&
                             router.currentRoute.value.params.id == item.id
-                                ? 'dark-grey'
-                                : 'light-grey'
-                        "
-                    />
+                            ? 'dark-grey'
+                            : 'light-grey'
+                        " />
                 </RouterLink>
             </nav>
         </header>
@@ -102,21 +81,11 @@ const { title, items, description, createNewPath, path } = defineProps({
                 </p>
             </header>
             <section>
-                <RouterView
-                    v-slot="{ Component }"
-                    v-model:deleteBtn="deleteBtn"
-                    v-model:updateBtn="updateBtn"
-                    v-model:calendarBtn="calendarBtn"
-                    v-model:descriptionHidden="descriptionHidden"
-                    v-model:mdMenuExplore="mdMenuExplore"
-                    v-model:screenShotBtn="screenShotBtn"
-                >
-                    <transition
-                        v-if="Component"
-                        enter-active-class="animate__animated animate__fadeInRight"
-                        leave-active-class="animate__animated animate__fadeOutLeft"
-                        mode="out-in"
-                    >
+                <RouterView v-slot="{ Component }" v-model:deleteBtn="deleteBtn" v-model:updateBtn="updateBtn"
+                    v-model:calendarBtn="calendarBtn" v-model:descriptionHidden="descriptionHidden"
+                    v-model:mdMenuExplore="mdMenuExplore" v-model:screenShotBtn="screenShotBtn">
+                    <transition v-if="Component" enter-active-class="animate__animated animate__fadeInRight"
+                        leave-active-class="animate__animated animate__fadeOutLeft" mode="out-in">
                         <component :is="Component" />
                     </transition>
                 </RouterView>
@@ -131,7 +100,7 @@ const { title, items, description, createNewPath, path } = defineProps({
     gap: 3rem;
     height: 100%;
 
-    > header {
+    >header {
         display: flex;
         flex-direction: column;
         gap: 1.4rem;
@@ -141,19 +110,19 @@ const { title, items, description, createNewPath, path } = defineProps({
         background-color: var(--color-light-grey);
         border-radius: 1rem;
 
-        > a {
+        >a {
             width: 100%;
 
-            > * {
+            >* {
                 width: 100%;
             }
         }
 
-        > .input {
+        >.input {
             width: 100%;
             padding: 0;
 
-            > input {
+            >input {
                 width: 100%;
                 border-radius: 10px !important;
                 background-color: var(--color-dark-grey);
@@ -177,7 +146,7 @@ const { title, items, description, createNewPath, path } = defineProps({
             }
         }
 
-        > nav {
+        >nav {
             display: flex;
             flex-direction: column;
             gap: 1rem;
@@ -186,10 +155,10 @@ const { title, items, description, createNewPath, path } = defineProps({
             padding-top: 1rem;
             width: 100%;
 
-            > a {
+            >a {
                 width: 100%;
 
-                > * {
+                >* {
                     width: 100%;
                 }
             }
@@ -201,37 +170,37 @@ const { title, items, description, createNewPath, path } = defineProps({
         flex-direction: column;
         gap: 1rem;
 
-        > * {
+        >* {
             width: 100%;
         }
 
         margin: 4rem 0;
     }
 
-    > section {
+    >section {
         flex-grow: 1;
 
-        > header {
+        >header {
             display: flex;
             flex-direction: column;
             gap: 1rem;
 
-            > p {
+            >p {
                 font-size: 1.2rem;
                 font-weight: 400;
                 color: var(--color-grey);
             }
 
-            > div {
+            >div {
                 display: flex;
                 justify-content: space-between;
 
-                > div {
+                >div {
                     display: flex;
                     gap: 1rem;
                 }
 
-                > h2 {
+                >h2 {
                     color: var(--color-grey);
                 }
             }
@@ -244,7 +213,7 @@ const { title, items, description, createNewPath, path } = defineProps({
         flex-direction: column;
         gap: 1rem;
 
-        > header {
+        >header {
             order: 2;
             width: 100%;
         }
@@ -253,14 +222,14 @@ const { title, items, description, createNewPath, path } = defineProps({
             display: none;
         }
 
-        > section {
-            > header {
-                > div {
+        >section {
+            >header {
+                >div {
                     gap: 2rem;
                     flex-direction: column;
 
-                    > div {
-                        > * {
+                    >div {
+                        >* {
                             flex-grow: 1;
                         }
 

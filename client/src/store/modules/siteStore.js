@@ -154,13 +154,10 @@ const actions = {
     },
     async validateInvitation({ commit }, data) {
         try {
-            const reponse = await siteService.validateInvitation(data)
+            await siteService.validateInvitation(data)
 
-            if (reponse.status === 200) {
-                router.push({ name: 'Website-users-invitation-success' })
-            } else {
-                router.push({ name: 'Website-users-invitation-error' })
-            }
+
+            router.push({ name: 'Website-users-invitation-success' })
         } catch (error) {
             router.push({ name: 'Website-users-invitation-error' })
             //commit('setUntrackedPagesErrors', error)

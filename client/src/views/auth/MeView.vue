@@ -28,15 +28,15 @@ onBeforeMount(async () => {
         <div class="mt-12 mb-12 flex flex-col gap-4">
             <div class="info">
                 <span>Firstname</span>
-                <p>{{ user.firstname }}</p>
+                <p>{{ user?.firstname }}</p>
             </div>
             <div class="info">
                 <span>Lastname</span>
-                <p>{{ user.lastname }}</p>
+                <p>{{ user?.lastname }}</p>
             </div>
             <div class="info">
                 <span>Email</span>
-                <p>{{ user.email }}</p>
+                <p>{{ user?.email }}</p>
             </div>
         </div>
     </div>
