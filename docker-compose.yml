@@ -7,7 +7,7 @@ services:
       - 27017:27017
     volumes:
       - db-data:/data/db
-    command: ["mongod", "--replSet", "analytics", "--bind_ip_all"]
+    command: [ "mongod", "--replSet", "analytics", "--bind_ip_all" ]
     healthcheck:
       test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo -u root -p password --quiet) -eq 1
       interval: 10s
@@ -31,6 +31,8 @@ services:
     environment:
       JWT_SECRET: ImAstrongSecret
       URL_MONGO: mongodb://mongo:27017/?replicaSet=analytics
+    env_file:
+      - .env
     working_dir: /usr/src/app
     volumes:
       - ./server:/usr/src/app

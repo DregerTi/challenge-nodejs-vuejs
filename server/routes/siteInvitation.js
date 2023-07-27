@@ -5,6 +5,7 @@ const genericController = require("../controllers/generic");
 const checkAuth = require("../middlewares/check-auth");
 const invitationPermissions = require("../middlewares/invitations-permissions");
 const UserService = require("../services/user");
+const EmailService = require("../services/email");
 
 const routesList = [
     {
@@ -55,6 +56,8 @@ controller.create = async (req, res, next) => {
         if (user.id === req.user.id) return res.status(409).json({error: 'You cannot invite yourself'});
         const invitation = await service.create({siteId, userId: user.id, role});
         res.status(201).json(invitation);
+
+        EmailService.sendConfirmationEmail(email, 'invitation', invitation.id);
     } catch (err) {
         next(err);
     }

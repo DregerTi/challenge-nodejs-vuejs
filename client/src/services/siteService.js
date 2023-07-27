@@ -138,6 +138,27 @@ export const getSites = async function getSites() {
     }
 }
 
+export const addSiteUser = async function addSiteUser(data) {
+    try {
+        const response = await requester(
+            ROUTES.INVITATION(),
+            'POST',
+            {
+                ...data
+            },
+            true
+        )
+
+        if (response.status === 422) {
+            throw await response.json()
+        }
+
+        return await response.json()
+    } catch (error) {
+        throw error
+    }
+}
+
 export const updateSiteUser = async function updateSiteUser(data) {
     try {
         const response = await requester(

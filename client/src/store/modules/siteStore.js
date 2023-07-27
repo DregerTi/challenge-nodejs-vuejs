@@ -59,6 +59,21 @@ const actions = {
             //commit('setUntrackedPagesErrors', error)
         }
     },
+    async addSiteUser({ commit }, data) {
+        try {
+            await siteService.addSiteUser(data)
+            const siteUsers = await siteService.getSiteUsers()
+            commit('setSiteUsers', siteUsers)
+            await router.push({
+                name: 'Website-users',
+                params: {
+                    site: router.currentRoute.value.params.site
+                }
+            })
+        } catch (error) {
+            //commit('setUntrackedPagesErrors', error)
+        }
+    },
     async updateSiteUser({ commit }, data) {
         try {
             await siteService.updateSiteUser(data)

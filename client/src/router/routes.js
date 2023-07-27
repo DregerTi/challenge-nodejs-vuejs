@@ -21,7 +21,9 @@ const ROUTES = {
     EVENT_HEATMAP: (siteId) => `events/${siteId}/heatmap`,
     EVENT_TOTAL_USERS: (siteId) => `events/${siteId}/total-users`,
     EVENT_NEW_USERS: (siteId) => `events/${siteId}/total-new-users`,
-    GET_ME: () => `users/me`
+    GET_ME: () => `users/me`,
+    INVITATION: () => `invitations`,
+
 }
 
 export default ROUTES

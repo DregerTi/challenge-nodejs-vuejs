@@ -294,6 +294,14 @@ const router = createRouter({
                                         import(
                                             '../views/setting/websiteUser/WebsiteUserDeleteView.vue'
                                         )
+                                },
+                                {
+                                    path: 'invite',
+                                    name: 'Website-users-invitation',
+                                    component: () =>
+                                        import(
+                                            '../views/setting/websiteUser/WebsiteUserCreateView.vue'
+                                        )
                                 }
                             ]
                         },

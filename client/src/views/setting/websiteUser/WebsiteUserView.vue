@@ -29,14 +29,9 @@ const labels = ['Email', 'Role', 'Action']
 </script>
 
 <template>
-    <ListLayout
-        title="Website Users"
-        :items="items"
-        :labels="labels"
-        createPath="/"
+    <ListLayout title="Website Users" :items="items" :labels="labels" createPath="invite"
         description="As website admin, manage all users and their permissions."
-        :path="'/analytics/setting/' + $route.params.site + '/website-users'"
-    >
+        :path="'/analytics/setting/' + $route.params.site + '/website-users'">
     </ListLayout>
 </template>
 
