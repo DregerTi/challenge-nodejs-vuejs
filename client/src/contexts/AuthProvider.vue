@@ -1,5 +1,5 @@
 <script setup>
-import { provide, onMounted, ref } from 'vue'
+import { provide, onMounted, ref, computed } from 'vue'
 import {
     userKey,
     loginKey,
@@ -11,17 +11,26 @@ import {
 import * as securityService from '../services/securityService'
 import * as tokenStorage from '../services/tokenStorage'
 import router from '../router'
+import { useStore } from 'vuex'
 
 const user = ref(null)
 const errors = ref({})
+const store = useStore()
+const sites = computed(() => store.state.siteStore.sites)
 
 async function login(email, password) {
     try {
         const response = await securityService.login(email, password)
         errors.value = {}
         await tokenStorage.saveToken(response.token)
-        user.value = tokenStorage.getUser()
-        await router.push({ name: 'dashboard' })
+        //user.value = tokenStorage.getUser()
+        await store.dispatch('getSites')
+        if (sites.value.length > 0) {
+            console.log('jjkjlkjkk')
+            router.push({ name: 'dashboard', params: { site: sites.value[0].id } })
+        } else {
+            router.push({ name: 'site-create' })
+        }
     } catch (error) {
         errors.value = error
     }
@@ -41,14 +50,6 @@ async function logout() {
     await tokenStorage.removeToken()
     user.value = null
 }
-
-onMounted(() => {
-    if (user == !null) {
-        tokenStorage.getUser().then((user) => {
-            user.value = user
-        })
-    }
-})
 
 provide(userKey, user)
 provide(errorsKey, errors)

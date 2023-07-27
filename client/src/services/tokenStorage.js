@@ -3,7 +3,10 @@ export const getUser = async function getUser() {
     if (!token) {
         return null
     }
-    return JSON.parse(atob(token).split('.')[1])
+    console.log(token)
+    console.log(atob(token).split('.')[1])
+
+    return atob(token).split('.')[1]
 }
 
 export const saveToken = async function saveToken(token) {

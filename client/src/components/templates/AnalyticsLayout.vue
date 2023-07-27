@@ -2,7 +2,7 @@
 import { RouterView, useRoute } from 'vue-router'
 import Button from '@/components/atoms/Button.vue'
 import Header from '@/components/organisms/Header.vue'
-import { computed, onBeforeMount, ref } from 'vue'
+import { computed, onBeforeMount, onUpdated, ref } from 'vue'
 import Listbox from '@/components/atoms/Listbox.vue'
 import Calendar from '../molecules/Calendar.vue'
 import SiteProvider from '@/contexts/SiteProvider.vue'
@@ -25,59 +25,63 @@ const dateValue = {
 }
 const site = computed(() => store.state.siteStore.site)
 const sites = computed(() => store.state.siteStore.sites)
+const siteName = ref(null)
 
-onBeforeMount(() => {
-    store.dispatch('getSites')
-    store.dispatch('getSite', router.currentRoute.value.params.site)
+onBeforeMount(async () => {
+    siteName.value = 'Choose site'
+    console.log('&&&')
+    await store.dispatch('getSites')
+    console.log('&&&')
+    if (router.currentRoute.value.params.site) {
+        await store.dispatch('getSite', router.currentRoute.value.params.site)
+        console.log('kkl')
+        if (site.name != null) {
+            console.log('ddd')
+            siteName.value = site.name
+        }
+    }
     store.commit('setRangeDate', dateValue)
 })
 </script>
 
 <template>
     <div class="body">
-        <SiteProvider #default="{ site, sites }">
-            <Header :site="site" />
-            <div>
-                <div class="container">
-                    <header v-if="site">
-                        <Listbox
-                            variant="lg"
-                            :values="sites"
-                            :selected="site.name"
-                            path="dashboard"
+        <Header />
+        <div>
+            <div class="container">
+                <header v-if="sites">
+                    <Listbox variant="lg" :values="sites" :selected="siteName" path="dashboard" />
+                    <div class="actions">
+                        <Calendar class="dateButton" v-if="setDateButton" />
+                        <Button
+                            v-if="dashboardEditButton && !dashboardEditMode"
+                            v-bind:onClick="toogleDashboardEditMode"
+                            icon="Edit"
                         />
-                        <div class="actions">
-                            <Calendar class="dateButton" v-if="setDateButton" />
-                            <Button
-                                v-if="dashboardEditButton && !dashboardEditMode"
-                                v-bind:onClick="toogleDashboardEditMode"
-                                icon="Edit"
-                            />
-                            <Button
-                                v-if="dashboardEditButton && dashboardEditMode"
-                                v-bind:onClick="toogleDashboardEditMode"
-                                icon="Check"
-                            />
-                        </div>
-                    </header>
-                    <RouterView
-                        v-slot="{ Component }"
-                        :dashboardEditMode="dashboardEditMode"
-                        v-model:setDateButton="setDateButton"
-                        v-model:dashboardEditButton="dashboardEditButton"
+                        <Button
+                            v-if="dashboardEditButton && dashboardEditMode"
+                            v-bind:onClick="toogleDashboardEditMode"
+                            icon="Check"
+                        />
+                    </div>
+                </header>
+                <RouterView
+                    v-slot="{ Component }"
+                    :dashboardEditMode="dashboardEditMode"
+                    v-model:setDateButton="setDateButton"
+                    v-model:dashboardEditButton="dashboardEditButton"
+                >
+                    <transition
+                        v-if="Component"
+                        enter-active-class="animate__animated animate__fadeInRight"
+                        leave-active-class="animate__animated animate__fadeOutLeft"
+                        mode="out-in"
                     >
-                        <transition
-                            v-if="Component"
-                            enter-active-class="animate__animated animate__fadeInRight"
-                            leave-active-class="animate__animated animate__fadeOutLeft"
-                            mode="out-in"
-                        >
-                            <component :is="Component" />
-                        </transition>
-                    </RouterView>
-                </div>
+                        <component :is="Component" />
+                    </transition>
+                </RouterView>
             </div>
-        </SiteProvider>
+        </div>
     </div>
 </template>
 

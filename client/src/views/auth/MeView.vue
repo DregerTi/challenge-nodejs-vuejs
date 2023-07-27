@@ -1,29 +1,30 @@
 <script setup>
 import Button from '@/components/atoms/Button.vue'
-import AuthProvider from '@/contexts/AuthProvider.vue'
+import { defineEmits, onMounted } from 'vue'
+
+const emit = defineEmits(['update:setDateButton', 'update:dashboardEditButton'])
+emit('update:setDateButton', false)
+emit('update:dashboardEditButton', false)
 </script>
 
 <template>
     <div>
-        <AuthProvider #default="{ user }">
-            <header class="flex justify-between items-base">
-                <h2>My account</h2>
-                <RouterLink :to="'/analytics/' + $route.params.site + '/me/edit'">
-                    <Button icon="Edit" />
-                </RouterLink>
-            </header>
-            <div class="mt-12 mb-12 flex flex-col gap-4">
-                {{ user }}
-                <div class="info">
-                    <span>Username</span>
-                    <p>Username value</p>
-                </div>
-                <div class="info">
-                    <span>Email</span>
-                    <p>example@email.com</p>
-                </div>
+        <header class="flex justify-between items-base">
+            <h2>My account</h2>
+            <RouterLink :to="{ name: 'me-update' }">
+                <Button icon="Edit" />
+            </RouterLink>
+        </header>
+        <div class="mt-12 mb-12 flex flex-col gap-4">
+            <div class="info">
+                <span>Username</span>
+                <p>Username value</p>
             </div>
-        </AuthProvider>
+            <div class="info">
+                <span>Email</span>
+                <p>example@email.com</p>
+            </div>
+        </div>
     </div>
 </template>
 

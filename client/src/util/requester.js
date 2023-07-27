@@ -1,4 +1,5 @@
 import * as tokenStorage from '@/services/tokenStorage'
+import router from '@/router'
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL
 
@@ -25,6 +26,10 @@ async function requester(route, method, body, auth = true) {
             await tokenStorage.removeToken()
             window.location.reload()
         }
+    }
+
+    if (response.status === 404 || response.status === 500 || response.status === 403) {
+        await router.push({ name: 'error' })
     }
 
     return response

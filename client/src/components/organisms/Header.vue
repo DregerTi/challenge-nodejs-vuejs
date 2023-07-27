@@ -2,9 +2,13 @@
 import Header from '@/App.vue'
 import { RouterLink } from 'vue-router'
 import Button from '@/components/atoms/Button.vue'
-import { ref } from 'vue'
+import { computed, defineProps, ref } from 'vue'
 import Switch from '@/components/atoms/Switch.vue'
 import SiteProvider from '@/contexts/SiteProvider.vue'
+import { useStore } from 'vuex'
+
+const store = useStore()
+const site = computed(() => store.state.siteStore.site)
 
 const isOpen = ref(true)
 const isOpenBtn = 'xl-primary-bg-unset'
@@ -26,49 +30,47 @@ function mouseOver() {
         v-on:mouseover="mouseOver"
         v-on:mouseleave="mouseLeave"
     >
-        <SiteProvider #default="{ site }">
-            <img src="@/assets/logo.svg" alt="logo" class="header-logo" />
-            <div>
-                <nav>
-                    <RouterLink v-if="site" :to="'/analytics/' + $route.params.site + '/dashboard'">
-                        <Button
-                            icon="Dashboard"
-                            v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
-                            v-bind:title="isOpen ? 'Dashboard' : ''"
-                        />
-                    </RouterLink>
-                    <RouterLink v-if="site" :to="'/analytics/' + $route.params.site + '/audience'">
-                        <Button
-                            icon="Timeline"
-                            v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
-                            v-bind:title="isOpen ? 'Audience' : ''"
-                        />
-                    </RouterLink>
-                    <RouterLink v-if="site" :to="'/analytics/' + $route.params.site + '/explore'">
-                        <Button
-                            icon="AccountTree"
-                            v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
-                            v-bind:title="isOpen ? 'Explore' : ''"
-                        />
-                    </RouterLink>
-                    <RouterLink :to="'/analytics/' + $route.params.site + '/me'">
-                        <Button
-                            icon="Person"
-                            v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
-                            v-bind:title="isOpen ? 'My account' : ''"
-                        />
-                    </RouterLink>
-                    <RouterLink :to="'/analytics/' + $route.params.site + '/setting'">
-                        <Button
-                            icon="Settings"
-                            v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
-                            v-bind:title="isOpen ? 'Settings' : ''"
-                        />
-                    </RouterLink>
-                </nav>
-                <Switch class="switch" />
-            </div>
-        </SiteProvider>
+        <img src="@/assets/logo.svg" alt="logo" class="header-logo" />
+        <div>
+            <nav>
+                <RouterLink v-if="site?.id" :to="'/analytics/' + site?.id + '/dashboard'">
+                    <Button
+                        icon="Dashboard"
+                        v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
+                        v-bind:title="isOpen ? 'Dashboard' : ''"
+                    />
+                </RouterLink>
+                <RouterLink v-if="site?.id" :to="'/analytics/' + site?.id + '/audience'">
+                    <Button
+                        icon="Timeline"
+                        v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
+                        v-bind:title="isOpen ? 'Audience' : ''"
+                    />
+                </RouterLink>
+                <RouterLink v-if="site?.id" :to="'/analytics/' + site?.id + '/explore'">
+                    <Button
+                        icon="AccountTree"
+                        v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
+                        v-bind:title="isOpen ? 'Explore' : ''"
+                    />
+                </RouterLink>
+                <RouterLink to="/analytics/me">
+                    <Button
+                        icon="Person"
+                        v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
+                        v-bind:title="isOpen ? 'My account' : ''"
+                    />
+                </RouterLink>
+                <RouterLink to="/analytics/setting">
+                    <Button
+                        icon="Settings"
+                        v-bind:variant="isOpen ? isCloseBtn : isOpenBtn"
+                        v-bind:title="isOpen ? 'Settings' : ''"
+                    />
+                </RouterLink>
+            </nav>
+            <Switch class="switch" />
+        </div>
     </header>
 </template>
 

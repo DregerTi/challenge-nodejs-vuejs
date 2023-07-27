@@ -1,6 +1,11 @@
 <script setup>
 import Input from '@/components/atoms/Input.vue'
 import Button from '@/components/atoms/Button.vue'
+import { defineEmits } from 'vue'
+
+const emit = defineEmits(['update:setDateButton', 'update:dashboardEditButton'])
+emit('update:setDateButton', false)
+emit('update:dashboardEditButton', false)
 </script>
 
 <template>

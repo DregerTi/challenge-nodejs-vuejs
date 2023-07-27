@@ -1,9 +1,12 @@
 <script setup>
 import Header from '@/components/organisms/Header.vue'
 import MenuButton from '@/components/molecules/MenuButton.vue'
-import { defineEmits } from 'vue'
+import { computed, defineEmits, onMounted } from 'vue'
 import AuthProvider from '@/contexts/AuthProvider.vue'
+import { useStore } from 'vuex'
 
+const store = useStore()
+const site = computed(() => store.state.siteStore.site)
 const emit = defineEmits(['update:setDateButton', 'update:dashboardEditButton'])
 emit('update:setDateButton', false)
 emit('update:dashboardEditButton', false)
@@ -18,32 +21,38 @@ emit('update:dashboardEditButton', false)
             </header>
             <section>
                 <MenuButton
-                    v-if="$route.params.site"
+                    v-if="site?.id"
                     icon="Badge"
                     title="Web site"
                     description="Manage your website informations"
-                    :path="'/analytics/' + $route.params.site + '/setting/website-info'"
+                    :path="'/analytics/' + site?.id + '/setting/website-info'"
                 />
                 <MenuButton
-                    v-if="$route.params.site"
+                    v-if="site?.id"
                     icon="VpnKey"
                     title="API key"
                     description="Manage website API key"
-                    :path="'/analytics/' + $route.params.site + '/setting/api-key'"
+                    :path="'/analytics/' + site?.id + '/setting/api-key'"
                 />
                 <MenuButton
-                    v-if="$route.params.site"
+                    v-if="site?.id"
                     icon="LinkOff"
                     title="Untracked pages"
                     description="Manage your untracked pages"
-                    :path="'/analytics/' + $route.params.site + '/setting/untracked-page'"
+                    :path="'/analytics/' + site?.id + '/setting/untracked-page'"
                 />
                 <MenuButton
-                    v-if="$route.params.site"
+                    v-if="site?.id"
                     icon="Group"
                     title="Website users"
                     description="Manage website users & permissions"
-                    :path="'/analytics/' + $route.params.site + '/setting/website-users'"
+                    :path="'/analytics/' + site?.id + '/setting/website-users'"
+                />
+                <MenuButton
+                    icon="Add"
+                    title="Add website"
+                    description="Start to track your website"
+                    path="/analytics/setting/create"
                 />
                 <MenuButton icon="Logout" title="Logout" @click="logout" :path="'/auth/login'" />
             </section>

@@ -24,7 +24,7 @@ const createSite = async (formData) => {
         </header>
         <form @submit.prevent="createSite(formData)" class="mt-12 mb-12 flex flex-col gap-4">
             <Input
-                :error="siteErrors.name"
+                :error="siteErrors?.name"
                 class="w-full"
                 label="Website name"
                 type="text"
@@ -33,7 +33,7 @@ const createSite = async (formData) => {
                 v-model:value="formData.name"
             />
             <Input
-                :error="siteErrors.url"
+                :error="siteErrors?.url"
                 class="w-full"
                 label="Website URL"
                 type="text"

@@ -1,8 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useStore } from 'vuex'
+import { computed } from 'vue'
+
+const store = useStore()
+const site = computed(() => store.state.siteStore.site)
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
+        {
+            path: '/error',
+            name: 'error',
+            component: () => import('../views/ErrorView.vue')
+        },
         {
             path: '/auth/',
             redirect: '/auth/login',
@@ -34,26 +44,7 @@ const router = createRouter({
             ]
         },
         {
-            path: '/site/',
-            name: 'site',
-            component: () => import('../components/templates/AnalyticsLayout.vue'),
-            beforeEnter: (to, from, next) => {
-                if (!localStorage.getItem('token')) {
-                    next({ name: 'login' })
-                } else {
-                    next()
-                }
-            },
-            children: [
-                {
-                    path: 'create',
-                    name: 'site-create',
-                    component: () => import('../views/setting/websiteInfo/WebsiteCreateView.vue')
-                }
-            ]
-        },
-        {
-            path: '/analytics/:site?/',
+            path: '/analytics/',
             name: 'analytics',
             beforeEnter: (to, from, next) => {
                 if (!localStorage.getItem('token')) {
@@ -65,12 +56,12 @@ const router = createRouter({
             component: () => import('../components/templates/AnalyticsLayout.vue'),
             children: [
                 {
-                    path: 'dashboard',
+                    path: ':site?/dashboard',
                     name: 'dashboard',
                     component: () => import('../views/DashboardView.vue')
                 },
                 {
-                    path: 'audience/',
+                    path: ':site?/audience/',
                     name: 'audience',
                     children: [
                         {
@@ -117,7 +108,7 @@ const router = createRouter({
                     ]
                 },
                 {
-                    path: 'explore/',
+                    path: ':site?/explore/',
                     name: 'explore',
                     children: [
                         {
@@ -248,7 +239,13 @@ const router = createRouter({
                             component: () => import('../views/setting/SettingView.vue')
                         },
                         {
-                            path: 'website-info/',
+                            path: 'create',
+                            name: 'site-create',
+                            component: () =>
+                                import('../views/setting/websiteInfo/WebsiteCreateView.vue')
+                        },
+                        {
+                            path: ':site?/website-info/',
                             name: 'website-info',
                             children: [
                                 {
@@ -268,35 +265,12 @@ const router = createRouter({
                             ]
                         },
                         {
-                            path: 'api-key',
+                            path: ':site?/api-key',
                             name: 'api-key',
                             component: () => import('../views/setting/ApiKeyView.vue')
                         },
                         {
-                            path: 'users/',
-                            name: 'users',
-                            children: [
-                                {
-                                    path: '',
-                                    name: 'users',
-                                    component: () => import('../views/setting/user/UserView.vue')
-                                },
-                                {
-                                    path: ':id/edit',
-                                    name: 'users-edit',
-                                    component: () =>
-                                        import('../views/setting/user/UserEditView.vue')
-                                },
-                                {
-                                    path: ':id/delete',
-                                    name: 'users-delete',
-                                    component: () =>
-                                        import('../views/setting/user/UserDeleteView.vue')
-                                }
-                            ]
-                        },
-                        {
-                            path: 'website-users/',
+                            path: ':site?/website-users/',
                             name: 'website-users',
                             children: [
                                 {
@@ -324,7 +298,7 @@ const router = createRouter({
                             ]
                         },
                         {
-                            path: 'untracked-page/',
+                            path: ':site?/untracked-page/',
                             name: 'untracked-page',
                             component: () =>
                                 import('../views/setting/untrackedPage/UntrackedPageView.vue'),

@@ -7,8 +7,8 @@ const state = {
     siteUser: null,
     sites: null,
     site: {
-        name: '',
-        url: ''
+        name: null,
+        url: null
     },
     siteErrors: null,
     apiKey: '*****************'
