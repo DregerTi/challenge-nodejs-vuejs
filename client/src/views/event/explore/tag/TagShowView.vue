@@ -10,9 +10,9 @@ const emit = defineEmits([
     'update:mdMenuExplore'
 ])
 emit('update:deleteBtn', false)
-emit('update:updateBtn', true)
-emit('update:mdMenuExplore', true)
-emit('update:calendarBtn', true)
+emit('update:updateBtn', false)
+emit('update:mdMenuExplore', false)
+emit('update:calendarBtn', false)
 emit('update:descriptionHidden', false)
 
 const store = useStore()
@@ -20,10 +20,12 @@ const tag = computed(() => store.state.tag.tag)
 </script>
 
 <template>
-    <h2>
-        {{ tag?.name }}
-    </h2>
-    <p>{{ tag?.tagKey }}</p>
+    <div class="mt-5">
+        <h2 class="mb-3">
+            {{ tag?.name }}
+        </h2>
+        <p>{{ tag?.tagKey }}</p>
+    </div>
 </template>
 
 <style scoped lang="scss"></style>

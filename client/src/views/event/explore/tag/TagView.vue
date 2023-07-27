@@ -32,13 +32,10 @@ onUpdated(async () => {
 </script>
 
 <template>
-    <ExploreLayout
-        title="Tags"
-        :items="tags"
+    <ExploreLayout title="Tags" :items="tags"
         description="Create and edit tags to track your users' actions on your website"
         :createNewPath="'/analytics/' + $route.params.site + '/explore/tag/create'"
-        :path="'/analytics/' + $route.params.site + '/explore/tag'"
-    >
+        :path="'/analytics/' + $route.params.site + '/explore/tag'">
     </ExploreLayout>
 </template>
 

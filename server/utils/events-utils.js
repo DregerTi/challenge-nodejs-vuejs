@@ -736,7 +736,6 @@ module.exports = function eventUtil() {
       ];
     },
     getConversionTunnelAggregate(id, tagIdList, start, end) {
-      console.log("tagIdList", tagIdList);
       return [
         {
           $match: {
