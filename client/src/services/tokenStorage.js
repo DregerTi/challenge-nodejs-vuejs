@@ -3,8 +3,6 @@ export const getUser = async function getUser() {
     if (!token) {
         return null
     }
-    console.log(token)
-    console.log(atob(token).split('.')[1])
 
     return atob(token).split('.')[1]
 }

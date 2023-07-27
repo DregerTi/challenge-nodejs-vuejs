@@ -735,12 +735,13 @@ module.exports = function eventUtil() {
         }
       ];
     },
-    getConversionTunnelAggregate(id, tagIdList, start, end, previousPeriodStart, previousPeriodEnd) {
+    getConversionTunnelAggregate(id, tagIdList, start, end) {
+      console.log("tagIdList", tagIdList);
       return [
         {
           $match: {
             siteId: id,
-            type: "tag",
+            tagId : { $in: tagIdList },
             createdAt: {
               $gte: start,
               $lte: end

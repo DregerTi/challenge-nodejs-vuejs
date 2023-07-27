@@ -46,7 +46,6 @@ onBeforeMount(async () => {
                     v-if="site?.id && userRole === 'ADMIN'"
                     icon="VpnKey"
                     title="API key"
-                    v-track="'muewmhpjdr'"
                     description="Manage website API key"
                     :path="'/analytics/setting/' + site?.id + '/api-key'"
                 />

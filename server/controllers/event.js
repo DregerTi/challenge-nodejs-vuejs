@@ -4,7 +4,7 @@ const eventUtils = require("../utils/events-utils");
 const Event = require("../mongodb/models/event");
 
 
-module.exports = function Controller(EventService, TagService, SessionService, ViewerService, UntrackPathService, ConversionTunnelTagService, options) {
+module.exports = function Controller(EventService, TagService, SessionService, ViewerService, UntrackPathService, ConversionTunnelTagService, SiteService, options) {
   return {
     getAllEventsForSite: async function(req, res, next) {
       const { id } = req.params;
@@ -353,9 +353,14 @@ module.exports = function Controller(EventService, TagService, SessionService, V
         return;
       }
 
+      const siteUrl = await SiteService.findOne({ id });
+
       const aggregate = eventUtils().getHeatmapPathsAggregate(id, start, end, searchString);
       const result = await EventService.findAllAggregate(aggregate);
 
+      result.map((item) => {
+        item.path = item.path.replace(siteUrl.url, "");
+      });
       res.write(`data: ${JSON.stringify(result)}\n\n`);
 
       const changeStream = Event.watch();
@@ -589,8 +594,12 @@ module.exports = function Controller(EventService, TagService, SessionService, V
 
       const { start, end, previousPeriodStart, previousPeriodEnd } =
         eventUtils().getRangeDates(startDate, endDate);
-      const tagIds = await ConversionTunnelTagService.findAll({conversionTunnelId: parseInt(conversionTunnelId, 10)})
-      if (tagIds.length === 0) {
+
+      // get all tags of the conversion tunnel ordered by their position
+
+
+      const tags = await ConversionTunnelTagService.findAll({ conversionTunnelId: parseInt(conversionTunnelId, 10)}, { order: { order: 'ASC' } });
+      if (tags.length === 0) {
         res.status(404).json({ message: "Conversion tunnel not found" });
         return;
       }
@@ -600,19 +609,66 @@ module.exports = function Controller(EventService, TagService, SessionService, V
         return;
       }
 
-      const aggregate = eventUtils().getConversionTunnelAggregate(id, tagIds.map(tag => tag.tagId), start, end, previousPeriodStart, previousPeriodEnd);
-      const result = (await EventService.findAllAggregate(aggregate))[0];
-      console.log(result);
+      const tagIds = tags.map(tag => String(tag.tagId))
 
-      res.write(`data: ${JSON.stringify(result)}\n\n`);
+      const aggregate = eventUtils().getConversionTunnelAggregate(id, tagIds, start, end, previousPeriodStart, previousPeriodEnd);
+      const result = await EventService.findAllAggregate(aggregate);
+
+      let validated = 0;
+      let nonValidated = 0;
+
+      let currentTag = 0;
+
+      for (let i = 0; i < result.length; i++) {
+        for (let j = 0; j < result[i].events.length; j++) {
+          if (result[i].events[j].tagId === tagIds[currentTag]) {
+            if (currentTag === tagIds.length - 1) {
+              currentTag = 0;
+              validated++;
+              continue;
+            }
+            currentTag++;
+          } else {
+            nonValidated++;
+          }
+        }
+      }
+
+      const finalRes = {
+        taux: (validated / (validated + nonValidated)) * 100,
+      }
+
+
+      res.write(`data: ${JSON.stringify(finalRes)}\n\n`);
 
       const changeStream = Event.watch();
       changeStream.on("change", async (change) => {
-        if (change.fullDocument.type === "tag") {
+        if (change.fullDocument.type === 'tag') {
           try {
-            const result = (await EventService.findAllAggregate(aggregate))[0];
+            let validated = 0;
+            let nonValidated = 0;
 
-            res.write(`data: ${JSON.stringify(result)}\n\n`);
+            let currentTagPosition = 0;
+            const result = await EventService.findAllAggregate(aggregate);
+            for (let i = 0; i < result.length; i++) {
+              for (let j = 0; j < result[i].events.length; j++) {
+                if (result[i].events[j].tagId === tagIds[currentTagPosition]) {
+                  if (currentTagPosition === tagIds.length - 1) {
+                    currentTagPosition = 0;
+                    validated++;
+                    continue;
+                  }
+                  currentTagPosition++;
+                } else {
+                  nonValidated++;
+                }
+              }
+            }
+            const finalRes = {
+              taux: (validated / (validated + nonValidated)) * 100,
+            }
+
+            res.write(`data: ${JSON.stringify(finalRes)}\n\n`);
           } catch (err) {
             next(err);
           }

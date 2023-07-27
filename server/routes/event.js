@@ -9,6 +9,7 @@ const UntrackPathService = require("../services/untrackPath");
 const checkAuth = require("../middlewares/check-auth");
 const sitePermission = require("../middlewares/site-permissions");
 const ConversionTunnelTagService = require("../services/conversionTunnelTags");
+const SiteService = require("../services/site");
 
 const routesList = [
   {
@@ -77,7 +78,8 @@ const routesList = [
 ];
 
 const eventController =
-  new controller(new EventService(), new TagService(), new SessionService(), new ViewerService(), new UntrackPathService(), new ConversionTunnelTagService(),{});
+  new controller(new EventService(), new TagService(), new SessionService(), new ViewerService(),
+    new UntrackPathService(), new ConversionTunnelTagService(), new SiteService(), {});
 
 module.exports = new specificRouter(
   eventController,
