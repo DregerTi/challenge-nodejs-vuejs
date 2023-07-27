@@ -457,8 +457,11 @@ const actions = {
                 url.searchParams.append(key, state.rangeDate[key])
             )
             const site = siteStore.state.site
-            url.searchParams.append('path', decodeURIComponent(decodeURIComponent(path)))
-            url.searchParams.append('size', size)
+            url.searchParams.append(
+                'path',
+                site.url + '' + decodeURIComponent(decodeURIComponent(path))
+            )
+            //url.searchParams.append('size', size)
 
             eventSourceHeatmap = new EventSourcePolyfill(url, {
                 headers: {
@@ -471,6 +474,7 @@ const actions = {
                     return
                 }
                 const heatmap = JSON.parse(event.data)
+                console.log(heatmap)
                 commit('setHeatmap', heatmap)
             }
             eventSourceHeatmap.addEventListener('message', listener)

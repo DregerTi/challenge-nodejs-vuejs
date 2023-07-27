@@ -44,6 +44,7 @@ function scaleCoordinates(data) {
 const store = useStore()
 const heatmap = computed(() => store.state.eventStore.heatmap)
 const rangeDate = computed(() => store.state.eventStore.rangeDate)
+const site = computed(() => store.state.siteStore.site)
 const heatmapInstance = ref(null)
 
 onMounted(() => {
@@ -52,6 +53,8 @@ onMounted(() => {
         router.currentRoute.value.params.id,
         router.currentRoute.value.params.size
     )
+
+    store.dispatch('getSite', router.currentRoute.value.params.id)
 
     canvasWidth.value = heatmapCanvas.value.offsetWidth
     canvasHeight.value = heatmapCanvas.value.offsetHeight
@@ -112,10 +115,12 @@ onUnmounted(() => {
 
 <template>
     <div>
-        {{ router.currentRoute.value.params.size }}
         <nav class="heatmap-nav">
             <RouterLink
-                :to="{ name: 'heatmap', params: { id: $route.params.id, size: 'sm' } }"
+                :to="{
+                    name: 'heatmap-show',
+                    params: { site: $route.params.site, id: $route.params.id, size: 'sm' }
+                }"
                 class="w-full"
             >
                 <Button
@@ -130,7 +135,10 @@ onUnmounted(() => {
                 />
             </RouterLink>
             <RouterLink
-                :to="{ name: 'heatmap', params: { id: $route.params.id, size: 'md' } }"
+                :to="{
+                    name: 'heatmap-show',
+                    params: { site: $route.params.site, id: $route.params.id, size: 'md' }
+                }"
                 class="w-full"
             >
                 <Button
@@ -145,7 +153,10 @@ onUnmounted(() => {
                 />
             </RouterLink>
             <RouterLink
-                :to="{ name: 'heatmap', params: { id: $route.params.id, size: 'lg' } }"
+                :to="{
+                    name: 'heatmap-show',
+                    params: { site: $route.params.site, id: $route.params.id, size: 'lg' }
+                }"
                 class="w-full"
             >
                 <Button
@@ -160,10 +171,11 @@ onUnmounted(() => {
                 />
             </RouterLink>
         </nav>
-        <div>
+        <div class="heatmap-container">
             <div class="heatmap-canvas" ref="heatmapCanvas"></div>
             <iframe
-                src="https://www.laroutedutrone.fr/presentation"
+                id="heatmap-iframe"
+                :src="site.url + '' + decodeURIComponent(decodeURIComponent($route.params.id))"
                 frameborder="0"
                 style="width: 100%; height: 3000px"
             ></iframe>
@@ -175,6 +187,7 @@ onUnmounted(() => {
 .heatmap-canvas {
     width: 100%;
     height: 3000px;
+    z-index: 1000;
 }
 .heatmap-nav {
     display: flex;
@@ -183,5 +196,13 @@ onUnmounted(() => {
     margin-top: 2rem;
     background-color: var(--color-light-grey);
     border-radius: 10px;
+}
+
+.heatmap-container {
+}
+
+#heatmap-iframe {
+    position: relative;
+    top: -3000px;
 }
 </style>
