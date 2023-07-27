@@ -348,7 +348,14 @@ module.exports = function eventUtil() {
               },
               {
                 $limit: 5
-              }
+              },
+              {
+                $project: {
+                  _id: 0,
+                  path: "$_id",
+                  dailyCounts: "$dailyCounts"
+                }
+              },
             ]
           }
         },
