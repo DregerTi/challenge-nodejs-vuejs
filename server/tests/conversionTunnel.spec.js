@@ -3,9 +3,15 @@ const chaiHttp = require("chai-http");
 chai.use(chaiHttp);
 const index = require("../index");
 const clearDatabase = require("./dropDatabase");
+const generalFixtures = require("./fixtures");
 
 
 describe("Conversion tunnel API", function() {
+  before(async () => {
+    await clearDatabase();
+    await generalFixtures();
+  });
+  
   after(async () => {
     await clearDatabase();
   });
@@ -16,7 +22,6 @@ describe("Conversion tunnel API", function() {
       .post("/login")
       .send({ email: "t@toto.com", password: "test123456" })
       .end((err, res) => {
-        console.log(res.body);
         chai.expect(res).to.have.status(200);
         chai.expect(res.body).to.have.property("token");
         const adminToken = res.body.token;

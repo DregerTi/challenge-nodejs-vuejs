@@ -41,7 +41,7 @@ module.exports = async function generalFixtures() {
     register(users[user]);
   }
   
-  loginAddSite(users.adminUser);
+  // loginAddSite(users.adminUser);
 }
 
 function register(userTest) {
@@ -49,24 +49,23 @@ function register(userTest) {
   Service.create(userTest);
 }
 
-function loginAddSite(userTest) {
-  chai.request(index)
-    .post("/login")
-    .send({ email, password } = userTest)
-    .end((err, res) => {
-      console.log(res.body);
-      chai.expect(res).to.have.status(200);
-      chai.expect(res.body).to.have.property("token");
+// function loginAddSite(userTest) {
+//   chai.request(index)
+//     .post("/login")
+//     .send({ email, password } = userTest)
+//     .end((err, res) => {
+//       chai.expect(res).to.have.status(200);
+//       chai.expect(res.body).to.have.property("token");
 
-      const token = res.body.token;
+//       const token = res.body.token;
 
-      chai.request(index)
-      .post("/sites")
-      .auth(token, { type: "bearer" })
-      .send({ name: "site test", url: "http://site.test" })
-      .end((err, res) => {
-        chai.expect(res).to.have.status(201);
-        chai.expect(res.body).to.have.property("id");
-      });
-    });
-}
+//       chai.request(index)
+//       .post("/sites")
+//       .auth(token, { type: "bearer" })
+//       .send({ name: "site test", url: "http://site.test" })
+//       .end((err, res) => {
+//         chai.expect(res).to.have.status(201);
+//         chai.expect(res.body).to.have.property("id");
+//       });
+//     });
+// }
