@@ -24,7 +24,7 @@ const { title, path, buttonType, editMode } = defineProps({
     selectValues: {
         type: Array,
         default: null
-    },
+    }
 })
 
 const emit = defineEmits(['update:modelValue', 'click:editButton'])

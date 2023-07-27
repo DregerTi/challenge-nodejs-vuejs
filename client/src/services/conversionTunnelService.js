@@ -112,12 +112,12 @@ export const updateConversionTunnelTags = async function updateConversionTunnelT
 ) {
     try {
         const response = await requester(
-            ROUTES.CONVERSION_TUNNEL(router.currentRoute.value.params.site, router.currentRoute.value.params.id) + '/tags',
+            ROUTES.CONVERSION_TUNNEL(
+                router.currentRoute.value.params.site,
+                router.currentRoute.value.params.id
+            ) + '/tags',
             'PUT',
-            [
-                ..._conversionTunnel
-            ]
-            ,
+            [..._conversionTunnel],
             true
         )
 

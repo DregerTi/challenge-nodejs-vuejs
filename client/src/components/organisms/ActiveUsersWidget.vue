@@ -1,7 +1,5 @@
-<script setup>
-
-</script>
+<script setup></script>
 
 <template>
-  <div>active users</div>
+    <div>active users</div>
 </template>

@@ -1,7 +1,5 @@
-<script setup>
-
-</script>
+<script setup></script>
 
 <template>
-  <div>new users</div>
+    <div>new users</div>
 </template>

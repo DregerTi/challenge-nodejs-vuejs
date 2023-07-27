@@ -1,7 +1,5 @@
-<script setup>
-
-</script>
+<script setup></script>
 
 <template>
-  <div>tag</div>
+    <div>tag</div>
 </template>

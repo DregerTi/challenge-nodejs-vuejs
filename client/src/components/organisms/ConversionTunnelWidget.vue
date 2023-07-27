@@ -1,7 +1,5 @@
-<script setup>
-
-</script>
+<script setup></script>
 
 <template>
-  <div>conversion tunnel</div>
+    <div>conversion tunnel</div>
 </template>
