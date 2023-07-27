@@ -1,18 +1,26 @@
 import * as siteService from '@/services/siteService'
 import { getSiteUser } from '@/services/siteService'
+import router from '@/router'
 
 const state = {
     siteUsers: null,
     siteUser: null,
     sites: null,
-    site: null
+    site: {
+        name: '',
+        url: ''
+    },
+    siteErrors: null,
+    apiKey: '*****************'
 }
 
 const getters = {
     siteUsers: (state) => state.siteUsers,
     siteUser: (state) => state.siteUser,
     sites: (state) => state.sites,
-    site: (state) => state.site
+    site: (state) => state.site,
+    siteErrors: (state) => state.siteErrors,
+    apiKey: (state) => state.apiKey
 }
 
 const actions = {
@@ -35,6 +43,7 @@ const actions = {
     async getSite({ commit }, id) {
         try {
             const site = await siteService.getSite(id)
+            site.apiKey = '******************' + site.apiKey.substring(18)
             commit('setSite', site)
         } catch (error) {
             //commit('setUntrackedPagesErrors', error)
@@ -77,6 +86,47 @@ const actions = {
         } catch (error) {
             //commit('setUntrackedPagesErrors', error)
         }
+    },
+    async createSite({ commit }, _site) {
+        try {
+            await siteService.createSite(_site)
+            const site = await siteService.getSiteUsers()
+            commit('setSite', site)
+            commit('setSiteErrors', null)
+            await router.push({
+                name: 'dashboard',
+                params: {
+                    site: site.id
+                }
+            })
+        } catch (error) {
+            commit('setSiteErrors', error)
+        }
+    },
+    async updateSite({ commit }, _site) {
+        try {
+            await siteService.updateSite(_site)
+            const site = await siteService.getSiteUsers()
+            commit('setSite', site)
+            commit('setSiteErrors', null)
+            await router.push({
+                name: 'dashboard',
+                params: {
+                    site: site.id
+                }
+            })
+        } catch (error) {
+            commit('setSiteErrors', error)
+        }
+    },
+    async refreshApiKey({ commit }) {
+        try {
+            const site = await siteService.refreshApiKey(router.currentRoute.value.params.site)
+            commit('setSite', site)
+            commit('setSiteErrors', null)
+        } catch (error) {
+            commit('setSiteErrors', error)
+        }
     }
 }
 
@@ -92,6 +142,12 @@ const mutations = {
     },
     setSite(state, site) {
         state.site = site
+    },
+    setSiteErrors(state, siteErrors) {
+        state.siteErrors = siteErrors
+    },
+    setApiKey(state, apiKey) {
+        state.apiKey = apiKey
     }
 }
 

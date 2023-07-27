@@ -15,6 +15,7 @@ import IconLocalFire from '@/components/icons/IconLocalFire.vue'
 import IconVpnKey from '@/components/icons/IconVpnKey.vue'
 import IconLinkOff from '@/components/icons/IconLinkOff.vue'
 import IconLogout from '@/components/icons/IconLogout.vue'
+import IconAdd from '@/components/icons/IconAdd.vue'
 
 const { title, description, icon, path } = defineProps({
     title: {
@@ -53,6 +54,7 @@ const { title, description, icon, path } = defineProps({
             <IconVpnKey v-if="icon == 'VpnKey'" />
             <IconLinkOff v-if="icon == 'LinkOff'" />
             <IconLogout v-if="icon == 'Logout'" />
+            <IconAdd v-if="icon == 'Add'" />
             <div>
                 <h5>{{ title }}</h5>
                 <p v-if="description">{{ description }}</p>

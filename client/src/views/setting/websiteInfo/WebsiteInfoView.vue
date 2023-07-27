@@ -1,5 +1,14 @@
 <script setup>
 import Button from '@/components/atoms/Button.vue'
+import { useStore } from 'vuex'
+import { computed, onMounted } from 'vue'
+
+const store = useStore()
+const site = computed(() => store.state.siteStore.site)
+
+onMounted(async () => {
+    await store.dispatch('getSite')
+})
 </script>
 
 <template>
@@ -13,11 +22,11 @@ import Button from '@/components/atoms/Button.vue'
         <div class="mt-12 mb-12 flex flex-col gap-4">
             <div class="info">
                 <span>Web site name</span>
-                <p>Website name value</p>
+                <p>{{ site?.name }}</p>
             </div>
             <div class="info">
                 <span>Web site URL</span>
-                <p>https://website-url.com</p>
+                <p>{{ site?.url }}</p>
             </div>
         </div>
     </div>

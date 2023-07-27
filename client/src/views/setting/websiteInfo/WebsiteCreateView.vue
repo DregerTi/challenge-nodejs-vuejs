@@ -1,43 +1,48 @@
 <script setup>
 import Input from '@/components/atoms/Input.vue'
 import Button from '@/components/atoms/Button.vue'
-import SiteProvider from '@/contexts/SiteProvider.vue'
-import { reactive } from 'vue'
+import { computed, reactive } from 'vue'
+import { useStore } from 'vuex'
 
 const formData = reactive({
     name: '',
     url: ''
 })
+
+const store = useStore()
+const siteErrors = computed(() => store.state.siteStore.siteErrors)
+
+const createSite = async (formData) => {
+    await store.dispatch('createSite', formData)
+}
 </script>
 
 <template>
     <div>
-        <SiteProvider #default="{ site, errors, createSite }">
-            <header class="flex justify-between items-base">
-                <h2>Add your web site</h2>
-            </header>
-            <form @submit.prevent="createSite(formData)" class="mt-12 mb-12 flex flex-col gap-4">
-                <Input
-                    :error="errors.name"
-                    class="w-full"
-                    label="Website name"
-                    type="text"
-                    placeholder="Website name"
-                    name="name"
-                    v-model:value="formData.name"
-                />
-                <Input
-                    :error="errors.url"
-                    class="w-full"
-                    label="Website URL"
-                    type="text"
-                    placeholder="https://website-url.com"
-                    name="url"
-                    v-model:value="formData.url"
-                />
-                <Button type="submit" title="Submit" />
-            </form>
-        </SiteProvider>
+        <header class="flex justify-between items-base">
+            <h2>Add your web site</h2>
+        </header>
+        <form @submit.prevent="createSite(formData)" class="mt-12 mb-12 flex flex-col gap-4">
+            <Input
+                :error="siteErrors.name"
+                class="w-full"
+                label="Website name"
+                type="text"
+                placeholder="Website name"
+                name="name"
+                v-model:value="formData.name"
+            />
+            <Input
+                :error="siteErrors.url"
+                class="w-full"
+                label="Website URL"
+                type="text"
+                placeholder="https://website-url.com"
+                name="url"
+                v-model:value="formData.url"
+            />
+            <Button type="submit" title="Submit" />
+        </form>
     </div>
 </template>
 

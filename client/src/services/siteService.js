@@ -2,6 +2,27 @@ import ROUTES from '@/router/routes'
 import requester from '@/util/requester'
 import router from '@/router'
 
+export async function updateSite(_site) {
+    try {
+        const response = await requester(
+            ROUTES.SITE(_site.id),
+            'PATCH',
+            {
+                ..._site
+            },
+            true
+        )
+
+        if (response.status === 422) {
+            throw await response.json()
+        }
+
+        return await response.json()
+    } catch (error) {
+        throw error
+    }
+}
+
 export const createSite = async function createSite(_site) {
     try {
         const response = await requester(

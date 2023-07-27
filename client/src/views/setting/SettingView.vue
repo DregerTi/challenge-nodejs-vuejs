@@ -18,24 +18,28 @@ emit('update:dashboardEditButton', false)
             </header>
             <section>
                 <MenuButton
+                    v-if="$route.params.site"
                     icon="Badge"
                     title="Web site"
                     description="Manage your website informations"
                     :path="'/analytics/' + $route.params.site + '/setting/website-info'"
                 />
                 <MenuButton
+                    v-if="$route.params.site"
                     icon="VpnKey"
                     title="API key"
                     description="Manage website API key"
                     :path="'/analytics/' + $route.params.site + '/setting/api-key'"
                 />
                 <MenuButton
+                    v-if="$route.params.site"
                     icon="LinkOff"
                     title="Untracked pages"
                     description="Manage your untracked pages"
                     :path="'/analytics/' + $route.params.site + '/setting/untracked-page'"
                 />
                 <MenuButton
+                    v-if="$route.params.site"
                     icon="Group"
                     title="Website users"
                     description="Manage website users & permissions"
