@@ -22,8 +22,7 @@ const ROUTES = {
     EVENT_TOTAL_USERS: (siteId) => `events/${siteId}/total-users`,
     EVENT_NEW_USERS: (siteId) => `events/${siteId}/total-new-users`,
     GET_ME: () => `users/me`,
-    INVITATION: () => `invitations`,
-
+    INVITATION: () => `invitations`
 }
 
 export default ROUTES

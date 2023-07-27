@@ -1,5 +1,5 @@
 import * as userService from '@/services/userService'
-import router from '@/router';
+import router from '@/router'
 
 const state = {
     user: null

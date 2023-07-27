@@ -156,7 +156,6 @@ const actions = {
         try {
             await siteService.validateInvitation(data)
 
-
             router.push({ name: 'Website-users-invitation-success' })
         } catch (error) {
             router.push({ name: 'Website-users-invitation-error' })

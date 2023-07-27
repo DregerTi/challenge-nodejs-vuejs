@@ -6,7 +6,6 @@ import router from '@/router'
 
 const store = useStore()
 const conversionTunnel = computed(() => store.state.conversionTunnel.conversionTunnel)
-
 </script>
 
 <template>
@@ -15,8 +14,12 @@ const conversionTunnel = computed(() => store.state.conversionTunnel.conversionT
             {{ conversionTunnel?.name }}
         </h2>
 
-        <Button title="Manage tags" class="w-full p-5" variant="light-grey"
-            @click="router.push(router.currentRoute.value.path + '/settings')" />
+        <Button
+            title="Manage tags"
+            class="w-full p-5"
+            variant="light-grey"
+            @click="router.push(router.currentRoute.value.path + '/settings')"
+        />
     </div>
 </template>
 

@@ -461,7 +461,7 @@ const actions = {
                 'path',
                 site.url + '' + decodeURIComponent(decodeURIComponent(path))
             )
-            //url.searchParams.append('size', size)
+            url.searchParams.append('size', size)
 
             eventSourceHeatmap = new EventSourcePolyfill(url, {
                 headers: {

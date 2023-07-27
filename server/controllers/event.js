@@ -408,18 +408,20 @@ module.exports = function Controller(EventService, TagService, SessionService, V
       const result = await EventService.findAllAggregate(aggregate);
 
       res.write(`data: ${JSON.stringify(result)}\n\n`);
-
+      
       const changeStream = Event.watch();
       changeStream.on("change", async () => {
         try {
           const result = await EventService.findAllAggregate(aggregate);
-
+          
           res.write(`data: ${JSON.stringify(result)}\n\n`);
         } catch (err) {
           next(err);
         }
-
+        
       });
+      
+      res.write(`data: ${JSON.stringify('zebi')}\n\n`);
 
       req.on("close", () => {
         changeStream.close();

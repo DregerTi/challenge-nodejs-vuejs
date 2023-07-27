@@ -29,8 +29,8 @@ const enabled = ref(false)
                 :class="enabled ? 'translate-x-12' : 'translate-x-0'"
                 class="pointer-events-none inline-block transform ring-0"
             />
-            <div class="container-icon-mode" >
-                <IconSun class="text-transparent"  />
+            <div class="container-icon-mode">
+                <IconSun class="text-transparent" />
                 <IconMoon class="text-transparent" />
             </div>
         </Switch>
