@@ -7,18 +7,21 @@ const clearDatabase = require("./dropDatabase");
 let adminUser = {
   email: "t@toto.com",
   password: "test123456",
+  passwordConfirmation: "test123456",
   firstname: "admin",
   lastname: "admin"
 };
 let userOne = {
   email: "user1@t.com",
   password: "test123456",
+  passwordConfirmation: "test123456",
   firstname: "user1",
   lastname: "user1"
 };
 let userTwo = {
   email: "user2@t.com",
   password: "test123456",
+  passwordConfirmation: "test123456",
   firstname: "user2",
   lastname: "user2"
 };
@@ -28,6 +31,7 @@ describe("Site and SiteInvitation API", function() {
   before(async () => {
     await clearDatabase();
   });
+  
   it("should register new user, login it, create a new site, " +
     "send invitation to 2 users, one accepts it and the other refuse, and finally list the site's users", (done) => {
     chai.request(index)

@@ -14,8 +14,9 @@ describe("Conversion tunnel API", function() {
   it("should return 200", (done) => {
     chai.request(index)
       .post("/login")
-      .send({ email: "t@toto.com", password: "123456" })
+      .send({ email: "t@toto.com", password: "test123456" })
       .end((err, res) => {
+        console.log(res.body);
         chai.expect(res).to.have.status(200);
         chai.expect(res.body).to.have.property("token");
         const adminToken = res.body.token;

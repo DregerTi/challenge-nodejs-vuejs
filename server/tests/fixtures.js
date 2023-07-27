@@ -54,6 +54,7 @@ function loginAddSite(userTest) {
     .post("/login")
     .send({ email, password } = userTest)
     .end((err, res) => {
+      console.log(res.body);
       chai.expect(res).to.have.status(200);
       chai.expect(res.body).to.have.property("token");
 
