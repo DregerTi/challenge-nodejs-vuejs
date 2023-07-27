@@ -35,19 +35,41 @@ onBeforeMount(async () => {
                 <p>Manage settings</p>
             </header>
             <section>
-                <MenuButton v-if="site?.id && userRole === 'ADMIN'" icon="Badge" title="Web site"
+                <MenuButton
+                    v-if="site?.id && userRole === 'ADMIN'"
+                    icon="Badge"
+                    title="Web site"
                     description="Manage your website informations"
-                    :path="'/analytics/' + site?.id + '/setting/website-info'" />
-                <MenuButton v-if="site?.id && userRole === 'ADMIN'" icon="VpnKey" title="API key" v-track="'muewmhpjdr'"
-                    description="Manage website API key" :path="'/analytics/' + site?.id + '/setting/api-key'" />
-                <MenuButton v-if="site?.id && userRole === 'ADMIN'" icon="LinkOff" title="Untracked pages"
+                    :path="'/analytics/setting/' + site?.id + '/website-info'"
+                />
+                <MenuButton
+                    v-if="site?.id && userRole === 'ADMIN'"
+                    icon="VpnKey"
+                    title="API key"
+                    v-track="'muewmhpjdr'"
+                    description="Manage website API key"
+                    :path="'/analytics/setting/' + site?.id + '/api-key'"
+                />
+                <MenuButton
+                    v-if="site?.id && userRole === 'ADMIN'"
+                    icon="LinkOff"
+                    title="Untracked pages"
                     description="Manage your untracked pages"
-                    :path="'/analytics/' + site?.id + '/setting/untracked-page'" />
-                <MenuButton v-if="site?.id && userRole === 'ADMIN'" icon="Group" title="Website users"
+                    :path="'/analytics/setting/' + site?.id + '/untracked-page'"
+                />
+                <MenuButton
+                    v-if="site?.id && userRole === 'ADMIN'"
+                    icon="Group"
+                    title="Website users"
                     description="Manage website users & permissions"
-                    :path="'/analytics/' + site?.id + '/setting/website-users'" />
-                <MenuButton icon="Add" title="Add website" description="Start to track your website"
-                    path="/analytics/setting/create" />
+                    :path="'/analytics/setting/' + site?.id + '/website-users'"
+                />
+                <MenuButton
+                    icon="Add"
+                    title="Add website"
+                    description="Start to track your website"
+                    path="/analytics/setting/create"
+                />
                 <MenuButton icon="Logout" title="Logout" @click="logout" :path="'/auth/login'" />
             </section>
         </Auth-provider>
@@ -58,25 +80,25 @@ onBeforeMount(async () => {
 .container-menu {
     margin-top: 5rem;
 
-    >section {
+    > section {
         display: flex;
         flex-wrap: wrap;
         gap: 2rem;
         margin: 5rem 0;
     }
 
-    >header {
+    > header {
         display: flex;
         flex-direction: column;
         align-items: baseline !important;
 
-        >h2 {
+        > h2 {
             font-size: 1.5rem;
             font-weight: 500;
             color: var(--color-grey);
         }
 
-        >p {
+        > p {
             font-size: 1.2rem;
             font-weight: 400;
             color: var(--color-grey);
@@ -88,24 +110,24 @@ onBeforeMount(async () => {
     .container-menu {
         margin-top: 0rem;
 
-        >section {
+        > section {
             display: grid;
             margin: 2rem 0;
             gap: 1.4rem;
             width: calc(100% - 1.4rem);
             grid-template-columns: 50% 50%;
 
-            >.menu-button {
+            > .menu-button {
                 width: 100%;
             }
         }
 
-        >header {
-            >h2 {
+        > header {
+            > h2 {
                 font-size: 1.2rem;
             }
 
-            >p {
+            > p {
                 font-size: 1rem;
             }
         }

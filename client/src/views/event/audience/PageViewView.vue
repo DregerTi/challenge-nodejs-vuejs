@@ -1,5 +1,5 @@
 <script setup>
-import { computed, defineEmits, onBeforeMount, onMounted, watch } from 'vue'
+import { computed, defineEmits, onBeforeMount, onMounted, onUnmounted, watch } from 'vue'
 import EventStat from '@/components/templates/EventStat.vue'
 import { useStore } from 'vuex'
 
@@ -22,7 +22,7 @@ watch(rangeDate, () => {
     store.dispatch('getViewPerPages')
 })
 
-onBeforeMount(() => {
+onUnmounted(() => {
     store.dispatch('closeEventSourceViewPerPages')
 })
 </script>

@@ -38,7 +38,7 @@ onBeforeMount(async () => {
             <RouterLink
                 class="w-full"
                 :to="{
-                    name: 'untracked-page',
+                    name: 'untracked-page-show',
                     params: { site: $route.params.site, id: untrackedPage?.id }
                 }"
             >

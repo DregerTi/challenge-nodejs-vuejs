@@ -68,7 +68,6 @@ const state = {
 
 const getters = {
     viewPerPages: (state) => state.viewPerPages,
-    viewPerPagesBrute: (state) => state.viewPerPagesBrute,
     rangeDate: (state) => state.rangeDate,
     sessions: (state) => state.sessions,
     sessionsDuration: (state) => state.sessionsDuration,
@@ -213,28 +212,35 @@ const actions = {
                 }
 
                 let eventBrute = JSON.parse(event.data)
-                const { totalSessionsCurrent, totalSessionsPrevious } = eventBrute
-                const trend = totalSessionsCurrent > totalSessionsPrevious ? 'up' : 'down'
-                const differencePercentage =
-                    ((totalSessionsCurrent - totalSessionsPrevious) / totalSessionsPrevious) * 100
+                let { avgTimeCurrentPeriod, avgTimePreviousPeriod } = eventBrute
+                avgTimeCurrentPeriod =
+                    avgTimeCurrentPeriod[0] != undefined
+                        ? avgTimeCurrentPeriod[0].averageDuration
+                        : 0
+                avgTimePreviousPeriod =
+                    avgTimePreviousPeriod[0] != undefined
+                        ? avgTimePreviousPeriod[0].averageDuration
+                        : 0
+                const trend = avgTimeCurrentPeriod > avgTimePreviousPeriod ? 'up' : 'down'
                 const description = trend === 'up' ? `more than last time` : `less than last time`
                 const sessionsDurationBrute = {
                     trend: trend,
-                    value: totalSessionsCurrent,
-                    lastPeriode: differencePercentage.toFixed(2),
-                    description: differencePercentage.toFixed(2) + ' ' + description
+                    value: avgTimeCurrentPeriod,
+                    description: description
                 }
                 commit('setSessionsDurationBrute', sessionsDurationBrute)
+
                 const dayList = state.dayList
                 const totalList = dayList.map((date) => {
                     const foundDay = JSON.parse(event.data).dailyAvgTime.find(
                         (item) => item.date === date
                     )
-                    return foundDay ? parseInt(foundDay.totalSessions) : 0
+                    return foundDay ? parseInt(foundDay.averageDuration) : 0
                 })
 
+                const labels = dayList.map((date) => date.replace(/^\d{4}-/, ''))
                 const chartData = {
-                    labels: dayList,
+                    labels: labels,
                     datasets: [
                         {
                             label: 'Sessions duration',
@@ -450,9 +456,12 @@ const actions = {
                     return
                 }
 
+                console.log(JSON.parse(event.data))
+
                 let eventBrute = JSON.parse(event.data)
 
-                const { currentPeriod, previousPeriod } = eventBrute
+                let { currentPeriod, dailyCounts } = eventBrute
+
                 const trend = currentPeriod > previousPeriod ? 'up' : 'down'
                 const differencePercentage =
                     ((totalSessionsCurrent - totalSessionsPrevious) / totalSessionsPrevious) * 100
@@ -465,7 +474,7 @@ const actions = {
                 }
                 commit('setViewPerPagesBrute', eventBrute)
 
-                commit('setViewPerPages', viewPerPages)
+                commit('setViewPerPages', eventBrute)
             }
             eventSourceViewPerPages.addEventListener('message', listener)
             eventSourceViewPerPages.addEventListener('error', listener)
@@ -636,7 +645,7 @@ const mutations = {
         state.sessionsDuration = sessionsDuration
     },
     setSessionsDurationBrute(state, sessionsDurationBrute) {
-        state.sessionsDuration = sessionsDurationBrute
+        state.sessionsDurationBrute = sessionsDurationBrute
     },
     setSessionBrute(state, sessionBrute) {
         state.sessionBrute = sessionBrute

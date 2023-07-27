@@ -37,8 +37,8 @@ emit('update:screenShotBtn', false)
             title="Untracked Pages"
             :items="untrackedPages"
             description="Manage the pages that are not tracked by the analytics script"
-            :createNewPath="'/analytics/' + $route.params.site + '/setting/untracked-page/add'"
-            :path="'/analytics/' + $route.params.site + '/setting/untracked-page'"
+            :createNewPath="'/analytics/setting/' + $route.params.site + '/untracked-page/add'"
+            :path="'/analytics/setting/' + $route.params.site + '/untracked-page'"
         >
         </ExploreLayout>
     </div>

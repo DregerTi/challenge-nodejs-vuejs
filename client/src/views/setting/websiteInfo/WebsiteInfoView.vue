@@ -30,8 +30,8 @@ onBeforeMount(async () => {
     <div>
         <header class="flex justify-between items-base">
             <h2>Web site informations</h2>
-            <RouterLink :to="'/analytics/' + $route.params.site + '/setting/website-info/edit'">
-                <Button v-if="userRole === 'ADMIN'" icon="Edit" />
+            <RouterLink :to="'/analytics/setting/' + $route.params.site + '/website-info/edit'">
+                <Button icon="Edit" />
             </RouterLink>
         </header>
         <div class="mt-12 mb-12 flex flex-col gap-4">

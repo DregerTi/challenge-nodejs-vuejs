@@ -35,7 +35,7 @@ const labels = ['Email', 'Role', 'Action']
         :labels="labels"
         createPath="/"
         description="As website admin, manage all users and their permissions."
-        :path="'/analytics/' + $route.params.site + '/setting/website-users'"
+        :path="'/analytics/setting/' + $route.params.site + '/website-users'"
     >
     </ListLayout>
 </template>

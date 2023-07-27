@@ -22,8 +22,8 @@ emit('update:setDateButton', true)
 emit('update:dashboardEditButton', false)
 
 const store = useStore()
-const sessionsDuration = computed(() => store.state.eventStore.sessions)
-const sessionsDurationBrute = computed(() => store.state.eventStore.sessionsBrute)
+const sessionsDuration = computed(() => store.state.eventStore.sessionsDuration)
+const sessionsDurationBrute = computed(() => store.state.eventStore.sessionsDurationBrute)
 const rangeDate = computed(() => store.state.eventStore.rangeDate)
 
 onMounted(() => {
@@ -46,7 +46,7 @@ onUnmounted(() => {
                 <Line id="chart-session-duration" :data="sessionsDuration" />
             </div>
             <PinCard
-                :value="sessionsDurationBrute?.value"
+                :value="sessionsDurationBrute?.value + ' min'"
                 title="Average session"
                 :description="sessionsDurationBrute?.description"
                 :trend="sessionsDurationBrute?.trend"

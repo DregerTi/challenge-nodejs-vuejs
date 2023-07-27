@@ -28,9 +28,9 @@ async function requester(route, method, body, auth = true) {
         }
     }
 
-    if (response.status === 404 || response.status === 500 || response.status === 403) {
+    /*if (response.status === 404 || response.status === 500 || response.status === 403) {
         await router.push({ name: 'error' })
-    }
+    }*/
 
     return response
 }

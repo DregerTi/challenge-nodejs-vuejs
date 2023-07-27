@@ -41,7 +41,7 @@ const deleteSiteUser = async () => {
         <div class="flex gap-4">
             <RouterLink
                 class="w-full"
-                :to="'/analytics/' + $route.params.site + '/setting/website-users'"
+                :to="'/analytics/setting/' + $route.params.site + '/website-users'"
             >
                 <Button title="Cancel" class="w-full" variant="light-grey" />
             </RouterLink>
