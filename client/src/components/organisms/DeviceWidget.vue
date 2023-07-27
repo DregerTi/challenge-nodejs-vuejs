@@ -60,4 +60,18 @@ onUnmounted(() => {
         width: 60%;
     }
 }
+@media (max-width: 768px) {
+    .chart-card--devices {
+        flex-direction: column;
+        gap: 2rem;
+
+        > div {
+            width: 100% !important;
+        }
+
+        .stat-list {
+            width: 100% !important;
+        }
+    }
+}
 </style>

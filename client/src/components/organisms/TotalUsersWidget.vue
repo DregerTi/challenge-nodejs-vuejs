@@ -50,7 +50,7 @@ onUnmounted(() => {
         </div>
         <PinCard
             :value="totalUser?.preview.value"
-            title="Total session"
+            title="Total users"
             :trend="totalUser?.preview.trend"
         />
     </section>

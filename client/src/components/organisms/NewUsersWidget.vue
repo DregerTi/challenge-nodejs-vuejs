@@ -83,4 +83,18 @@ onUnmounted(() => {
         }
     }
 }
+@media (max-width: 768px) {
+    .chart-card--sessions {
+        flex-direction: column;
+        gap: 2rem;
+
+        > div {
+            width: 100% !important;
+        }
+
+        .pin-card {
+            width: 100% !important;
+        }
+    }
+}
 </style>

@@ -35,6 +35,7 @@ const emit = defineEmits(['update:modelValue', 'click:editButton'])
         <header>
             <h5 v-if="!editMode">{{ title }}</h5>
             <Listbox
+                class="listbox-card"
                 @update:selected="(value) => $emit('update:modelValue', value)"
                 v-if="editMode"
                 :selected="title"
@@ -87,6 +88,10 @@ const emit = defineEmits(['update:modelValue', 'click:editButton'])
                 color: var(--color-text);
             }
         }
+    }
+
+    .listbox-card {
+        width: 100%;
     }
 }
 

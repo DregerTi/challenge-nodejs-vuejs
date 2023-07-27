@@ -28,8 +28,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-    {{ viewPerPages }}
-    <EventStat title="Page ranking" :rows="viewPerPages" :labels="labels"> </EventStat>
+    <EventStat title="Page ranking" :rows="viewPerPages" :labels="labels">
+        <div></div>
+    </EventStat>
 </template>
 
 <style lang="scss"></style>

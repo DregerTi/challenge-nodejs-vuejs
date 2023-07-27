@@ -79,7 +79,23 @@ onUnmounted(() => {
         }
 
         & > .pin-card {
-            width: 23% !important;
+            max-width: 23%;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .chart-card--sessions {
+        flex-direction: column;
+        gap: 2rem;
+
+        > div {
+            width: 100% !important;
+        }
+
+        .pin-card {
+            max-width: 100% !important;
+            width: 100% !important;
         }
     }
 }

@@ -47,6 +47,7 @@ const dashboardItems = computed(() => store.state.dashboardItemStore.dashboardIt
 const sessionsBrute = computed(() => store.state.eventStore.sessionsBrute)
 const rangeDate = computed(() => store.state.eventStore.rangeDate)
 const newUser = computed(() => store.state.eventStore.newUser)
+const sessionsDurationBrute = computed(() => store.state.eventStore.sessionsDurationBrute)
 
 function updateItem(value, item) {
     item.kpi = value
@@ -63,14 +64,18 @@ onBeforeMount(() => {
     store.dispatch('getActiveUsers')
     store.dispatch('getPossibleKpis')
     store.dispatch('getDashboardItems')
+    store.dispatch('getSessionsDuration')
 })
 
 watch(rangeDate, () => {
     store.dispatch('closeEventSourceActiveUsers')
+    store.dispatch('closeEventSourceSessionDuration')
     store.dispatch('getActiveUsers')
+    store.dispatch('getSessionsDuration')
 })
 
 onUnmounted(() => {
+    store.dispatch('closeEventSourceSessionDuration')
     store.dispatch('closeEventSourceActiveUsers')
 })
 </script>
@@ -94,7 +99,11 @@ onUnmounted(() => {
                 variant="primary"
             />
             <PinCard
-                :value="sessionsDurationBrute?.value"
+                :value="
+                    sessionsDurationBrute?.value != undefined
+                        ? sessionsDurationBrute?.value
+                        : 0 + ' min'
+                "
                 title="Average session"
                 :description="sessionsDurationBrute?.description"
                 :trend="sessionsDurationBrute?.trend"
@@ -194,6 +203,11 @@ onUnmounted(() => {
         grid-template-columns: repeat(1, 1fr);
         grid-template-rows: repeat(6, 1fr);
         grid-row-gap: 1.5rem;
+    }
+}
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-rows: unset;
     }
 }
 </style>

@@ -29,9 +29,7 @@ const siteName = ref(null)
 
 onBeforeMount(async () => {
     siteName.value = 'Choose site'
-    console.log('&&&')
     await store.dispatch('getSites')
-    console.log('&&&')
     if (router.currentRoute.value.params.site) {
         await store.dispatch('getSite', router.currentRoute.value.params.site)
         console.log('kkl')

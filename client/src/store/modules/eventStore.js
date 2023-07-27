@@ -48,7 +48,14 @@ const state = {
             }
         ]
     },
-    sessionsDuration: null,
+    sessionsDuration: {
+        labels: [],
+        datasets: [
+            {
+                data: []
+            }
+        ]
+    },
     sessionsDurationBrute: null,
     devices: {
         labels: [],
@@ -63,7 +70,7 @@ const state = {
     countriesBrute: null,
     activeUsers: 0,
     rangeDate: [],
-    dayList: null
+    dayList: []
 }
 
 const getters = {
@@ -128,6 +135,10 @@ const actions = {
         await eventSourceCountry.close()
         eventSourceCountry = null
     },
+    async closeEventSourceActiveUsers() {
+        await eventSourceActiveUsers.close()
+        eventSourceActiveUsers = null
+    },
     async getSessions({ commit }) {
         try {
             const url = new URL(
@@ -167,6 +178,7 @@ const actions = {
                     )
                     return foundDay ? parseInt(foundDay.totalSessions) : 0
                 })
+
                 const labels = dayList.map((date) => date.replace(/^\d{4}-/, ''))
                 const chartData = {
                     labels: labels,
@@ -199,7 +211,7 @@ const actions = {
                 url.searchParams.append(key, state.rangeDate[key])
             )
 
-            const eventSourceSessionDuration = new EventSourcePolyfill(url, {
+            eventSourceSessionDuration = new EventSourcePolyfill(url, {
                 headers: {
                     Authorization: `Bearer ${await tokenStorage.getToken()}`
                 }
@@ -225,7 +237,7 @@ const actions = {
                 const description = trend === 'up' ? `more than last time` : `less than last time`
                 const sessionsDurationBrute = {
                     trend: trend,
-                    value: avgTimeCurrentPeriod,
+                    value: avgTimeCurrentPeriod.toFixed(2),
                     description: description
                 }
                 commit('setSessionsDurationBrute', sessionsDurationBrute)
@@ -237,6 +249,8 @@ const actions = {
                     )
                     return foundDay ? parseInt(foundDay.averageDuration) : 0
                 })
+
+                console.log(totalList)
 
                 const labels = dayList.map((date) => date.replace(/^\d{4}-/, ''))
                 const chartData = {
@@ -251,6 +265,8 @@ const actions = {
                         }
                     ]
                 }
+
+                console.log(chartData)
 
                 commit('setSessionsDuration', chartData)
             }
@@ -459,22 +475,37 @@ const actions = {
                 console.log(JSON.parse(event.data))
 
                 let eventBrute = JSON.parse(event.data)
+                const site = siteStore.state.site
+                const transformedData = eventBrute.currentPeriod.map((item) => {
+                    const title = item.path.replace(site.url, '')
+                    const value = item.currentPeriodCount
+                    const trend = item.currentPeriodCount > item.previousPeriodCount ? 'up' : 'down'
+                    return { title, value, trend }
+                })
 
-                let { currentPeriod, dailyCounts } = eventBrute
+                const dayList = state.dayList
+                const totalList = dayList.map((date) => {
+                    const foundDay = eventBrute.dailyCounts.find((item) => item.date === date)
+                    return foundDay ? parseInt(foundDay.totalSessions) : 0
+                })
 
-                const trend = currentPeriod > previousPeriod ? 'up' : 'down'
-                const differencePercentage =
-                    ((totalSessionsCurrent - totalSessionsPrevious) / totalSessionsPrevious) * 100
-                const description = trend === 'up' ? `more than last time` : `less than last time`
-                const sessionsBrute = {
-                    trend: trend,
-                    value: totalSessionsCurrent,
-                    lastPeriode: differencePercentage.toFixed(2),
-                    description: differencePercentage.toFixed(2) + ' ' + description
+                const labels = dayList.map((date) => date.replace(/^\d{4}-/, ''))
+                const chartData = {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Sessions',
+                            data: totalList,
+                            backgroundColor: '#a8dae3',
+                            borderColor: '#a8dae3',
+                            borderWidth: 1
+                        }
+                    ]
                 }
-                commit('setViewPerPagesBrute', eventBrute)
 
-                commit('setViewPerPages', eventBrute)
+                commit('setViewPerPagesBrute', chartData)
+
+                commit('setViewPerPages', transformedData)
             }
             eventSourceViewPerPages.addEventListener('message', listener)
             eventSourceViewPerPages.addEventListener('error', listener)

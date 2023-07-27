@@ -49,7 +49,12 @@ onUnmounted(() => {
             <Bar id="chart-session" :data="sessionsDuration" />
         </div>
         <PinCard
-            :value="sessionsDurationBrute?.value"
+            :value="
+                sessionsDurationBrute?.value != undefined
+                    ? sessionsDurationBrute?.value
+                    : 0 + ' min'
+            "
+            :description="sessionsDurationBrute?.description"
             title="Total session"
             :trend="sessionsDurationBrute?.trend"
         />
@@ -79,6 +84,20 @@ onUnmounted(() => {
 
         & > .pin-card {
             width: 23% !important;
+        }
+    }
+}
+@media (max-width: 768px) {
+    .chart-card--sessions {
+        flex-direction: column;
+        gap: 2rem;
+
+        > div {
+            width: 100% !important;
+        }
+
+        .pin-card {
+            width: 100% !important;
         }
     }
 }
