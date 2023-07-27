@@ -214,3 +214,22 @@ export const getRole = async function getRole() {
         throw error
     }
 }
+
+export const validateInvitation = async function validateInvitation(data) {
+    try {
+        const response = await requester(
+            ROUTES.INVITATION() + '/' + data + '/accept',
+            'GET',
+            {},
+            true
+        )
+
+        if (response.status === 422) {
+            throw await response.json()
+        }
+
+        return await response.json()
+    } catch (error) {
+        throw error
+    }
+}

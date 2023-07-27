@@ -14,6 +14,30 @@ const router = createRouter({
             component: () => import('../views/ErrorView.vue')
         },
         {
+            path: '/invitation/:id',
+            name: 'Website-users-invitation-show',
+            component: () =>
+                import(
+                    '../views/setting/websiteUser/WebsiteUserInvitationView.vue'
+                )
+        },
+        {
+            path: '/invitation/success',
+            name: 'Website-users-invitation-success',
+            component: () =>
+                import(
+                    '../views/setting/websiteUser/WebsiteUserSuccessView.vue'
+                )
+        },
+        {
+            path: '/invitation/error',
+            name: 'Website-users-invitation-error',
+            component: () =>
+                import(
+                    '../views/setting/websiteUser/WebsiteUserErrorView.vue'
+                )
+        },
+        {
             path: '/auth/',
             redirect: '/auth/login',
             name: 'auth',
@@ -302,7 +326,7 @@ const router = createRouter({
                                         import(
                                             '../views/setting/websiteUser/WebsiteUserCreateView.vue'
                                         )
-                                }
+                                },
                             ]
                         },
                         {
