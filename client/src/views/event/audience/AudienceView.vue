@@ -28,12 +28,6 @@ emit('update:dashboardEditButton', false)
                 :path="'/analytics/' + $route.params.site + '/audience/new-users'"
             />
             <MenuButton
-                icon="Person"
-                title="Active users"
-                description="Number of currently active users on your website"
-                :path="'/analytics/' + $route.params.site + '/audience/active-users'"
-            />
-            <MenuButton
                 icon="Badge"
                 title="Sessions"
                 description="Analyzes the total number of sessions"
@@ -44,12 +38,6 @@ emit('update:dashboardEditButton', false)
                 title="Session duration"
                 description="Measures the average duration of sessions"
                 :path="'/analytics/' + $route.params.site + '/audience/avg-sessions'"
-            />
-            <MenuButton
-                icon="RoundaboutRight"
-                title="Bounce rate"
-                description="Percentage of users who leave without interaction"
-                :path="'/analytics/' + $route.params.site + '/audience/bounce-rate'"
             />
             <MenuButton
                 icon="TrendingUp"

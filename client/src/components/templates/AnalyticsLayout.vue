@@ -2,7 +2,7 @@
 import { RouterView, useRoute } from 'vue-router'
 import Button from '@/components/atoms/Button.vue'
 import Header from '@/components/organisms/Header.vue'
-import { onBeforeMount, ref } from 'vue'
+import { computed, onBeforeMount, ref } from 'vue'
 import Listbox from '@/components/atoms/Listbox.vue'
 import Calendar from '../molecules/Calendar.vue'
 import SiteProvider from '@/contexts/SiteProvider.vue'
@@ -23,8 +23,12 @@ const dateValue = {
     startDate: dayjs().add(-29, 'day').format('YYYY-MM-DD'),
     endDate: dayjs().format('YYYY-MM-DD')
 }
+const site = computed(() => store.state.siteStore.site)
+const sites = computed(() => store.state.siteStore.sites)
 
 onBeforeMount(() => {
+    store.dispatch('getSites')
+    store.dispatch('getSite', router.currentRoute.value.params.site)
     store.commit('setRangeDate', dateValue)
 })
 </script>

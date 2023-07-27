@@ -89,11 +89,6 @@ const router = createRouter({
                             component: () => import('../views/event/audience/NewUserView.vue')
                         },
                         {
-                            path: 'active-users',
-                            name: 'active-users',
-                            component: () => import('../views/event/audience/ActiveUserView.vue')
-                        },
-                        {
                             path: 'sessions',
                             name: 'sessions',
                             component: () => import('../views/event/audience/SessionView.vue')
@@ -103,11 +98,6 @@ const router = createRouter({
                             name: 'avg-sessions',
                             component: () =>
                                 import('../views/event/audience/SessionDurationView.vue')
-                        },
-                        {
-                            path: 'bounce-rate',
-                            name: 'bounce-rate',
-                            component: () => import('../views/event/audience/BounceRateView.vue')
                         },
                         {
                             path: 'page-views',
@@ -192,7 +182,7 @@ const router = createRouter({
                                 import('../views/event/explore/heatmap/HeatmapView.vue'),
                             children: [
                                 {
-                                    path: ':id',
+                                    path: ':id/:size',
                                     name: 'heatmap-show',
                                     component: () =>
                                         import('../views/event/explore/heatmap/HeatmapShowView.vue')

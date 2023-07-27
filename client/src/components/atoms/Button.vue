@@ -15,6 +15,9 @@ import IconCheck from '@/components/icons/IconCheck.vue'
 import IconDelete from '@/components/icons/IconDelete.vue'
 import IconScreenshotMonitor from '@/components/icons/IconScreenshotMonitor.vue'
 import IconAutorenew from '@/components/icons/IconAutorenew.vue'
+import IconSmartphone from '@/components/icons/IconSmartphone.vue'
+import IconLaptop from '@/components/icons/IconLaptop.vue'
+import IconTablet from '@/components/icons/IconTablet.vue'
 
 const { title, variant, icon, type } = defineProps({
     title: {
@@ -45,7 +48,10 @@ const { title, variant, icon, type } = defineProps({
                 'Check',
                 'Delete',
                 'ScreenshotMonitor',
-                'Autorenew'
+                'Autorenew',
+                'Smartphone',
+                'Laptop',
+                'Tablet'
             ].includes(value)
         }
     },
@@ -85,6 +91,9 @@ const { title, variant, icon, type } = defineProps({
         <IconDelete v-if="icon == 'Delete'" />
         <IconScreenshotMonitor v-if="icon == 'ScreenshotMonitor'" />
         <IconAutorenew v-if="icon == 'Autorenew'" />
+        <IconSmartphone v-if="icon == 'Smartphone'" />
+        <IconLaptop v-if="icon == 'Laptop'" />
+        <IconTablet v-if="icon == 'Tablet'" />
         <p v-if="title">{{ title }}</p>
     </button>
 </template>

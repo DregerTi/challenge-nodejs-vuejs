@@ -141,15 +141,16 @@ export default {
         const handleClick = (event) => {
             let { clientX, clientY } = event
             const width = window.innerWidth
+            let newClientX = 111
             let size = 'other'
             if (width < 700) {
                 size = 'sm'
-                clientX = ((clientX / 100) * 600).toFixed(0)
+                newClientX = 600 * (((clientX / width) * 100) / 100)
             } else if (width < 868) {
                 size = 'md'
-                clientX = ((clientX / 100) * 768).toFixed(0)
+                newClientX = 768 * (((clientX / width) * 100) / 100)
             } else {
-                clientX = ((clientX / 100) * 992).toFixed(0)
+                newClientX = 922 * (((clientX / width) * 100) / 100)
                 size = 'lg'
             }
             sendEvent({
@@ -161,7 +162,7 @@ export default {
                 path: window.location.href,
                 type: 'click',
                 size: size,
-                coordinates: { x: clientX, y: clientY }
+                coordinates: { x: Math.trunc(newClientX), y: clientY }
             })
         }
 

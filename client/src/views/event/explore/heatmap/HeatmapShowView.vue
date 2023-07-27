@@ -1,6 +1,9 @@
 <script setup>
-import { defineEmits, ref, onMounted } from 'vue'
+import { defineEmits, ref, onMounted, computed, onUnmounted, watch } from 'vue'
 import h337 from '@mars3d/heatmap.js'
+import { useStore } from 'vuex'
+import router from '@/router'
+import Button from '@/components/atoms/Button.vue'
 
 const emit = defineEmits([
     'update:descriptionHidden',
@@ -22,12 +25,12 @@ const canvasWidth = ref(0)
 const canvasHeight = ref(0)
 
 function scaleCoordinates(data) {
-    const scaledData = data.map((point) => {
-        const scaledX = ((point.x / 100) * canvasWidth.value).toFixed(0)
-        const scaledY = ((point.y / 100) * canvasHeight.value).toFixed(0)
-
+    if (!data || data[0] === undefined) return []
+    const scaledData = data[0].results.map((point) => {
+        const scaledX = canvasWidth.value * (((point.x / 922) * 100) / 100)
+        const scaledY = point.y
         const x = Math.max(0, Math.min(scaledX, canvasWidth.value))
-        const y = Math.max(0, Math.min(scaledY, canvasHeight.value))
+        const y = scaledY
 
         return {
             x,
@@ -35,72 +38,144 @@ function scaleCoordinates(data) {
             value: point.value
         }
     })
-
     return scaledData
 }
 
+const store = useStore()
+const heatmap = computed(() => store.state.eventStore.heatmap)
+const rangeDate = computed(() => store.state.eventStore.rangeDate)
+const heatmapInstance = ref(null)
+
 onMounted(() => {
+    store.dispatch(
+        'getHeatmap',
+        router.currentRoute.value.params.id,
+        router.currentRoute.value.params.size
+    )
+
     canvasWidth.value = heatmapCanvas.value.offsetWidth
     canvasHeight.value = heatmapCanvas.value.offsetHeight
 
-    console.log(canvasWidth.value)
-
-    const heatmapInstance = h337.create({
+    heatmapInstance.value = h337.create({
         container: heatmapCanvas.value
     })
 
-    const testData = {
-        max: 100,
-        data: [
-            { x: 10, y: 20, value: 50 },
-            { x: 50, y: 70, value: 60 },
-            { x: 30, y: 40, value: 80 },
-            { x: 90, y: 20, value: 50 },
-            { x: 50, y: 70, value: 60 },
-            { x: 30, y: 40, value: 80 },
-            { x: 90, y: 20, value: 50 },
-            { x: 50, y: 70, value: 60 },
-            { x: 30, y: 40, value: 80 },
-            { x: 90, y: 20, value: 50 },
-            { x: 50, y: 70, value: 60 },
-            { x: 30, y: 40, value: 80 },
-            { x: 90, y: 20, value: 50 },
-            { x: 50, y: 70, value: 60 },
-            { x: 30, y: 40, value: 80 },
-            { x: 90, y: 20, value: 50 },
-            { x: 50, y: 70, value: 60 },
-            { x: 30, y: 40, value: 80 },
-            { x: 90, y: 20, value: 50 },
-            { x: 50, y: 70, value: 60 },
-            { x: 30, y: 40, value: 80 },
-            { x: 90, y: 20, value: 50 },
-            { x: 50, y: 70, value: 60 },
-            { x: 30, y: 40, value: 80 },
-            { x: 90, y: 20, value: 50 },
-            { x: 50, y: 70, value: 60 },
-            { x: 30, y: 40, value: 80 }
-        ]
-    }
-
-    const scaledData = scaleCoordinates(testData.data)
+    const scaledData = scaleCoordinates(store.state.eventStore.heatmap)
 
     const scaledTestData = {
-        max: testData.max,
         data: scaledData
     }
-    console.log(scaledTestData)
-    heatmapInstance.setData(scaledTestData)
+
+    heatmapInstance.value.setData(scaledTestData)
+})
+
+watch(heatmap, () => {
+    canvasWidth.value = heatmapCanvas.value.offsetWidth
+    canvasHeight.value = heatmapCanvas.value.offsetHeight
+
+    const scaledData = scaleCoordinates(store.state.eventStore.heatmap)
+
+    const scaledTestData = {
+        data: scaledData
+    }
+    heatmapInstance.value.repaint()
+    heatmapInstance.value.setData(scaledTestData)
+})
+
+watch(
+    () => router.currentRoute.value.params,
+    () => {
+        store.dispatch('closeEventSourceHeatmapPaths')
+        store.dispatch('getHeatmapPaths')
+        store.dispatch(
+            'getHeatmap',
+            router.currentRoute.value.params.id,
+            router.currentRoute.value.params.size
+        )
+    }
+)
+
+watch(rangeDate, () => {
+    store.dispatch('closeEventSourceHeatmapPaths')
+    store.dispatch('getHeatmapPaths')
+    store.dispatch(
+        'getHeatmap',
+        router.currentRoute.value.params.id,
+        router.currentRoute.value.params.size
+    )
+})
+
+onUnmounted(() => {
+    store.dispatch('closeEventSourceHeatmap')
 })
 </script>
 
 <template>
     <div>
-        <div class="heatmap-canvas" ref="heatmapCanvas"></div>
+        <nav class="heatmap-nav">
+            <RouterLink
+                :to="{ name: 'heatmap', params: { id: $route.params.id, size: 'sm' } }"
+                class="w-full"
+            >
+                <Button
+                    title="Mobile"
+                    icon="Smartphone"
+                    class="w-full"
+                    :variant="
+                        router.currentRoute.value.params.size == 'sm'
+                            ? 'light-grey'
+                            : 'button--dark-grey'
+                    "
+                />
+            </RouterLink>
+            <RouterLink
+                :to="{ name: 'heatmap', params: { id: $route.params.id, size: 'md' } }"
+                class="w-full"
+            >
+                <Button
+                    title="Tablet"
+                    icon="Tablet"
+                    class="w-full"
+                    :variant="
+                        router.currentRoute.value.params.size == 'md'
+                            ? 'light-grey'
+                            : 'button--dark-grey'
+                    "
+                />
+            </RouterLink>
+            <RouterLink
+                :to="{ name: 'heatmap', params: { id: $route.params.id, size: 'lg' } }"
+                class="w-full"
+            >
+                <Button
+                    title="Desktop"
+                    icon="Laptop"
+                    class="w-full"
+                    :variant="
+                        router.currentRoute.value.params.size == 'lg'
+                            ? 'light-grey'
+                            : 'button--dark-grey'
+                    "
+                />
+            </RouterLink>
+        </nav>
+        <div>
+            <div class="heatmap-canvas" ref="heatmapCanvas"></div>
+        </div>
     </div>
 </template>
 
 <style scoped lang="scss">
 .heatmap-canvas {
     width: 100%;
+    height: 400px;
+}
+.heatmap-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+    margin-top: 2rem;
+    background-color: var(--color-light-grey);
+    border-radius: 10px;
 }
 </style>

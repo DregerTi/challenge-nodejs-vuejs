@@ -2,13 +2,18 @@ import { EventSourcePolyfill } from 'event-source-polyfill'
 import * as tokenStorage from '@/services/tokenStorage'
 import ROUTES from '@/router/routes'
 import router from '@/router'
+import siteStore from '@/store/modules/siteStore'
+import { useStore } from 'vuex'
 
+const store = useStore()
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL
 
 const state = {
     viewPerPages: null,
     viewPerPagesBrute: null,
     sessionsBrute: null,
+    heatmapPaths: null,
+    heatmap: null,
     sessions: {
         labels: [],
         datasets: [
@@ -40,7 +45,11 @@ const getters = {
     rangeDate: (state) => state.rangeDate,
     sessions: (state) => state.sessions,
     sessionsDuration: (state) => state.sessionsDuration,
-    activeUsers: (state) => state.activeUsers
+    activeUsers: (state) => state.activeUsers,
+    devices: (state) => state.devices,
+    countries: (state) => state.countries,
+    heatmapPaths: (state) => state.heatmapPaths,
+    heatmap: (state) => state.heatmap
 }
 
 let eventSourceSession = null
@@ -48,6 +57,8 @@ let eventSourceDevice = null
 let eventSourceCountry = null
 let eventSourceSessionDuration = null
 let eventSourceViewPerPages = null
+let eventSourceHeatmapPaths = null
+let eventSourceHeatmap = null
 
 const actions = {
     async getViewPerPages({ commit }) {},
@@ -66,6 +77,14 @@ const actions = {
     async closeEventSourceDevice() {
         await eventSourceDevice.close()
         eventSourceDevice = null
+    },
+    async closeEventSourceHeatmapPaths() {
+        await eventSourceHeatmapPaths.close()
+        eventSourceHeatmapPaths = null
+    },
+    async closeEventSourceHeatmap() {
+        await eventSourceHeatmap.close()
+        eventSourceHeatmap = null
     },
     async closeEventSourceCountry() {
         await eventSourceCountry.close()
@@ -110,9 +129,9 @@ const actions = {
                     )
                     return foundDay ? parseInt(foundDay.totalSessions) : 0
                 })
-
+                const labels = dayList.map((date) => date.replace(/^\d{4}-/, ''))
                 const chartData = {
-                    labels: dayList,
+                    labels: labels,
                     datasets: [
                         {
                             label: 'Sessions',
@@ -170,7 +189,7 @@ const actions = {
                 commit('setSessionsDurationBrute', sessionsDurationBrute)
                 const dayList = state.dayList
                 const totalList = dayList.map((date) => {
-                    const foundDay = JSON.parse(event.data).dailySessions.find(
+                    const foundDay = JSON.parse(event.data).dailyAvgTime.find(
                         (item) => item.date === date
                     )
                     return foundDay ? parseInt(foundDay.totalSessions) : 0
@@ -180,7 +199,7 @@ const actions = {
                     labels: dayList,
                     datasets: [
                         {
-                            label: 'Sessions',
+                            label: 'Sessions duration',
                             data: totalList,
                             backgroundColor: '#a8dae3',
                             borderColor: '#a8dae3',
@@ -307,6 +326,70 @@ const actions = {
             eventSourceCountry.addEventListener('error', listener)
         } catch (error) {}
     },
+    async getHeatmapPaths({ commit }) {
+        try {
+            const url = new URL(
+                apiBaseUrl + ROUTES.EVENT_HEATMAP_PATHS(router.currentRoute.value.params.site)
+            )
+
+            Object.keys(state.rangeDate).forEach((key) =>
+                url.searchParams.append(key, state.rangeDate[key])
+            )
+
+            eventSourceHeatmap = new EventSourcePolyfill(url, {
+                headers: {
+                    Authorization: `Bearer ${await tokenStorage.getToken()}`
+                }
+            })
+            const listener = async function (event) {
+                if (event.type === 'error') {
+                    this.close()
+                    return
+                }
+
+                const site = siteStore.state.site
+                const heatmapPaths = JSON.parse(event.data).map((item) => ({
+                    name: decodeURIComponent(decodeURIComponent(item.path.replace(site?.url, ''))),
+                    id: encodeURIComponent(encodeURIComponent(item.path)) + '/lg'
+                }))
+
+                commit('setHeatmapPaths', heatmapPaths)
+            }
+            eventSourceHeatmap.addEventListener('message', listener)
+            eventSourceHeatmap.addEventListener('error', listener)
+        } catch (error) {}
+    },
+    async getHeatmap({ commit }, path, size = 'lg') {
+        try {
+            const url = new URL(
+                apiBaseUrl + ROUTES.EVENT_HEATMAP(router.currentRoute.value.params.site)
+            )
+
+            Object.keys(state.rangeDate).forEach((key) =>
+                url.searchParams.append(key, state.rangeDate[key])
+            )
+            const site = siteStore.state.site
+            url.searchParams.append('path', decodeURIComponent(decodeURIComponent(path)))
+            url.searchParams.append('size', size)
+
+            eventSourceHeatmap = new EventSourcePolyfill(url, {
+                headers: {
+                    Authorization: `Bearer ${await tokenStorage.getToken()}`
+                }
+            })
+
+            const listener = function (event) {
+                if (event.type === 'error') {
+                    this.close()
+                    return
+                }
+                const heatmap = JSON.parse(event.data)
+                commit('setHeatmap', heatmap)
+            }
+            eventSourceHeatmap.addEventListener('message', listener)
+            eventSourceHeatmap.addEventListener('error', listener)
+        } catch (error) {}
+    },
     async getActiveUsers({ commit }) {}
 }
 
@@ -322,6 +405,9 @@ const mutations = {
     },
     setSessionsDuration(state, sessionsDuration) {
         state.sessionsDuration = sessionsDuration
+    },
+    setSessionsDurationBrute(state, sessionsDurationBrute) {
+        state.sessionsDuration = sessionsDurationBrute
     },
     setSessionBrute(state, sessionBrute) {
         state.sessionBrute = sessionBrute
@@ -354,6 +440,12 @@ const mutations = {
         }
 
         state.dayList = dayListVal
+    },
+    setHeatmap(state, heatmap) {
+        state.heatmap = heatmap
+    },
+    setHeatmapPaths(state, heatmapPaths) {
+        state.heatmapPaths = heatmapPaths
     }
 }
 

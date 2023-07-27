@@ -1,13 +1,18 @@
 import * as siteService from '@/services/siteService'
+import { getSiteUser } from '@/services/siteService'
 
 const state = {
     siteUsers: null,
-    siteUser: null
+    siteUser: null,
+    sites: null,
+    site: null
 }
 
 const getters = {
     siteUsers: (state) => state.siteUsers,
-    siteUser: (state) => state.siteUser
+    siteUser: (state) => state.siteUser,
+    sites: (state) => state.sites,
+    site: (state) => state.site
 }
 
 const actions = {
@@ -15,6 +20,22 @@ const actions = {
         try {
             const siteUsers = await siteService.getSiteUsers()
             commit('setSiteUsers', siteUsers)
+        } catch (error) {
+            //commit('setUntrackedPagesErrors', error)
+        }
+    },
+    async getSites({ commit }) {
+        try {
+            const sites = await siteService.getSites()
+            commit('setSites', sites)
+        } catch (error) {
+            //commit('setUntrackedPagesErrors', error)
+        }
+    },
+    async getSite({ commit }, id) {
+        try {
+            const site = await siteService.getSite(id)
+            commit('setSite', site)
         } catch (error) {
             //commit('setUntrackedPagesErrors', error)
         }
@@ -65,6 +86,12 @@ const mutations = {
     },
     setSiteUser(state, siteUser) {
         state.siteUser = siteUser
+    },
+    setSites(state, sites) {
+        state.sites = sites
+    },
+    setSite(state, site) {
+        state.site = site
     }
 }
 

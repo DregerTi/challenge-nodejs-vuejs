@@ -103,6 +103,20 @@ export const getSite = async function getSite(id) {
     }
 }
 
+export const getSites = async function getSites() {
+    try {
+        const response = await requester(ROUTES.USER_SITE(), 'GET', {}, true)
+
+        if (response.status === 422) {
+            throw await response.json()
+        }
+
+        return await response.json()
+    } catch (error) {
+        throw error
+    }
+}
+
 export const updateSiteUser = async function updateSiteUser(data) {
     try {
         const response = await requester(

@@ -60,14 +60,13 @@ onBeforeMount(() => {
 <template>
     <div>
         <section class="pin-container">
-            <PinCard title="Active users" :value="activeUsers" :editMode="dashboardEditMode" />
+            <PinCard title="Active users" :value="activeUsers" />
             <PinCard
                 title="Active users"
                 description="10% less from last month"
                 value="33"
                 trend="down"
                 variant="primary"
-                :editMode="dashboardEditMode"
             />
             <PinCard
                 title="Active users"
@@ -75,7 +74,6 @@ onBeforeMount(() => {
                 value="33"
                 trend="down"
                 variant="primary"
-                :editMode="dashboardEditMode"
             />
             <PinCard
                 title="Active users"
@@ -83,7 +81,6 @@ onBeforeMount(() => {
                 value="33"
                 trend="down"
                 variant="primary"
-                :editMode="dashboardEditMode"
             />
         </section>
         <div class="dashboard-grid">
@@ -97,7 +94,7 @@ onBeforeMount(() => {
                 @click:edit-button="deleteItemMethod(item.id)"
                 path="/"
             >
-                <SessionWidget v-if="item.name === 'Sessions'" />
+                <SessionWidget v-if="item.name === 'Sessions'" variant="sm" />
                 <PageViewWidget v-if="item.name === 'Page Views'" />
                 <TotalUsersWidget v-if="item.name === 'Total Users'" />
                 <ActiveUsersWidget v-if="item.name === 'Active Users'" />
