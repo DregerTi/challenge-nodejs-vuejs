@@ -80,6 +80,15 @@ const actions = {
         } catch (error) {
             commit('setConversionTunnelsErrors', error)
         }
+    },
+    async updateConversionTunnelTags({ commit }, data) {
+        try {
+            await conversionTunnelService.updateConversionTunnelTags(data)
+            const conversionTunnel = await conversionTunnelService.getConversionTunnel()
+            commit('setConversionTunnel', conversionTunnel)
+        } catch (error) {
+            commit('setConversionTunnelsErrors', error)
+        }
     }
 }
 

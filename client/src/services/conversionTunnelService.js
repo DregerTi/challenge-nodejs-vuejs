@@ -106,3 +106,27 @@ export const getConversionTunnel = async function getConversionTunnel() {
         throw error
     }
 }
+
+export const updateConversionTunnelTags = async function updateConversionTunnelTags(
+    _conversionTunnel
+) {
+    try {
+        const response = await requester(
+            ROUTES.CONVERSION_TUNNEL(router.currentRoute.value.params.site, router.currentRoute.value.params.id) + '/tags',
+            'PUT',
+            [
+                ..._conversionTunnel
+            ]
+            ,
+            true
+        )
+
+        if (response.status === 422) {
+            throw await response.json()
+        }
+
+        return await response.json()
+    } catch (error) {
+        throw error
+    }
+}

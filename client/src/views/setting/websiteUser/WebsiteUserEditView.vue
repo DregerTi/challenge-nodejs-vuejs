@@ -31,7 +31,10 @@ onBeforeMount(async () => {
 
     const roleSite = function () {
         for (let i = 0; i < user.value.SiteUsers.length; i++) {
-            if (user.value.SiteUsers[i].siteId.toString() === router.currentRoute.value.params.site.toString()) {
+            if (
+                user.value.SiteUsers[i].siteId.toString() ===
+                router.currentRoute.value.params.site.toString()
+            ) {
                 return user.value.SiteUsers[i].role
             }
         }
@@ -46,9 +49,9 @@ let admin
 
 const role = function (value) {
     if (value === 'ADMIN') {
-        return formData.permissions = 'ADMIN', admin = false
+        return (formData.permissions = 'ADMIN'), (admin = false)
     } else {
-        return formData.permissions = 'USER', admin = true
+        return (formData.permissions = 'USER'), (admin = true)
     }
 }
 
@@ -76,7 +79,7 @@ const updateUser = async (formData) => {
             <p>{{ formData.permissions }}</p>
         </div>
 
-        <Button v-if=admin type="submit" title="Make Admin" />
+        <Button v-if="admin" type="submit" title="Make Admin" />
         <Button v-else type="submit" title="Make User" />
     </form>
 </template>
@@ -87,7 +90,7 @@ const updateUser = async (formData) => {
     flex-direction: column;
     gap: 1rem;
 
-    >* {
+    > * {
         width: 100%;
     }
 

@@ -109,7 +109,7 @@ export const updateSiteUser = async function updateSiteUser(data) {
             ROUTES.SITE_USERS(router.currentRoute.value.params.site) + '/' + data.email,
             'PATCH',
             {
-                role : data.permissions
+                role: data.permissions
             },
             true
         )
@@ -141,5 +141,4 @@ export const deleteSiteUser = async function deleteSiteUser(email) {
     } catch (error) {
         throw error
     }
-    
 }

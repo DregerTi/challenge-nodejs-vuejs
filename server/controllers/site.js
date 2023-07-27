@@ -353,6 +353,27 @@ controller.updateTagFromConversionTunnel = async function(req, res, next) {
     next(err);
   }
 }
+controller.updateTagConversionTunnel = async function(req, res, next) {
+  const { conversionTunnelId } = req.params;
+  const tags  = req.body;
+  try {
+    const conversionTunnelTags = await conversionTunnelTagService.findAll({ conversionTunnelId: parseInt(conversionTunnelId, 10) });
+    for (const conversionTunnelTag of conversionTunnelTags) {
+      await conversionTunnelTagService.delete({ id: conversionTunnelTag.id });
+    }
+    for (const tag of tags) {
+      await conversionTunnelTagService.create({
+        conversionTunnelId: parseInt(conversionTunnelId, 10),
+        tagId: parseInt(tag.id, 10),
+        order: parseInt(tag.order, 10),
+        createdBy: parseInt(req.user.id, 10)
+      });
+    }
+    res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
+}
 
 controller.createUntrackPath = async function(req, res, next) {
   const { url } = req.body;

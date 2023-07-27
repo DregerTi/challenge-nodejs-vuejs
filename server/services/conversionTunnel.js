@@ -1,4 +1,4 @@
-const { ConversionTunnel, User, Site} = require("../db");
+const { ConversionTunnel, User, Site, ConversionTunnelTag, Tag} = require("../db");
 const Sequelize = require("sequelize");
 const ValidationError = require("../errors/ValidationError");
 
@@ -36,7 +36,14 @@ module.exports = function TagService() {
       return ConversionTunnel.findAll(dbOptions);
     },
     findOne: async function (filters) {
-      return ConversionTunnel.findOne({ where: filters });
+      let dbOptions = {
+        where: filters,
+        include: [{
+          model: ConversionTunnelTag,
+          attributes: ["id", "order", "tagId", "conversionTunnelId"],
+        }]
+      };
+      return ConversionTunnel.findOne(dbOptions);
     },
     create: async function (data) {
       try {

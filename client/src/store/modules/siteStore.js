@@ -26,7 +26,7 @@ const actions = {
         } catch (error) {
             //commit('setUntrackedPagesErrors', error)
         }
-    },   
+    },
     async updateSiteUser({ commit }, data) {
         try {
             await siteService.updateSiteUser(data)
@@ -35,8 +35,8 @@ const actions = {
             await router.push({
                 name: 'Website-users',
                 params: {
-                    site: router.currentRoute.value.params.site,
-                }   
+                    site: router.currentRoute.value.params.site
+                }
             })
         } catch (error) {
             //commit('setUntrackedPagesErrors', error)
@@ -50,7 +50,7 @@ const actions = {
             await router.push({
                 name: 'Website-users',
                 params: {
-                    site: router.currentRoute.value.params.site,
+                    site: router.currentRoute.value.params.site
                 }
             })
         } catch (error) {

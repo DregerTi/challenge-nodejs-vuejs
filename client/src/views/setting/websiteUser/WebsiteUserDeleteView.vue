@@ -39,7 +39,10 @@ const deleteSiteUser = async () => {
     <div class="event-form">
         <p>Are you sure you want to delete this user from your website ?</p>
         <div class="flex gap-4">
-            <RouterLink class="w-full" :to="'/analytics/' + $route.params.site + '/setting/website-users'">
+            <RouterLink
+                class="w-full"
+                :to="'/analytics/' + $route.params.site + '/setting/website-users'"
+            >
                 <Button title="Cancel" class="w-full" variant="light-grey" />
             </RouterLink>
             <Button title="Delete" class="w-full" variant="error" @click="deleteSiteUser()" />
@@ -53,7 +56,7 @@ const deleteSiteUser = async () => {
     flex-direction: column;
     gap: 1rem;
 
-    >p {
+    > p {
         color: var(--color-text);
     }
 }

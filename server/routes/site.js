@@ -105,6 +105,10 @@ const routesList = [
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
     },
     {
+        path: "/:id/conversion-tunnels/:conversionTunnelId/tags", method: "put", action: "updateTagConversionTunnel",
+        middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
+    },
+    {
         path: "/:id/conversion-tunnels/:conversionTunnelId/tags/:tagId", method: "delete", action: "removeTagFromConversionTunnel",
         middlewares: [checkAuth.requireAuthentication, sitePermissions.canAccessSite(['ADMIN'])]
     },

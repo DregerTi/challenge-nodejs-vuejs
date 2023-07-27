@@ -1,6 +1,8 @@
 <script setup>
 import { computed, defineEmits } from 'vue'
 import { useStore } from 'vuex'
+import Button from '@/components/atoms/Button.vue'
+import router from '@/router'
 
 const emit = defineEmits([
     'update:descriptionHidden',
@@ -20,9 +22,18 @@ const conversionTunnel = computed(() => store.state.conversionTunnel.conversionT
 </script>
 
 <template>
-    <h2>
-        {{ conversionTunnel?.name }}
-    </h2>
+    <div>
+        <h2 class="mb-10">
+            {{ conversionTunnel?.name }}
+        </h2>
+
+        <Button
+            title="Voir les tags"
+            class="w-full p-5"
+            variant="light-grey"
+            @click="router.push(router.currentRoute.value.path + '/settings')"
+        />
+    </div>
 </template>
 
 <style scoped lang="scss"></style>
