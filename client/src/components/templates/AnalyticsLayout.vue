@@ -2,7 +2,7 @@
 import { RouterView, useRoute } from 'vue-router'
 import Button from '@/components/atoms/Button.vue'
 import Header from '@/components/organisms/Header.vue'
-import { computed, onBeforeMount, onMounted, ref } from 'vue'
+import { computed, onBeforeMount, onMounted, ref, watch } from 'vue'
 import Listbox from '@/components/atoms/Listbox.vue'
 import Calendar from '../molecules/Calendar.vue'
 import router from '@/router'
@@ -32,6 +32,15 @@ onMounted(async () => {
     }
     store.commit('setRangeDate', dateValue)
 })
+
+watch(
+    () => router.currentRoute.value.params.site,
+    async () => {
+        if (router.currentRoute.value.params.site) {
+            await store.dispatch('getSite', router.currentRoute.value.params.site)
+        }
+    }
+)
 </script>
 
 <template>
@@ -40,7 +49,7 @@ onMounted(async () => {
         <div>
             <div class="container">
                 <header v-if="sites">
-                    <Listbox variant="lg" :values="sites" path="dashboard" />
+                    <Listbox variant="lg" :values="sites" :selected="site?.name" path="dashboard" />
                     <div class="actions">
                         <Calendar class="dateButton" v-if="setDateButton" />
                         <Button

@@ -62,7 +62,7 @@ watch(selectedValue, (newValue) => {
                         >
                             <RouterLink
                                 v-if="path"
-                                :to="{ name: path, params: { site: value.id } }"
+                                :to="{ name: 'dashboard', params: { site: value.id } }"
                             >
                                 <li
                                     :class="[

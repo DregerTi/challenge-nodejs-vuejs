@@ -88,22 +88,36 @@ const saveTags = async () => {
         <h2 class="mb-10 mt-3">
             {{ conversionTunnel?.name }}
         </h2>
-        <div v-if="tags.length === 0">
-            No tag added yet... Don't wait to add some ! 🏷
-        </div>
+        <div v-if="tags.length === 0">No tag added yet... Don't wait to add some ! 🏷</div>
         <form v-else @submit.prevent="saveTags()">
-            <div v-for="tag in tags" :key="tag.id" class="flex items-center w-full mb-2">
-                <Switch :class="[isSelected(tag) ? 'bg-blue-600' : 'bg-gray-200']"
-                    class="inline-flex h-6 w-11 items-center rounded-full" @change="toggleTag(tag)" @click="onClick(tag)">
+            <div
+                v-for="tag in tags"
+                :key="tag.id"
+                class="flex items-center w-full mb-2 pt-3 pb-3 justify-between"
+            >
+                <Switch
+                    :class="[isSelected(tag) ? 'bg-blue-600' : 'bg-gray-200']"
+                    class="inline-flex h-6 w-11 items-center rounded-full"
+                    @change="toggleTag(tag)"
+                    @click="onClick(tag)"
+                >
                     <span class="sr-only">{{ tag.name }}</span>
-                    <span :class="isSelected(tag) ? 'translate-x-6' : 'translate-x-1'"
-                        class="inline-block h-4 w-4 transform rounded-full bg-white transition" />
+                    <span
+                        :class="isSelected(tag) ? 'translate-x-6' : 'translate-x-1'"
+                        class="inline-block h-4 w-4 transform rounded-full bg-white transition"
+                    />
                 </Switch>
                 <span class="ml-2">{{ tag.name }}</span>
-                <input v-model="tag.order" :placeholder="isSelected(tag) ? 'Order' : ''" type="number" min="1"
-                    :disabled="!isSelected(tag)" class="ml-2 p-2 rounded-md" />
+                <input
+                    v-model="tag.order"
+                    :placeholder="isSelected(tag) ? 'Order' : ''"
+                    type="number"
+                    min="1"
+                    :disabled="!isSelected(tag)"
+                    class="ml-2 p-2 rounded-md w-24"
+                />
             </div>
-            <Button type="submit" title="Save" />
+            <Button type="submit" title="Save" class="w-full mt-8" />
         </form>
     </div>
 </template>
