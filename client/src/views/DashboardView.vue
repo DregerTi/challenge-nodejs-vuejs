@@ -83,7 +83,7 @@ onUnmounted(() => {
 <template>
     <div>
         <section class="pin-container">
-            <PinCard title="Active users" :value="activeUsers" />
+            <PinCard title="Active users" :value="activeUsers?.uniqueViewerCount" />
             <PinCard
                 title="Total sessions"
                 :description="sessionsBrute?.description"
@@ -100,7 +100,7 @@ onUnmounted(() => {
             />
             <PinCard
                 :value="
-                    sessionsDurationBrute?.value != undefined
+                    sessionsDurationBrute?.value !== undefined
                         ? sessionsDurationBrute?.value
                         : 0 + ' min'
                 "

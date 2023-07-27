@@ -32,9 +32,7 @@ onBeforeMount(async () => {
     await store.dispatch('getSites')
     if (router.currentRoute.value.params.site) {
         await store.dispatch('getSite', router.currentRoute.value.params.site)
-        console.log('kkl')
         if (site.name != null) {
-            console.log('ddd')
             siteName.value = site.name
         }
     }

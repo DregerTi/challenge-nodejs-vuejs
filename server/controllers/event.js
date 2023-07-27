@@ -155,8 +155,8 @@ module.exports = function Controller(EventService, TagService, SessionService, V
         changeStream.on("change", async () => {
           try {
             const aggregate = eventUtils().getActiveUsersAggregate(id);
-            const result = (await EventService.findAllAggregate(aggregate))[0];
-
+            const result = await EventService.findAllAggregate(aggregate);
+            console.log('new result');
             res.write(`data: ${JSON.stringify(result)}\n\n`);
           } catch (err) {
             next(err);
@@ -428,8 +428,11 @@ module.exports = function Controller(EventService, TagService, SessionService, V
     getNewUsers: async function(req, res, next) {
       const { id } = req.params;
       let { startDate, endDate } = req.query;
-      try {
+      res.setHeader("Content-Type", "text/event-stream");
+      res.setHeader("Cache-Control", "no-cache");
+      res.setHeader("Connection", "keep-alive");
 
+      try {
         const { start, end, previousPeriodStart, previousPeriodEnd } =
           eventUtils().getRangeDates(startDate, endDate);
 
@@ -439,18 +442,31 @@ module.exports = function Controller(EventService, TagService, SessionService, V
         }
 
         const aggregate = eventUtils().getNewUsersAggregate(id, start, end, previousPeriodStart, previousPeriodEnd);
-
-
         const result = (await EventService.findAllAggregate(aggregate))[0];
-        if (result?.totalNewUsersCurrentPeriod === undefined) {
-          result.totalNewUsersCurrentPeriod = 0;
-        }
-        if (result?.totalNewUsersPreviousPeriod === undefined) {
-          result.totalNewUsersPreviousPeriod = 0;
-        }
 
-        if (result) res.json(result);
-        else res.sendStatus(404);
+
+        res.write(`data: ${JSON.stringify(result)}\n\n`);
+
+        const changeStream = Event.watch();
+        changeStream.on("change", async () => {
+          try {
+            const result = (await EventService.findAllAggregate(aggregate))[0];
+
+            res.write(`data: ${JSON.stringify(result)}\n\n`);
+          } catch (err) {
+            next(err);
+          }
+        });
+
+        req.on("error", (err) => {
+          changeStream.close();
+          res.end();
+        });
+
+        req.on("close", () => {
+          changeStream.close();
+          res.end();
+        });
       } catch (err) {
         next(err);
       }

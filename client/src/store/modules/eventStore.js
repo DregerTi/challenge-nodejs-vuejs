@@ -100,32 +100,46 @@ let eventSourceActiveUsers = null
 
 const actions = {
     async closeEventSourceTotalUser() {
-        await eventSourceTotalUser.close()
-        eventSourceTotalUser = null
+        if(eventSourceTotalUser) {
+            await eventSourceTotalUser.close()
+            eventSourceTotalUser = null
+        }
     },
     async closeEventSourceNewUser() {
-        await eventSourceNewUser.close()
-        eventSourceNewUser = null
+        if(eventSourceNewUser) {
+            await eventSourceNewUser.close()
+            eventSourceNewUser = null
+        }
     },
     async closeEventSourceSession() {
-        await eventSourceSession.close()
-        eventSourceSession = null
+        if(eventSourceSession) {
+            await eventSourceSession.close()
+            eventSourceSession = null
+        }
     },
     async closeEventSourceSessionDuration() {
-        await eventSourceSessionDuration.close()
-        eventSourceSessionDuration = null
+        if(eventSourceSessionDuration) {
+            await eventSourceSessionDuration.close()
+            eventSourceSessionDuration = null
+        }
     },
     async closeEventSourceViewPerPages() {
-        await eventSourceViewPerPages.close()
-        eventSourceViewPerPages = null
+        if(eventSourceViewPerPages) {
+            await eventSourceViewPerPages.close()
+            eventSourceViewPerPages = null
+        }
     },
     async closeEventSourceDevice() {
-        await eventSourceDevice.close()
-        eventSourceDevice = null
+        if(eventSourceDevice) {
+            await eventSourceDevice.close()
+            eventSourceDevice = null
+        }
     },
     async closeEventSourceHeatmapPaths() {
-        await eventSourceHeatmapPaths.close()
-        eventSourceHeatmapPaths = null
+        if (eventSourceHeatmapPaths) {
+            await eventSourceHeatmapPaths.close()
+            eventSourceHeatmapPaths = null
+        }
     },
     async closeEventSourceHeatmap() {
         await eventSourceHeatmap.close()
@@ -250,7 +264,6 @@ const actions = {
                     return foundDay ? parseInt(foundDay.averageDuration) : 0
                 })
 
-                console.log(totalList)
 
                 const labels = dayList.map((date) => date.replace(/^\d{4}-/, ''))
                 const chartData = {
@@ -266,7 +279,6 @@ const actions = {
                     ]
                 }
 
-                console.log(chartData)
 
                 commit('setSessionsDuration', chartData)
             }
@@ -472,7 +484,6 @@ const actions = {
                     return
                 }
 
-                console.log(JSON.parse(event.data))
 
                 let eventBrute = JSON.parse(event.data)
                 const site = siteStore.state.site
@@ -484,23 +495,47 @@ const actions = {
                 })
 
                 const dayList = state.dayList
-                const totalList = dayList.map((date) => {
+                dayList.map((date) => {
                     const foundDay = eventBrute.dailyCounts.find((item) => item.date === date)
                     return foundDay ? parseInt(foundDay.totalSessions) : 0
                 })
 
+
+                let datasets = []
+                const backgroundColor = [
+                    '#a8dae3',
+                    '#3a93a6',
+                    '#216b88',
+                    '#0f4e5b',
+                    '#37737e',
+                ];
+                const  borderColor = [
+                    '#a8dae3',
+                    '#3a93a6',
+                    '#216b88',
+                    '#0f4e5b',
+                    '#37737e',
+                ];
+
+                eventBrute.dailyCounts.forEach((item, index) => {
+                    const label = item.path.replace(site.url, '');
+                    let data = [];
+                    dayList.map((date) => {
+                        const foundDay = item.dailyCounts.find((item) => item.date === date)
+                        data.push(foundDay ? parseInt(foundDay.count) : 0)
+                    });
+
+                    datasets.push({ label, data, backgroundColor: backgroundColor[index],
+                        borderColor: borderColor[index],
+                        borderWidth: 1 })
+
+                })
+
+
                 const labels = dayList.map((date) => date.replace(/^\d{4}-/, ''))
                 const chartData = {
                     labels: labels,
-                    datasets: [
-                        {
-                            label: 'Sessions',
-                            data: totalList,
-                            backgroundColor: '#a8dae3',
-                            borderColor: '#a8dae3',
-                            borderWidth: 1
-                        }
-                    ]
+                    datasets: datasets
                 }
 
                 commit('setViewPerPagesBrute', chartData)
@@ -591,19 +626,25 @@ const actions = {
                     return
                 }
                 let eventBrute = JSON.parse(event.data)
-                const { newUsersCurrentPeriod, newUsersPreviousPeriod } = eventBrute
-                const trend = newUsersCurrentPeriod > newUsersPreviousPeriod ? 'up' : 'down'
+                let { totalNewUsersCurrentPeriod, totalNewUsersPreviousPeriod } = eventBrute
+                if (totalNewUsersCurrentPeriod === undefined) {
+                    totalNewUsersCurrentPeriod = 0
+                }
+                if (totalNewUsersPreviousPeriod === undefined) {
+                    totalNewUsersPreviousPeriod = 0
+                }
+                const trend = totalNewUsersCurrentPeriod > totalNewUsersPreviousPeriod  ? 'up' : 'down'
                 const description = trend === 'up' ? `more than last time` : `less than last time`
                 const preview = {
                     trend: trend,
-                    value: newUsersCurrentPeriod,
+                    value: totalNewUsersCurrentPeriod,
                     description: description
                 }
 
                 const dayList = state.dayList
                 let totalList = dayList.map((date) => {
-                    const foundDay = eventBrute.dailyUsers.find((item) => item.date === date)
-                    return foundDay ? parseInt(foundDay.usersCount) : 0
+                    const foundDay = eventBrute.dailyNewUsers.find((item) => item.date === date)
+                    return foundDay ? parseInt(foundDay.newUsersCount) : 0
                 })
                 const labels = dayList.map((date) => date.replace(/^\d{4}-/, ''))
                 const newUsers = {
@@ -649,9 +690,9 @@ const actions = {
                     this.close()
                     return
                 }
-                console.log('event.data', event.data)
 
-                //commit('setActiveUsers', JSON.parse(event.data))
+
+                commit('setActiveUsers', JSON.parse(event.data)[0])
             }
             eventSourceActiveUsers.addEventListener('message', listener)
             eventSourceActiveUsers.addEventListener('error', listener)

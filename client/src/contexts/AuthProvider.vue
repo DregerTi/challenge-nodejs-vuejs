@@ -26,7 +26,6 @@ async function login(email, password) {
         //user.value = tokenStorage.getUser()
         await store.dispatch('getSites')
         if (sites.value.length > 0) {
-            console.log('jjkjlkjkk')
             router.push({ name: 'dashboard', params: { site: sites.value[0].id } })
         } else {
             router.push({ name: 'site-create' })
