@@ -1,5 +1,5 @@
 <script setup>
-import { computed, defineEmits } from 'vue'
+import { computed, defineEmits, onMounted, onUnmounted, watch } from 'vue'
 import { useStore } from 'vuex'
 
 const emit = defineEmits([
@@ -17,6 +17,20 @@ emit('update:descriptionHidden', false)
 
 const store = useStore()
 const tag = computed(() => store.state.tag.tag)
+const tagEvent = computed(() => store.state.eventStore.tag)
+const rangeDate = computed(() => store.state.eventStore.rangeDate)
+
+onMounted(() => {
+    store.dispatch('getTag')
+})
+watch(rangeDate, () => {
+    store.dispatch('closeEventSourceTag')
+    store.dispatch('getTag')
+})
+
+onUnmounted(() => {
+    store.dispatch('closeEventSourceTag')
+})
 </script>
 
 <template>
@@ -26,6 +40,9 @@ const tag = computed(() => store.state.tag.tag)
         </h2>
         <p>{{ tag?.tagKey }}</p>
     </div>
+    <section>
+        {{ tagEvent }}
+    </section>
 </template>
 
 <style scoped lang="scss"></style>

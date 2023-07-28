@@ -21,6 +21,9 @@ const ROUTES = {
     EVENT_HEATMAP: (siteId) => `events/${siteId}/heatmap`,
     EVENT_TOTAL_USERS: (siteId) => `events/${siteId}/total-users`,
     EVENT_NEW_USERS: (siteId) => `events/${siteId}/total-new-users`,
+    EVENT_TAG: (siteId, tagId) => `events/${siteId}/tag/${tagId}`,
+    EVENT_CONVERSION_TUNNEL: (siteId, conversionTunnelId) =>
+        `events/${siteId}/conversion-tunnel/${conversionTunnelId}`,
     GET_ME: () => `users/me`,
     INVITATION: () => `invitations`
 }

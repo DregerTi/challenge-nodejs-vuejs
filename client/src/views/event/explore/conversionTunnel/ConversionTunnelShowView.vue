@@ -1,11 +1,12 @@
 <script setup>
-import { computed, defineEmits, onBeforeMount } from 'vue'
+import { computed, defineEmits, onBeforeMount, onMounted, onUnmounted, watch } from 'vue'
 import { useStore } from 'vuex'
 import Button from '@/components/atoms/Button.vue'
 import router from '@/router'
 
 const store = useStore()
 const conversionTunnel = computed(() => store.state.conversionTunnel.conversionTunnel)
+
 </script>
 
 <template>
@@ -20,6 +21,9 @@ const conversionTunnel = computed(() => store.state.conversionTunnel.conversionT
             variant="light-grey"
             @click="router.push(router.currentRoute.value.path + '/settings')"
         />
+        <section>
+            {{ conversionTunnelEvent }}
+        </section>
     </div>
 </template>
 

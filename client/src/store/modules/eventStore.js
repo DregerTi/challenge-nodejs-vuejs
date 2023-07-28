@@ -8,6 +8,8 @@ const apiBaseUrl = import.meta.env.VITE_API_BASE_URL
 
 const state = {
     viewPerPages: null,
+    tag: null,
+    conversionTunnel: null,
     viewPerPagesBrute: {
         labels: [''],
         datasets: [
@@ -91,7 +93,9 @@ const getters = {
     heatmapPaths: (state) => state.heatmapPaths,
     heatmap: (state) => state.heatmap,
     totalUser: (state) => state.totalUser,
-    newUser: (state) => state.newUser
+    newUser: (state) => state.newUser,
+    tag: (state) => state.tag,
+    conversionTunnel: (state) => state.conversionTunnel
 }
 
 let eventSourceSession = null
@@ -104,6 +108,8 @@ let eventSourceHeatmap = null
 let eventSourceTotalUser = null
 let eventSourceNewUser = null
 let eventSourceActiveUsers = null
+let eventSourceTag = null
+let eventSourceConversionTunnel = null
 
 const actions = {
     async closeEventSourceTotalUser() {
@@ -158,6 +164,18 @@ const actions = {
         if (eventSourceHeatmapPaths) {
             await eventSourceHeatmapPaths.close()
             eventSourceHeatmapPaths = null
+        }
+    },
+    async closeEventSourceTag() {
+        if (eventSourceTag) {
+            await eventSourceTag.close()
+            eventSourceTag = null
+        }
+    },
+    async closeEventSourceConversionTunnel() {
+        if (eventSourceConversionTunnel) {
+            await eventSourceConversionTunnel.close()
+            eventSourceConversionTunnel = null
         }
     },
     async closeEventSourceHeatmap() {
@@ -304,6 +322,74 @@ const actions = {
             //eventSourceSessionDuration.addEventListener('open', listener)
             eventSourceSessionDuration.addEventListener('message', listener)
             eventSourceSessionDuration.addEventListener('error', listener)
+        } catch (error) {}
+    },
+    async getConversionTunnel({ commit }) {
+        try {
+            const url = new URL(
+                apiBaseUrl +
+                    ROUTES.EVENT_CONVERSION_TUNNEL(
+                        router.currentRoute.value.params.site,
+                        router.currentRoute.value.params.id
+                    )
+            )
+
+            Object.keys(state.rangeDate).forEach((key) =>
+                url.searchParams.append(key, state.rangeDate[key])
+            )
+
+            eventSourceConversionTunnel = new EventSourcePolyfill(url, {
+                headers: {
+                    Authorization: `Bearer ${await tokenStorage.getToken()}`
+                }
+            })
+
+            const listener = function (event) {
+                if (event.type === 'error') {
+                    return
+                }
+
+                let eventBrute = JSON.parse(event.data)
+
+                commit('setConversionTunnel', eventBrute)
+            }
+
+            eventSourceConversionTunnel.addEventListener('message', listener)
+            eventSourceConversionTunnel.addEventListener('error', listener)
+        } catch (error) {}
+    },
+    async getTag({ commit }) {
+        try {
+            const url = new URL(
+                apiBaseUrl +
+                    ROUTES.EVENT_TAG(
+                        router.currentRoute.value.params.site,
+                        router.currentRoute.value.params.id
+                    )
+            )
+
+            Object.keys(state.rangeDate).forEach((key) =>
+                url.searchParams.append(key, state.rangeDate[key])
+            )
+
+            eventSourceTag = new EventSourcePolyfill(url, {
+                headers: {
+                    Authorization: `Bearer ${await tokenStorage.getToken()}`
+                }
+            })
+
+            const listener = function (event) {
+                if (event.type === 'error') {
+                    return
+                }
+
+                let eventBrute = JSON.parse(event.data)
+
+                commit('setTag', eventBrute)
+            }
+
+            eventSourceTag.addEventListener('message', listener)
+            eventSourceTag.addEventListener('error', listener)
         } catch (error) {}
     },
     async getDevices({ commit }) {
@@ -765,6 +851,12 @@ const mutations = {
     },
     setNewUser(state, newUser) {
         state.newUser = newUser
+    },
+    setTag(state, tag) {
+        state.tag = tag
+    },
+    setConversionTunnel(state, conversionTunnel) {
+        state.conversionTunnel = conversionTunnel
     }
 }
 
