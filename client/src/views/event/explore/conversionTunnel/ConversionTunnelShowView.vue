@@ -6,7 +6,20 @@ import router from '@/router'
 
 const store = useStore()
 const conversionTunnel = computed(() => store.state.conversionTunnel.conversionTunnel)
+const conversionTunnelEvent = computed(() => store.state.eventStore.conversionTunnel)
+const rangeDate = computed(() => store.state.eventStore.rangeDate)
 
+onMounted(() => {
+  store.dispatch('getConversionTunnelEvent')
+})
+watch(rangeDate, () => {
+  store.dispatch('closeEventSourceConversionTunnelEvent')
+  store.dispatch('getConversionTunnelEvent')
+})
+
+onUnmounted(() => {
+  store.dispatch('closeEventSourceConversionTunnelEvent')
+})
 </script>
 
 <template>
@@ -21,8 +34,8 @@ const conversionTunnel = computed(() => store.state.conversionTunnel.conversionT
             variant="light-grey"
             @click="router.push(router.currentRoute.value.path + '/settings')"
         />
-        <section>
-            {{ conversionTunnelEvent }}
+        <section v-if="conversionTunnel">
+            taux de réussite: {{ conversionTunnelEvent?.taux ?? 0 }}%
         </section>
     </div>
 </template>

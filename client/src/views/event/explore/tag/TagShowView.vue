@@ -21,15 +21,15 @@ const tagEvent = computed(() => store.state.eventStore.tag)
 const rangeDate = computed(() => store.state.eventStore.rangeDate)
 
 onMounted(() => {
-    store.dispatch('getTag')
+    store.dispatch('getTagEvent')
 })
 watch(rangeDate, () => {
-    store.dispatch('closeEventSourceTag')
-    store.dispatch('getTag')
+    store.dispatch('closeEventSourceTagEvent')
+    store.dispatch('getTagEvent')
 })
 
 onUnmounted(() => {
-    store.dispatch('closeEventSourceTag')
+    store.dispatch('closeEventSourceTagEvent')
 })
 </script>
 
@@ -40,8 +40,8 @@ onUnmounted(() => {
         </h2>
         <p>{{ tag?.tagKey }}</p>
     </div>
-    <section>
-        {{ tagEvent }}
+    <section v-if="tagEvent">
+        total events: {{tagEvent?.currentPeriod?.currentPeriodCount }}
     </section>
 </template>
 

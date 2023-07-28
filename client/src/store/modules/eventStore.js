@@ -8,8 +8,8 @@ const apiBaseUrl = import.meta.env.VITE_API_BASE_URL
 
 const state = {
     viewPerPages: null,
-    tag: null,
-    conversionTunnel: null,
+    tagEvent: null,
+    conversionTunnelEvent: null,
     viewPerPagesBrute: {
         labels: [''],
         datasets: [
@@ -94,8 +94,8 @@ const getters = {
     heatmap: (state) => state.heatmap,
     totalUser: (state) => state.totalUser,
     newUser: (state) => state.newUser,
-    tag: (state) => state.tag,
-    conversionTunnel: (state) => state.conversionTunnel
+    tagEvent: (state) => state.tagEvent,
+    conversionTunnelEvent: (state) => state.conversionTunnelEvent
 }
 
 let eventSourceSession = null
@@ -166,13 +166,13 @@ const actions = {
             eventSourceHeatmapPaths = null
         }
     },
-    async closeEventSourceTag() {
+    async closeEventSourceTagEvent() {
         if (eventSourceTag) {
             await eventSourceTag?.close()
             eventSourceTag = null
         }
     },
-    async closeEventSourceConversionTunnel() {
+    async closeEventSourceConversionTunnelEvent() {
         if (eventSourceConversionTunnel) {
             await eventSourceConversionTunnel?.close()
             eventSourceConversionTunnel = null
@@ -324,7 +324,7 @@ const actions = {
             eventSourceSessionDuration.addEventListener('error', listener)
         } catch (error) {}
     },
-    async getConversionTunnel({ commit }) {
+    async getConversionTunnelEvent({ commit }) {
         try {
             const url = new URL(
                 apiBaseUrl +
@@ -351,14 +351,14 @@ const actions = {
 
                 let eventBrute = JSON.parse(event.data)
 
-                commit('setConversionTunnel', eventBrute)
+                commit('setConversionTunnelEvent', eventBrute)
             }
 
             eventSourceConversionTunnel.addEventListener('message', listener)
             eventSourceConversionTunnel.addEventListener('error', listener)
         } catch (error) {}
     },
-    async getTag({ commit }) {
+    async getTagEvent({ commit }) {
         try {
             const url = new URL(
                 apiBaseUrl +
@@ -385,7 +385,7 @@ const actions = {
 
                 let eventBrute = JSON.parse(event.data)
 
-                commit('setTag', eventBrute)
+                commit('setTagEvent', eventBrute)
             }
 
             eventSourceTag.addEventListener('message', listener)
@@ -854,10 +854,10 @@ const mutations = {
     setNewUser(state, newUser) {
         state.newUser = newUser
     },
-    setTag(state, tag) {
+    setTagEvent(state, tag) {
         state.tag = tag
     },
-    setConversionTunnel(state, conversionTunnel) {
+    setConversionTunnelEvent(state, conversionTunnel) {
         state.conversionTunnel = conversionTunnel
     }
 }
