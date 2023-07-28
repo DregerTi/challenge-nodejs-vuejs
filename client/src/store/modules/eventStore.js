@@ -561,7 +561,9 @@ const actions = {
                 }
                 const heatmap = JSON.parse(event.data)
                 console.log(heatmap)
-                commit('setHeatmap', heatmap)
+                if (heatmap[0]) {
+                    commit('setHeatmap', heatmap)
+                }
             }
             eventSourceHeatmap.addEventListener('message', listener)
             eventSourceHeatmap.addEventListener('error', listener)
