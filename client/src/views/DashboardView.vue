@@ -68,6 +68,8 @@ onBeforeMount(() => {
 watch(rangeDate, () => {
     store.dispatch('closeEventSourceActiveUsers')
     store.dispatch('closeEventSourceSessionDuration')
+    store.dispatch('closeEventSourceSessions')
+    store.dispatch('closeEventSourceNewUsers')
     store.dispatch('getActiveUsers')
     store.dispatch('getSessionsDuration')
     store.dispatch('getSessions')
