@@ -12,10 +12,6 @@ import store from './store/index'
 
 const app = createApp(App)
 
-app.use(Tracker, {
-    APP_ID: import.meta.env.VITE_DIGITANALYTICS_APP_ID
-})
-
 app.use(store)
 app.use(router)
 app.use(VueTailwindDatepicker)
