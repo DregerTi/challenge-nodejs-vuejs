@@ -27,9 +27,9 @@ function addComponent() {
     count.value += 1
 }
 
-function deleteItemMethod(id) {
-    store.dispatch('deleteDashboardItem', id)
-    store.dispatch('getDashboardItems')
+async function deleteItemMethod(id) {
+    await store.dispatch('deleteDashboardItem', id)
+    await store.dispatch('getDashboardItems')
 }
 
 const emit = defineEmits(['update:setDateButton', 'update:dashboardEditButton'])
@@ -45,13 +45,13 @@ const rangeDate = computed(() => store.state.eventStore.rangeDate)
 const newUser = computed(() => store.state.eventStore.newUser)
 const sessionsDurationBrute = computed(() => store.state.eventStore.sessionsDurationBrute)
 
-function updateItem(value, item) {
+async function updateItem(value, item) {
     item.kpi = value
     item.name = value
     if (item.id) {
-        store.dispatch('updateDashboardItem', item)
+        await store.dispatch('updateDashboardItem', item)
     } else {
-        store.dispatch('createDashboardItem', item)
+        await store.dispatch('createDashboardItem', item)
         count.value = 0
     }
 }

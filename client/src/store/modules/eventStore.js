@@ -114,80 +114,80 @@ let eventSourceConversionTunnel = null
 const actions = {
     async closeEventSourceTotalUser() {
         if (eventSourceTotalUser) {
-            await eventSourceTotalUser.close()
+            await eventSourceTotalUser?.close()
             eventSourceTotalUser = null
         }
     },
     async closeEventSourceNewUsers() {
         if (eventSourceNewUser) {
-            await eventSourceNewUser.close()
+            await eventSourceNewUser?.close()
             eventSourceNewUser = null
         }
     },
     async closeEventSourceNewUser() {
         if (eventSourceNewUser) {
-            await eventSourceNewUser.close()
+            await eventSourceNewUser?.close()
             eventSourceNewUser = null
         }
     },
     async closeEventSourceSessions() {
         if (eventSourceSession) {
-            await eventSourceSession.close()
+            await eventSourceSession?.close()
             eventSourceSession = null
         }
     },
     async closeEventSourceSession() {
         if (eventSourceSession) {
-            await eventSourceSession.close()
+            await eventSourceSession?.close()
             eventSourceSession = null
         }
     },
     async closeEventSourceSessionDuration() {
         if (eventSourceSessionDuration) {
-            await eventSourceSessionDuration.close()
+            await eventSourceSessionDuration?.close()
             eventSourceSessionDuration = null
         }
     },
     async closeEventSourceViewPerPages() {
         if (eventSourceViewPerPages) {
-            await eventSourceViewPerPages.close()
+            await eventSourceViewPerPages?.close()
             eventSourceViewPerPages = null
         }
     },
     async closeEventSourceDevice() {
         if (eventSourceDevice) {
-            await eventSourceDevice.close()
+            await eventSourceDevice?.close()
             eventSourceDevice = null
         }
     },
     async closeEventSourceHeatmapPaths() {
         if (eventSourceHeatmapPaths) {
-            await eventSourceHeatmapPaths.close()
+            await eventSourceHeatmapPaths?.close()
             eventSourceHeatmapPaths = null
         }
     },
     async closeEventSourceTag() {
         if (eventSourceTag) {
-            await eventSourceTag.close()
+            await eventSourceTag?.close()
             eventSourceTag = null
         }
     },
     async closeEventSourceConversionTunnel() {
         if (eventSourceConversionTunnel) {
-            await eventSourceConversionTunnel.close()
+            await eventSourceConversionTunnel?.close()
             eventSourceConversionTunnel = null
         }
     },
     async closeEventSourceHeatmap() {
-        await eventSourceHeatmap.close()
+        await eventSourceHeatmap?.close()
         eventSourceHeatmap = null
     },
     async closeEventSourceCountry() {
-        await eventSourceCountry.close()
+        await eventSourceCountry?.close()
         eventSourceCountry = null
     },
     async closeEventSourceActiveUsers() {
-        await eventSourceActiveUsers.close()
+        await eventSourceActiveUsers?.close()
         eventSourceActiveUsers = null
     },
     async getSessions({ commit }) {
