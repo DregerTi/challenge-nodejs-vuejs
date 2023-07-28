@@ -62,7 +62,7 @@ describe("Site and SiteInvitation API", function() {
                     chai.request(index)
                       .post("/sites")
                       .auth(adminToken, { type: "bearer" })
-                      .send({ name: "site test", url: "http://site.test" })
+                      .send({ name: "site test", url: "http://site.test", kbis: "123456789" })
                       .end((err, res) => {
                         chai.expect(res).to.have.status(201);
                         chai.expect(res.body).to.have.property("id");

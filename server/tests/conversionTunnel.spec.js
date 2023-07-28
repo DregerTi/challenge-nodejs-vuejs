@@ -29,7 +29,7 @@ describe("As a user using conversion tunnel", function() {
         chai.request(index)
           .post("/sites")
           .auth(adminToken, { type: "bearer" })
-          .send({ name: "test site", url: "http://site.test" })
+          .send({ name: "test site", url: "http://site.test", kbis: "123456789" })
           .end((err, res) => {
             chai.expect(res).to.have.status(201);
             chai.expect(res.body).to.have.property("id");
