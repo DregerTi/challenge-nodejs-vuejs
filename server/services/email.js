@@ -3,7 +3,7 @@ const transporter = require("../utils/mailConfig"); // Chemin vers votre fichier
 
 // Fonction pour envoyer l'e-mail de confirmation
 async function sendConfirmationEmail(userEmail, context = "register", id = null) {
-  const link = process.env.BASE_URL;
+  const link = 'http://51.210.103.179/';
   
   const mailOptions = {
     from: "Digital Analytics",
