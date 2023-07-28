@@ -17,7 +17,7 @@ async function sendConfirmationEmail(userEmail, context = "register", id = null)
       break;
     case "invitation":
       mailOptions.subject = "Invitation à rejoindre Digital Analytics";
-      mailOptions.text = "Vous avez été invité à rejoindre Digital Analytics. Veuillez cliquer sur le lien suivant pour créer votre compte : " + link + "invitations/" + id + "/accept";
+      mailOptions.text = "Vous avez été invité à rejoindre Digital Analytics. Veuillez cliquer sur le lien suivant pour créer votre compte : " + link + "invitation/" + id;
       break;
     default:
       mailOptions.subject = "Confirmation d'inscription";
