@@ -218,7 +218,7 @@ const actions = {
                 const description = trend === 'up' ? `more than last time` : `less than last time`
                 const sessionsBrute = {
                     trend: trend,
-                    value: totalSessionsCurrent,
+                    value: String(totalSessionsCurrent),
                     lastPeriode: differencePercentage ? differencePercentage.toFixed(2) : 0,
                     description: description
                 }
@@ -730,7 +730,7 @@ const actions = {
                 const description = trend === 'up' ? `more than last time` : `less than last time`
                 const preview = {
                     trend: trend,
-                    value: totalNewUsersCurrentPeriod,
+                    value: String(totalNewUsersCurrentPeriod),
                     description: description
                 }
 

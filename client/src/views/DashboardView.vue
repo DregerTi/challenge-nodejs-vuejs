@@ -87,7 +87,7 @@ onUnmounted(() => {
         <section class="pin-container">
             <PinCard
                 title="Active users"
-                :value="activeUsers?.uniqueViewerCount ? activeUsers?.uniqueViewerCount : 0"
+                :value="String(activeUsers?.uniqueViewerCount ? activeUsers?.uniqueViewerCount : 0)"
             />
             <PinCard
                 title="Total sessions"
@@ -98,9 +98,9 @@ onUnmounted(() => {
             />
             <PinCard
                 title="New users"
-                :description="newUser?.preview.description"
-                :value="newUser?.preview.value"
-                :trend="newUser?.preview.trend"
+                :description="newUser?.preview?.description"
+                :value="String(newUser?.preview?.value)"
+                :trend="String(newUser?.preview.trend)"
                 variant="primary"
             />
             <PinCard
