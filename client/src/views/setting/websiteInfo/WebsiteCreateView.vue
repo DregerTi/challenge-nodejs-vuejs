@@ -6,7 +6,8 @@ import { useStore } from 'vuex'
 
 const formData = reactive({
     name: '',
-    url: ''
+    url: '',
+    kbis: '',
 })
 
 const store = useStore()
@@ -41,6 +42,15 @@ const createSite = async (formData) => {
                 name="url"
                 v-model:value="formData.url"
             />
+          <Input
+            :error="siteErrors?.kbis"
+            class="w-full"
+            label="Kbis"
+            type="text"
+            placeholder="1234567891"
+            name="url"
+            v-model:value="formData.kbis"
+          />
             <Button type="submit" title="Submit" />
         </form>
     </div>

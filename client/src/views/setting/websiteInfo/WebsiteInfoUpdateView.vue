@@ -20,6 +20,7 @@ onBeforeMount(async () => {
     formData.name = site.value.name
     formData.url = site.value.url
     formData.id = site.value.id
+    formData.kbis = site.value.kbis
 })
 </script>
 
@@ -47,6 +48,15 @@ onBeforeMount(async () => {
                 name="url"
                 v-model:value="formData.url"
             />
+          <Input
+            :error="siteErrors?.kbis"
+            class="w-full"
+            label="Kbis"
+            type="text"
+            placeholder="1234567891"
+            name="url"
+            v-model:value="formData.kbis"
+          />
             <Button title="Save" type="submit" />
         </form>
     </div>

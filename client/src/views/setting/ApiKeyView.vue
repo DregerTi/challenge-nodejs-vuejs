@@ -37,7 +37,6 @@ onBeforeMount(async () => {
                 icon="Autorenew"
                 class="h-fit mb-2.5"
                 @click="refreshApiKey"
-                v-track="'0fwwt9gyg8'"
             />
         </div>
     </div>

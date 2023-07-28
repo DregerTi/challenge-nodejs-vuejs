@@ -37,6 +37,18 @@ module.exports = (connection) => {
           }
         }
       },
+      kbis: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+          regex(str, pattern, modifiers) {
+            if (!/^[0-9]{9}$/.test(str)) {
+              throw new Error('Kbis must be a valid kbis');
+            }
+          }
+        }
+      },
       createdAt: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW
