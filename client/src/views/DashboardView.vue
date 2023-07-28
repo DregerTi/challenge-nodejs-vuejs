@@ -57,12 +57,8 @@ function updateItem(value, item) {
 }
 
 onBeforeMount(() => {
-    store.dispatch('getActiveUsers')
-    store.dispatch('getNewUser')
     store.dispatch('getPossibleKpis')
     store.dispatch('getDashboardItems')
-    store.dispatch('getSessionsDuration')
-    store.dispatch('getSessions')
 })
 
 watch(rangeDate, () => {
