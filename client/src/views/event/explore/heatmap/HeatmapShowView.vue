@@ -117,38 +117,69 @@ onUnmounted(() => {
 <template>
     <div>
         <nav class="heatmap-nav">
-            <RouterLink :to="{
-                name: 'heatmap-show',
-                params: { site: $route.params.site, id: $route.params.id, size: 'sm' }
-            }" class="w-full">
-                <Button title="Mobile" icon="Smartphone" class="w-full" :variant="router.currentRoute.value.params.size === 'sm'
-                    ? 'button--dark-grey'
-                    : 'light-grey'
-                    " />
+            <RouterLink
+                :to="{
+                    name: 'heatmap-show',
+                    params: { site: $route.params.site, id: $route.params.id, size: 'sm' }
+                }"
+                class="w-full"
+            >
+                <Button
+                    title="Mobile"
+                    icon="Smartphone"
+                    class="w-full"
+                    :variant="
+                        router.currentRoute.value.params.size === 'sm'
+                            ? 'button--dark-grey'
+                            : 'light-grey'
+                    "
+                />
             </RouterLink>
-            <RouterLink :to="{
-                name: 'heatmap-show',
-                params: { site: $route.params.site, id: $route.params.id, size: 'md' }
-            }" class="w-full">
-                <Button title="Tablet" icon="Tablet" class="w-full" :variant="router.currentRoute.value.params.size == 'md'
-                    ? 'button--dark-grey'
-                    : 'light-grey'
-                    " />
+            <RouterLink
+                :to="{
+                    name: 'heatmap-show',
+                    params: { site: $route.params.site, id: $route.params.id, size: 'md' }
+                }"
+                class="w-full"
+            >
+                <Button
+                    title="Tablet"
+                    icon="Tablet"
+                    class="w-full"
+                    :variant="
+                        router.currentRoute.value.params.size == 'md'
+                            ? 'button--dark-grey'
+                            : 'light-grey'
+                    "
+                />
             </RouterLink>
-            <RouterLink :to="{
-                name: 'heatmap-show',
-                params: { site: $route.params.site, id: $route.params.id, size: 'lg' }
-            }" class="w-full">
-                <Button title="Desktop" icon="Laptop" class="w-full" :variant="router.currentRoute.value.params.size == 'lg'
-                    ? 'button--dark-grey'
-                    : 'light-grey'
-                    " />
+            <RouterLink
+                :to="{
+                    name: 'heatmap-show',
+                    params: { site: $route.params.site, id: $route.params.id, size: 'lg' }
+                }"
+                class="w-full"
+            >
+                <Button
+                    title="Desktop"
+                    icon="Laptop"
+                    class="w-full"
+                    :variant="
+                        router.currentRoute.value.params.size == 'lg'
+                            ? 'button--dark-grey'
+                            : 'light-grey'
+                    "
+                />
             </RouterLink>
         </nav>
         <div class="heatmap-container">
             <div class="heatmap-canvas" ref="heatmapCanvas"></div>
-            <iframe id="heatmap-iframe" :src="site.url + '' + decodeURIComponent(decodeURIComponent($route.params.id))"
-                frameborder="0" style="width: 100%; height: 3000px"></iframe>
+            <iframe
+                id="heatmap-iframe"
+                :src="decodeURIComponent(decodeURIComponent($route.params.id))"
+                frameborder="0"
+                style="width: 100%; height: 3000px"
+            ></iframe>
         </div>
     </div>
 </template>
@@ -169,7 +200,8 @@ onUnmounted(() => {
     border-radius: 10px;
 }
 
-.heatmap-container {}
+.heatmap-container {
+}
 
 #heatmap-iframe {
     position: relative;
